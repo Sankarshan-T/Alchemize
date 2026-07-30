@@ -146,6 +146,10 @@ const isUserIdv = async (email: string): Promise<boolean> => {
 	return data.result==="verified_eligible"
 }
 export const POST: RequestHandler = async ({ request, cookies }) => {
+	//DISABLES SHIPPING AFTER 630AM IST TMRW
+	if(Date.now() > 1785459600000){
+		return new Response("Shipping is disabled after 6:30 AM IST on July 31st, 2026 for S1. Please contact #alchemize-help for assistance.", { status: 403 })
+	}
 	//Confirm ownership by comparing email from access token with project owner email
 	const authToken = cookies.get("user_token")
 	let decoded = null
