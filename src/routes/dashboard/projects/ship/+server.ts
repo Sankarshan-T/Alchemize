@@ -143,12 +143,15 @@ function calculateRecordedTime(log: Log[]): number {
 const isUserIdv = async (email: string): Promise<boolean> => {
 	const fetchRes = await fetch(`https://auth.hackclub.com/api/external/check?email=${email}`)
 	const data = await fetchRes.json()
-	return data.result==="verified_eligible"
+	return data.result === "verified_eligible"
 }
 export const POST: RequestHandler = async ({ request, cookies }) => {
-	//DISABLES SHIPPING AFTER 630AM IST TMRW
-	if(Date.now() > 1785459600000){
-		return new Response("Shipping is disabled after 6:30 AM IST on July 31st, 2026 for S1. Please contact #alchemize-help for assistance.", { status: 403 })
+	//DISABLES SHIPPING AFTER 630AM IST DAY AFTER TMRW
+	if (Date.now() > 1785632400000) {
+		return new Response(
+			"Shipping is disabled after 6:30 AM IST on August 2nd, 2026 for S1. Please contact #alchemize-help for assistance.",
+			{ status: 403 }
+		)
 	}
 	//Confirm ownership by comparing email from access token with project owner email
 	const authToken = cookies.get("user_token")
@@ -192,7 +195,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	) {
 		return new Response("All project fields are required", { status: 400 })
 	}
-	if(projectData.fields.address === "null" || !projectData.fields.address){
+	if (projectData.fields.address === "null" || !projectData.fields.address) {
 		return new Response("Your Address is missing, please add it on auth.hackclub.com", { status: 400 })
 	}
 	const hackatimeProject = await getHackatimeProject(
