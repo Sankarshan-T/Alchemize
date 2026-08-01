@@ -6,8 +6,6 @@
 		FlaskConical,
 		Rocket,
 		ShoppingCart,
-		X,
-		Newspaper,
 		LoaderCircleIcon,
 	} from "lucide-svelte"
 	import { onMount } from "svelte"
@@ -19,7 +17,13 @@
 	} from "$env/static/public"
 	import { scopes } from "$lib/utils"
 	import Accordion from "$lib/components/accordion.svelte"
-	import { CircleCheck, ShoppingBag, User } from "@lucide/svelte"
+	import {
+		CircleCheck,
+		Newspaper,
+		ShoppingBag,
+		User,
+		Users,
+	} from "@lucide/svelte"
 	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
@@ -184,13 +188,23 @@
 				>
 					With more mixing this time
 				</h3>
-				<div class="p-3 w-full flex items-center justify-center">
+				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>
 						<Button
-							class="p-6 w-full text-xl bg-primary/40 border border-primary hover:border-border hover:bg-primary/50 hover:-translate-y-px justify-between flex"
+							variant="primary"
+							class="p-6 w-full text-xl justify-between flex"
 						>
 							<p>Get Started</p>
-							<ChevronsRight />
+							{#if showRotator}
+								<LoaderCircleIcon class="animate-spin" />
+							{:else}
+								<ChevronsRight />
+							{/if}
+						</Button>
+					</a>
+					<a href="/docs">
+						<Button variant="primary" class="py-6">
+							<Newspaper class="size-6" />
 						</Button>
 					</a>
 				</div>
