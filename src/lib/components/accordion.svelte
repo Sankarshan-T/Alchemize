@@ -13,15 +13,13 @@
 			: 'rounded-b-md'}"
 	>
 		<h3
-			class="text-sm md:text-base font-black tracking-tight line-clamp-1 pr-8 {open
-				? 'text-primary'
-				: 'text-primary-foreground'}"
+			class="text-sm md:text-base font-black tracking-tight line-clamp-1 pr-8 text-primary-foreground"
 		>
 			{Title}
 		</h3>
 
 		<span
-			class="absolute right-5 font-mono font-black text-primary text-base md:text-lg select-none"
+			class="absolute right-5 font-mono font-black text-primary-foreground text-base md:text-lg select-none"
 		>
 			{#if open}
 				&minus;

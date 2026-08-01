@@ -376,18 +376,13 @@
 
 		<section
 			id="faq"
-			class="flex flex-col gap-12 py-24 border-t-2 border-border relative"
+			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
 		>
-			<div class="flex flex-col gap-1 items-center text-center">
-				<div class="text-xs uppercase text-primary font-bold tracking-[0.25em]">
-					Information
-				</div>
-				<h2
-					class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
-				>
-					FAQ
-				</h2>
-			</div>
+			<h2
+				class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
+			>
+				FAQ
+			</h2>
 
 			<div class="flex flex-col gap-3 w-full max-w-4xl mx-auto">
 				<Accordion
