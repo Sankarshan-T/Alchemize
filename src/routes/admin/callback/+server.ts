@@ -21,11 +21,12 @@ interface TokenPayload extends AirtableUser {
 }
 export const GET: RequestHandler = async ({ url, cookies }) => {
     const code = url.searchParams.get("code")
-    const state = url.searchParams.get("state")
-    const storedState = cookies.get("oauth_state")
-    if (!state || !storedState || state !== storedState) {
-        throw redirect(302, `/admin/error?message=${encodeURIComponent("Invalid state parameter")}&status=400`);
-    }
+    // STATES UNSUPPORTED FROM HCA
+    // const state = url.searchParams.get("state")
+    // const storedState = cookies.get("oauth_state")
+    // if (!state || !storedState || state !== storedState) {
+    //     throw redirect(302, `/admin/error?message=${encodeURIComponent("Invalid state parameter")}&status=400`);
+    // }
     if (!code) {
         throw redirect(302, `/admin/error?message=${encodeURIComponent("Missing authorization code")}&status=400`);
     }
