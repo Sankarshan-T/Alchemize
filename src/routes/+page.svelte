@@ -400,14 +400,14 @@
 	</main>
 
 	<footer
-		class="w-full border-t-2 border-zinc-950 bg-black/90 relative z-20 mt-24 py-16"
+		class="w-full border-t-2 border-border bg-background/40 relative z-20 mt-24 py-16"
 	>
 		<div
 			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
 		>
 			<div class="flex flex-col gap-4 max-w-xs">
 				<h3
-					class="text-xl font-black font-alchemize text-primary tracking-wide uppercase"
+					class="text-xl font-black font-alchemize text-white tracking-wide uppercase"
 				>
 					Hack Club
 				</h3>
@@ -415,68 +415,47 @@
 					Hack Club is the world’s largest nonprofit movement of teenagers
 					making cool projects.
 				</p>
-				<div class="text-zinc-600 text-[10px] mt-2 tracking-tight">
-					© Hack Club • All Rights Reserved
-				</div>
 			</div>
 
 			<div
 				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider"
 			>
 				<div class="flex flex-col gap-3">
-					<div class="text-zinc-500 text-[10px] font-mono tracking-widest">
-						DIRECTORY
-					</div>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
 						href="https://hackclub.com/philosophy/">Philosophy</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/team/">Team Cluster</a
+						href="https://hackclub.com/team/">The Team</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/brand/">Asset Brand</a
+						href="https://hackclub.com/brand/">Branding</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/philanthropy/">Liquidity Fund</a
+						href="https://hackclub.com/philanthropy/">Philanthropy</a
 					>
 				</div>
 				<div class="flex flex-col gap-3">
-					<div class="text-zinc-500 text-[10px] font-mono tracking-widest">
-						RESOURCES
-					</div>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/jams/">System Jams</a
+						href="https://hackclub.com/jams/">Jams</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://toolbox.hackclub.com/">Toolbox Matrix</a
+						href="https://toolbox.hackclub.com/">Toolbox</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/conduct/">Legal Conduct</a
+						href="https://hackclub.com/conduct/">Code of Conduct</a
 					>
 					<a
 						class="text-muted-foreground hover:text-primary transition-colors"
-						href="https://hackclub.com/privacy/">Data Privacy</a
+						href="https://hackclub.com/privacy/">Privacy</a
 					>
 				</div>
-			</div>
-
-			<div
-				class="border border-zinc-800 p-4 bg-background/60 max-w-xs lg:text-right flex flex-col gap-1 lg:items-end w-full sm:w-auto"
-			>
-				<div class="text-[10px] tracking-widest text-zinc-500 font-mono">
-					// Credits
-				</div>
-				<div class="text-xs font-bold text-zinc-300">
-					Made by TheUtkarsh8939
-				</div>
-				<div class="text-xs font-bold text-zinc-300">& Coolcream</div>
 			</div>
 		</div>
 	</footer>
