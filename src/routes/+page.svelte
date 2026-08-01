@@ -114,15 +114,7 @@
 	})
 </script>
 
-<div
-	class="relative min-h-screen w-full bg-gradbg text-zinc-100 font-mono tracking-wide selection:bg-primary selection:text-primary-foreground overflow-x-hidden"
->
-	<div class="fixed inset-0 bg-black/40 z-0 pointer-events-none"></div>
-
-	<div
-		class="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_2px,transparent_2px),linear-gradient(to_bottom,#8080800a_2px,transparent_2px)] bg-[size:56px_56px] pointer-events-none opacity-100"
-	></div>
-
+<div class="relative min-h-screen w-full bg-background overflow-x-hidden">
 	<div
 		class="absolute top-3 left-0 z-50 transition-transform duration-100 hover:scale-[1.02]"
 	>
@@ -136,29 +128,29 @@
 	</div>
 
 	<nav
-		class="fixed top-2 right-2 py-3 px-8 text-sm font-semibold bg-background/20 backdrop-blur-sm border border-border rounded-full flex items-center gap-3 z-100 hover:border-primary divide-x"
+		class="fixed top-2 right-2 py-3 px-8 text-sm text-secondary-foreground font-display font-semibold bg-secondary backdrop-blur-sm border border-border rounded-tl-2xl rounded-br-2xl flex items-center gap-3 z-100 hover:border-primary divide-x shadow-sm shadow-foreground"
 	>
 		<a
 			href="/#"
-			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
 		>
 			Home
 		</a>
 		<a
 			href="#features"
-			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
 		>
 			Features
 		</a>
 		<a
 			href="#themes"
-			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
 		>
 			Themes
 		</a>
 		<a
 			href="#faq"
-			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
 		>
 			Faq
 		</a>
@@ -170,7 +162,7 @@
 		>
 			<div class="flex flex-col items-center gap-2">
 				<div
-					class="flex items-center gap-2 text-sm font-bold text-primary-foreground tracking-[0.3em] uppercase"
+					class="flex items-center gap-2 text-sm font-decor text-foreground tracking-[0.3em] uppercase"
 				>
 					<CircleCheck class="h-3 w-3" />
 					<span>Season 1 -</span>
@@ -179,12 +171,12 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-primary-foreground text-shadow-lg text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-note font-alchemize tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
 				<h3
-					class="text-xl font-bold font-mono font-alchemize tracking-tighter text-primary-foreground text-shadow-lg text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-xl font-bold font-display font-alchemize tracking-tighter text-foreground text-shadow-sm text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					With more mixing this time
 				</h3>
@@ -203,7 +195,7 @@
 						</Button>
 					</a>
 					<a href="/docs">
-						<Button variant="primary" class="py-6">
+						<Button variant="secondary" class="py-6">
 							<Newspaper class="size-6" />
 						</Button>
 					</a>
@@ -212,9 +204,9 @@
 
 			<a
 				href="#features"
-				class="animate-pulse border border-white p-2 hover:border-primary bg-primary/40 transition-colors rounded-full"
+				class="animate-bounce border border-border p-2 hover:border-primary bg-secondary transition-colors rounded-full"
 			>
-				<ArrowDown class="w-5 h-5 text-primary-foreground" />
+				<ArrowDown class="w-5 h-5 text-foreground" />
 			</a>
 		</section>
 
@@ -482,14 +474,6 @@
 </div>
 
 <style>
-	.bg-gradbg {
-		background: radial-gradient(
-			circle,
-			rgba(0, 49, 83, 1) 24%,
-			rgba(9, 11, 15, 1) 92%
-		);
-	}
-
 	main {
 		transform: translateZ(0);
 	}
