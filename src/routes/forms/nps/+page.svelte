@@ -56,7 +56,7 @@
 		</p>
 
 		<h1
-			class="font-alchemize mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl"
+			class="font-alchemize mt-3 text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl"
 		>
 			Is Alchemize Good?
 		</h1>
@@ -73,7 +73,7 @@
 				class="mt-10 rounded-2xl bg-black px-20 text-center flex items-center flex-col justify-center"
 				style="height:200px;"
 			>
-				<p class="font-alchemize text-lg font-semibold text-white">
+				<p class="font-alchemize text-lg font-semibold text-primary-foreground">
 					Thanks for that.
 				</p>
 				<p class="mt-1 text-sm text-zinc-400">
@@ -104,7 +104,7 @@
 								${
 									score === n
 										? "scale-110 border-primary bg-primary text-black shadow-lg shadow-primary/30"
-										: "border-zinc-800 bg-zinc-950/70 text-zinc-400 hover:-translate-y-0.5 hover:border-primary/60 hover:text-white"
+										: "border-zinc-800 bg-zinc-950/70 text-zinc-400 hover:-translate-y-0.5 hover:border-primary/60 hover:text-primary-foreground"
 								}`}
 							>
 								{n}
@@ -130,7 +130,7 @@
 						id="heard"
 						bind:value={heardFrom}
 						placeholder="A friend, Slack, Site or something else..."
-						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-white placeholder:text-zinc-600 outline-none transition focus:border-primary"
+						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
@@ -147,7 +147,7 @@
 						bind:value={wentWell}
 						rows="3"
 						placeholder="The stuff worth keeping..."
-						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-white placeholder:text-zinc-600 outline-none transition focus:border-primary"
+						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
@@ -164,7 +164,7 @@
 						bind:value={couldImprove}
 						rows="3"
 						placeholder="Don't hold back..."
-						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-white placeholder:text-zinc-600 outline-none transition focus:border-primary"
+						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
@@ -181,7 +181,7 @@
 						bind:value={anythingElse}
 						rows="3"
 						placeholder="Anything we didn't ask..."
-						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-white placeholder:text-zinc-600 outline-none transition focus:border-primary"
+						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
@@ -197,14 +197,14 @@
 						id="slack"
 						bind:value={slack}
 						placeholder="@username"
-						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-white placeholder:text-zinc-600 outline-none transition focus:border-primary"
+						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
 				<button
 					type="submit"
 					disabled={checkAllFilled()}
-					class="w-full rounded-full bg-primary py-3 font-semibold text-white transition
+					class="w-full rounded-full bg-primary py-3 font-semibold text-primary-foreground transition
 					enabled:hover:scale-[1.02] enabled:hover:shadow-lg enabled:hover:shadow-primary/30 enabled:active:scale-95
 					disabled:cursor-not-allowed disabled:opacity-40"
 				>

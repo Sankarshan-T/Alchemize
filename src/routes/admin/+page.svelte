@@ -70,7 +70,7 @@
 	<h1 class="text-5xl text-admin-primary font-alchemize font-bold">
 		Alchemize Admin
 	</h1>
-	<h1 class="text-xl text-white font-alchemize font-medium">
+	<h1 class="text-xl text-primary-foreground font-alchemize font-medium">
 		Where would you like to go today, {data.name || "Admin"}?
 	</h1>
 	<nav

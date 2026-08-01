@@ -34,7 +34,7 @@
 			border: "border-red-950 group-hover:border-red-500/80",
 			shadow: "bg-red-500",
 			text: "text-red-400",
-			btn: "border-red-800 text-red-400 hover:bg-red-600 hover:text-white",
+			btn: "border-red-800 text-red-400 hover:bg-red-600 hover:text-primary-foreground",
 		},
 		glowstone: {
 			border: "border-yellow-950 group-hover:border-yellow-500/80",
@@ -46,13 +46,13 @@
 			border: "border-blue-950 group-hover:border-blue-500/80",
 			shadow: "bg-blue-900",
 			text: "text-blue-400",
-			btn: "border-blue-800 text-blue-400 hover:bg-blue-600 hover:text-white",
+			btn: "border-blue-800 text-blue-400 hover:bg-blue-600 hover:text-primary-foreground",
 		},
 		potion_mix: {
 			border: "border-rose-950 group-hover:border-rose-500/80",
 			shadow: "bg-rose-400",
 			text: "text-rose-400",
-			btn: "border-rose-800 text-rose-400 hover:bg-rose-600 hover:text-white",
+			btn: "border-rose-800 text-rose-400 hover:bg-rose-600 hover:text-primary-foreground",
 		},
 		none: {
 			border: "border-zinc-800 group-hover:border-primary/80",
@@ -143,7 +143,7 @@
 						<div class="flex flex-col gap-1">
 							<div class="flex items-start justify-between gap-2">
 								<h2
-									class="text-sm font-black uppercase text-white tracking-tight font-alchemize line-clamp-1"
+									class="text-sm font-black uppercase text-primary-foreground tracking-tight font-alchemize line-clamp-1"
 								>
 									{item.name}
 								</h2>

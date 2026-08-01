@@ -71,7 +71,7 @@
 		if (status.startsWith("pending")) {
 			return {
 				dot: "bg-white",
-				text: "text-white",
+				text: "text-primary-foreground",
 				title: "pending review",
 			}
 		}
@@ -256,7 +256,7 @@
 					class="text-2xl font-alchemize font-black uppercase tracking-wider line-clamp-1 text-primary"
 				>
 					Your Mixes
-					<span class="text-[0.5rem] text-white">Alchemize</span>
+					<span class="text-[0.5rem] text-primary-foreground">Alchemize</span>
 				</h1>
 			</div>
 
@@ -307,7 +307,7 @@
 							>
 								<div class="w-full flex items-center justify-between gap-4">
 									<h2
-										class="text-2xl font-black tracking-tight text-white line-clamp-1 [text-shadow:0_2px_4px_rgba(0,0,0,0.8)] font-alchemize"
+										class="text-2xl font-black tracking-tight text-primary-foreground line-clamp-1 [text-shadow:0_2px_4px_rgba(0,0,0,0.8)] font-alchemize"
 									>
 										{project.fields.Name || "Untitled Mix"}
 									</h2>

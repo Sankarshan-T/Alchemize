@@ -6,7 +6,7 @@
 	<div class="flex items-center justify-start gap-x-2">
 		<!-- <div class="bg-white rounded-full h-8 w-8"></div> -->
 		<div class=" flex flex-col items-start justify-start">
-			<p class="text-xl text-white">Supaadmin</p>
+			<p class="text-xl text-primary-foreground">Supaadmin</p>
 			<p class="text-muted-foreground text-xs">admin</p>
 		</div>
 	</div>

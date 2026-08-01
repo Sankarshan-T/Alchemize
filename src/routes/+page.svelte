@@ -130,13 +130,42 @@
 		</a>
 	</div>
 
+	<nav
+		class="fixed top-2 right-2 py-3 px-8 text-sm font-semibold bg-background/20 backdrop-blur-sm border border-border rounded-full flex items-center gap-3 z-100 hover:border-primary divide-x"
+	>
+		<a
+			href="/#"
+			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+		>
+			Home
+		</a>
+		<a
+			href="#features"
+			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+		>
+			Features
+		</a>
+		<a
+			href="#themes"
+			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+		>
+			Themes
+		</a>
+		<a
+			href="#faq"
+			class="relative text-primary-foreground cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
+		>
+			Faq
+		</a>
+	</nav>
+
 	<main class="z-10 relative w-full px-4 sm:px-6 md:px-10">
 		<section
 			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
 		>
 			<div class="flex flex-col items-center gap-2">
 				<div
-					class="flex items-center gap-2 text-xs font-bold text-white tracking-[0.3em] uppercase"
+					class="flex items-center gap-2 text-xs font-bold text-primary-foreground tracking-[0.3em] uppercase"
 				>
 					<CircleCheck class="h-3 w-3" />
 					<span>Season 1 -</span>
@@ -145,7 +174,7 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-white [text-shadow:4px_4px_0px_rgba(var(--primary),0.15)] selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-primary-foreground [text-shadow:4px_4px_0px_rgba(var(--primary),0.15)] selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
@@ -155,7 +184,7 @@
 				href="#features"
 				class="animate-pulse border border-white p-2 hover:border-primary bg-primary/40 transition-colors rounded-full"
 			>
-				<ArrowDown class="w-5 h-5 text-white" />
+				<ArrowDown class="w-5 h-5 text-primary-foreground" />
 			</a>
 		</section>
 
@@ -164,7 +193,7 @@
 			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
 		>
 			<h2
-				class="text-5xl font-black font-alchemize tracking-tight uppercase text-white"
+				class="text-5xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
 			>
 				HOW IT WORKS
 			</h2>
@@ -179,7 +208,9 @@
 						>
 							<Blocks class="h-7 w-7" />
 						</div>
-						<h3 class="text-2xl font-black uppercase tracking-tight text-white">
+						<h3
+							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+						>
 							01 - Create
 						</h3>
 					</div>
@@ -198,7 +229,9 @@
 						>
 							<Rocket class="h-7 w-7" />
 						</div>
-						<h3 class="text-2xl font-black uppercase tracking-tight text-white">
+						<h3
+							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+						>
 							02 - Ship
 						</h3>
 					</div>
@@ -217,7 +250,9 @@
 						>
 							<FlaskConical class="h-7 w-7" />
 						</div>
-						<h3 class="text-2xl font-black uppercase tracking-tight text-white">
+						<h3
+							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+						>
 							03 - Trade
 						</h3>
 					</div>
@@ -236,7 +271,9 @@
 						>
 							<ShoppingCart class="h-7 w-7" />
 						</div>
-						<h3 class="text-2xl font-black uppercase tracking-tight text-white">
+						<h3
+							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+						>
 							04 - Epic Shop
 						</h3>
 					</div>
@@ -253,7 +290,7 @@
 			class="flex flex-col gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
 			<h2
-				class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
+				class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
 			>
 				Themes for Season 2
 			</h2>
@@ -263,7 +300,7 @@
 					class="w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
+						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
 					>
 						1. Endless
 					</h3>
@@ -282,7 +319,7 @@
 					class="relative w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
+						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
 					>
 						2. Endless
 					</h3>
@@ -302,7 +339,7 @@
 					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
+						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
 					>
 						3. Endless
 					</h3>
@@ -330,7 +367,7 @@
 					Information
 				</div>
 				<h2
-					class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
+					class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
 				>
 					FAQ
 				</h2>
@@ -347,11 +384,11 @@
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
+					Content="Software development time is tracked using <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"
-					Content="If you have any questions or need help with anything, just join the <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
+					Content="If you have any questions or need help with anything, just join the <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
 				/>
 			</div>
 		</section>
@@ -365,7 +402,7 @@
 		>
 			<div class="flex flex-col gap-4 max-w-xs">
 				<h3
-					class="text-xl font-black font-alchemize text-white tracking-wide uppercase"
+					class="text-xl font-black font-alchemize text-primary-foreground tracking-wide uppercase"
 				>
 					Hack Club
 				</h3>

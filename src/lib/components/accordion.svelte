@@ -15,7 +15,7 @@
 		<h3
 			class="text-sm md:text-base font-black tracking-tight line-clamp-1 pr-8 {open
 				? 'text-primary'
-				: 'text-white'}"
+				: 'text-primary-foreground'}"
 		>
 			{Title}
 		</h3>

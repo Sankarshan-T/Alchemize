@@ -666,7 +666,7 @@
 										showSecondRotator ||
 										shipLoading}
 									type="submit"
-									class="bg-primary hover:bg-primary/80 text-white text-xs font-bold uppercase tracking-wider px-6 h-10 shadow-lg shadow-red-950/20 {!allFieldsFilled &&
+									class="bg-primary hover:bg-primary/80 text-primary-foreground text-xs font-bold uppercase tracking-wider px-6 h-10 shadow-lg shadow-red-950/20 {!allFieldsFilled &&
 										'pointer-events-none'}"
 									onclick={() => {
 										if (!name || !description) {

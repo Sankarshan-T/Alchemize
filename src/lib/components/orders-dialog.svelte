@@ -21,7 +21,7 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 border-0 bg-transparent p-0 max-w-2xl min-w-[80vw] h-[66vh] font-mono text-white overflow-visible shadow-none outline-none"
+		class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 border-0 bg-transparent p-0 max-w-2xl min-w-[80vw] h-[66vh] font-mono text-primary-foreground overflow-visible shadow-none outline-none"
 	>
 		<div
 			class="absolute z-0 inset-0 translate-x-1.5 translate-y-1.5 rounded bg-primary/20 pointer-events-none border-2 border-primary/40"
@@ -73,12 +73,12 @@
 							<div class="flex flex-col justify-between flex-1 min-w-0">
 								<div class="flex flex-col gap-0.5">
 									<h1
-										class="text-sm font-black uppercase text-white tracking-tight font-alchemize truncate"
+										class="text-sm font-black uppercase text-primary-foreground tracking-tight font-alchemize truncate"
 									>
 										{order.fields.orderItem}
 									</h1>
 									<p class="text-[11px] text-zinc-400 font-mono">
-										Quantity: <span class="text-white font-bold"
+										Quantity: <span class="text-primary-foreground font-bold"
 											>{order.fields.qty}</span
 										>
 									</p>

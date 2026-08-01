@@ -233,7 +233,7 @@
 						onclick={() => openProject(item.id)}
 					>
 						<h4
-							class="font-semibold text-sm line-clamp-1 group-hover:text-white transition"
+							class="font-semibold text-sm line-clamp-1 group-hover:text-primary-foreground transition"
 						>
 							{item.fields.Name || "Untitled Project"}
 						</h4>
@@ -260,7 +260,7 @@
 			<div class="relative group">
 				<a href="review/t1guides">
 					<button
-						class="p-2.5 h-10 text-sm font-medium rounded-xl transition-all flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-white"
+						class="p-2.5 h-10 text-sm font-medium rounded-xl transition-all flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-primary-foreground"
 					>
 						<Newspaper class="size-4" />
 					</button>
@@ -381,7 +381,7 @@
 									onclick={() => (detailsOpen = true)}
 									variant="outline"
 									size="sm"
-									class="h-7 border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:text-white text-xs"
+									class="h-7 border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:text-primary-foreground text-xs"
 								>
 									Full Details
 								</Button>
@@ -406,19 +406,19 @@
 							<a
 								href={project.demo}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
 								>Demo</a
 							>
 							<a
 								href={project.code}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
 								>Repository</a
 							>
 							<a
 								href={project.readme}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-white rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
 								>Readme</a
 							>
 						</div>
@@ -599,7 +599,7 @@
 						class="shrink-0 flex items-center justify-end gap-3 p-4 border-t border-zinc-800 bg-zinc-950/60 backdrop-blur-sm"
 					>
 						<button
-							class="h-10 py-2 px-5 font-bold uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white shadow-lg shadow-rose-950/20 transition duration-150 disabled:opacity-40"
+							class="h-10 py-2 px-5 font-bold uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-primary-foreground shadow-lg shadow-rose-950/20 transition duration-150 disabled:opacity-40"
 							disabled={userExternalCount < 20 || rejectLoader}
 							onclick={() =>
 								rejectProject(
@@ -618,7 +618,7 @@
 						</button>
 
 						<button
-							class="h-10 py-2 px-5 font-bold uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white shadow-lg shadow-emerald-950/20 transition duration-150 disabled:opacity-40"
+							class="h-10 py-2 px-5 font-bold uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-primary-foreground shadow-lg shadow-emerald-950/20 transition duration-150 disabled:opacity-40"
 							disabled={userExternalCount < 20 || acceptLoader}
 							onclick={() =>
 								acceptProject(

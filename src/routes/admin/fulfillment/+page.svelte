@@ -134,7 +134,7 @@
 									"text-xs transition-all duration-200 px-4 h-9 font-medium",
 									order.fields.fulfiller
 										? "border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-										: "bg-emerald-600 text-white hover:bg-emerald-600/50 border-transparent shadow-md shadow-emerald-950/20"
+										: "bg-emerald-600 text-primary-foreground hover:bg-emerald-600/50 border-transparent shadow-md shadow-emerald-950/20"
 								)}
 							>
 								{order.fields.fulfiller ? "View Details" : "Process order"}

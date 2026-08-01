@@ -309,7 +309,7 @@
 									>
 										<div class="flex justify-between items-start gap-4">
 											<p
-												class="font-alchemize font-bold text-white text-sm tracking-wide group-hover/item:text-primary transition-colors"
+												class="font-alchemize font-bold text-primary-foreground text-sm tracking-wide group-hover/item:text-primary transition-colors"
 											>
 												{project.fields.Name || "Untitled Project"}
 											</p>
@@ -375,7 +375,7 @@
 										Redstone
 									</p>
 									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
+										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
 									>
 										{userCurrencies.redstone ?? 0}
 									</p>
@@ -398,7 +398,7 @@
 										Glowstone
 									</p>
 									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
+										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
 									>
 										{userCurrencies.glowstone ?? 0}
 									</p>
@@ -421,7 +421,7 @@
 										Aqua Regia
 									</p>
 									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
+										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
 									>
 										{userCurrencies.aqua_regia ?? 0}
 									</p>
@@ -444,7 +444,7 @@
 										Potion Mix
 									</p>
 									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
+										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
 									>
 										{userCurrencies.potion_mix ?? 0}
 									</p>

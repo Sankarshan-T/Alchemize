@@ -8,12 +8,11 @@
 		Repeat,
 		Undo2,
 	} from "lucide-svelte"
-	import {toast} from "svelte-sonner"
+	import { toast } from "svelte-sonner"
 	const { data } = $props()
 	console.log(data)
 	const order = data.orderDetails
 	const markAsFulfilled = async () => {
-		
 		console.log("Marking as fulfilled...")
 		fetch(`/admin/fulfillment/fulfilled`, {
 			method: "POST",
@@ -21,16 +20,18 @@
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({ orderId: order.id }),
-		}).then((response) => {
-			if (response.ok) {
-				toast.success("Order marked as fulfilled!")
-			} else {
-				toast.error("Failed to mark order as fulfilled.")
-			}
-		}).catch((error) => {
-			console.error("Error marking order as fulfilled:", error)
-			toast.error("An error occurred while marking the order as fulfilled.")
 		})
+			.then(response => {
+				if (response.ok) {
+					toast.success("Order marked as fulfilled!")
+				} else {
+					toast.error("Failed to mark order as fulfilled.")
+				}
+			})
+			.catch(error => {
+				console.error("Error marking order as fulfilled:", error)
+				toast.error("An error occurred while marking the order as fulfilled.")
+			})
 		window.location.href = "/admin/fulfillment"
 	}
 </script>
@@ -45,10 +46,13 @@
 <main
 	class="w-full h-full flex-col max-h-screen overflow-x-hidden custom-scrollbar overflow-y-scroll flex items-center justify-center p-4 md:p-8 relative text-admin-text"
 >
-{#if order.fulfiller !== ""}
-	<div class="h-10 w-2/5 flex items-center justify-center rounded-xl bg-green-800/50 border-2 border-green-600 mb-20">!!!! Fullfilled order, Fulfilled by {order.fulfiller}</div>
-
-{/if}
+	{#if order.fulfiller !== ""}
+		<div
+			class="h-10 w-2/5 flex items-center justify-center rounded-xl bg-green-800/50 border-2 border-green-600 mb-20"
+		>
+			!!!! Fullfilled order, Fulfilled by {order.fulfiller}
+		</div>
+	{/if}
 	<div
 		class="relative z-50 w-full max-w-5xl h-[85vh] bg-slate-900/70 backdrop-blur-md border border-slate-700/40 rounded-2xl shadow-2xl grid grid-cols-1 md:grid-cols-2 overflow-x-hidden custom-scrollbar divide-y md:divide-y-0 md:divide-x divide-slate-800/60"
 	>
@@ -73,7 +77,7 @@
 				<div
 					class="space-y-3 bg-slate-950/30 p-4 rounded-xl border border-slate-800/40 text-sm"
 				>
-									<div class="flex items-center gap-3">
+					<div class="flex items-center gap-3">
 						<Repeat class="w-4 h-4 text-slate-400" />
 						<span class="text-admin-text/60 w-24">Quantity:</span>
 						<span class="font-semibold text-zinc-200">{order.qty}</span>
@@ -81,28 +85,29 @@
 					<div class="flex items-center gap-3">
 						<Calendar class="w-4 h-4 text-slate-400" />
 						<span class="text-admin-text/60 w-24">Ordered on:</span>
-						<span class="font-semibold text-zinc-200">{(new Date(order.dateCreated)).toLocaleDateString()}</span>
+						<span class="font-semibold text-zinc-200"
+							>{new Date(order.dateCreated).toLocaleDateString()}</span
+						>
 					</div>
 					<div class="flex items-center gap-3">
 						<User class="w-4 h-4 text-slate-400" />
 						<span class="text-admin-text/60 w-24">Ordered by:</span>
 						<span class="font-semibold text-zinc-200">{order.email}</span>
 					</div>
-
 				</div>
 			</div>
 
 			<div
 				class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 border-t border-slate-800/40 mt-6"
 			>
-			{#if order.fulfiller === ""}
-				<Button
-					class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow-lg transition-all w-full"
-					onclick={markAsFulfilled}
-				>
-					Mark as Fulfilled
-				</Button>
-			{/if}
+				{#if order.fulfiller === ""}
+					<Button
+						class="bg-emerald-600 hover:bg-emerald-500 text-primary-foreground font-medium shadow-lg transition-all w-full"
+						onclick={markAsFulfilled}
+					>
+						Mark as Fulfilled
+					</Button>
+				{/if}
 				<!-- <Button
 					variant="outline"
 					class="border-slate-700 hover:bg-slate-800 text-admin-text font-medium transition-all w-full"
@@ -129,8 +134,13 @@
 							class="text-[11px] font-semibold text-admin-text/40 uppercase tracking-wider block"
 							>Recipient</span
 						>
-						<p class="font-semibold text-zinc-200">{order.firstName} {order.lastName}</p>
-						<p class="text-xs text-admin-text/50 font-mono">{order.ageNow} years old</p>
+						<p class="font-semibold text-zinc-200">
+							{order.firstName}
+							{order.lastName}
+						</p>
+						<p class="text-xs text-admin-text/50 font-mono">
+							{order.ageNow} years old
+						</p>
 					</div>
 
 					<div class="space-y-0.5 pt-1">
@@ -142,9 +152,7 @@
 							{order.email}
 						</p>
 						<p class="text-zinc-400 text-xs">
-							HCB — <span class="font-mono text-zinc-300"
-								>Card Grant</span
-							>
+							HCB — <span class="font-mono text-zinc-300">Card Grant</span>
 						</p>
 					</div>
 				</div>
@@ -223,8 +231,9 @@
 		</div>
 	</div>
 </main>
+
 <style>
-		.custom-scrollbar::-webkit-scrollbar {
+	.custom-scrollbar::-webkit-scrollbar {
 		width: 4px;
 		height: 4px;
 	}

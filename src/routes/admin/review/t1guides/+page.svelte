@@ -32,48 +32,50 @@
 			>
 				Alchemize
 			</span>
-			<h2 class="text-xl font-bold mb-6 text-white">Review Guide</h2>
+			<h2 class="text-xl font-bold mb-6 text-primary-foreground">
+				Review Guide
+			</h2>
 
 			<nav class="space-y-1 text-sm text-zinc-400">
 				<a
 					href="#fraud"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<Shield class="w-4 h-4 text-rose-500" /> Fraud Check
 				</a>
 				<a
 					href="#repo"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<FolderGit2 class="w-4 h-4 text-indigo-400" /> Repo, Demo and Readme
 				</a>
 				<a
 					href="#hours"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<Clock3 class="w-4 h-4 text-amber-400" /> Project Hours
 				</a>
 				<a
 					href="#code"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<SearchCode class="w-4 h-4 text-sky-400" /> AI Detection
 				</a>
 				<a
 					href="#testing"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<CirclePlay class="w-4 h-4 text-emerald-400" /> Demo Testing
 				</a>
 				<a
 					href="#feedback"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<MessageSquareText class="w-4 h-4 text-purple-400" /> User Feedback
 				</a>
 				<a
 					href="#specifics"
-					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-white transition-colors"
+					class="flex items-center gap-2.5 p-2 hover:bg-zinc-900 rounded-md hover:text-primary-foreground transition-colors"
 				>
 					<Boxes class="w-4 h-4 text-teal-400" /> Project Types Guide
 				</a>
@@ -85,7 +87,9 @@
 		class="flex-1 overflow-y-auto p-6 md:p-12 lg:p-16 max-w-4xl mx-auto space-y-12 pb-32 scroll-smooth scrollbar-none!"
 	>
 		<header class="border-b border-zinc-900 pb-6 md:pt-4">
-			<h1 class="text-3xl font-extrabold tracking-tight text-white mb-3">
+			<h1
+				class="text-3xl font-extrabold tracking-tight text-primary-foreground mb-3"
+			>
 				Alchemize Review Guide
 			</h1>
 			<p class="text-zinc-400 leading-relaxed">
@@ -128,7 +132,7 @@
 
 		<section id="repo" class="space-y-4">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<FolderGit2 class="w-5 h-5 text-indigo-400" />
 				<h2>2. GitHub Repo + Demo + Project Description</h2>
@@ -211,7 +215,7 @@
 
 		<section id="hours" class="space-y-3">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<Clock3 class="w-5 h-5 text-amber-400" />
 				<h2>3. Project Hours Inspection</h2>
@@ -238,7 +242,7 @@
 
 		<section id="code" class="space-y-3">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<SearchCode class="w-5 h-5 text-sky-400" />
 				<h2>4. Code Review & AI Usage</h2>
@@ -246,7 +250,9 @@
 			<div
 				class="bg-zinc-900/60 p-5 rounded-xl space-y-3 text-sm text-zinc-300"
 			>
-				<p class="font-medium text-white">Look for AI Fingerprints:</p>
+				<p class="font-medium text-primary-foreground">
+					Look for AI Fingerprints:
+				</p>
 				<ul class="list-disc pl-5 space-y-1 text-zinc-400 text-xs">
 					<li>
 						Suspiciously perfect structure, copy-paste patterns and weird
@@ -281,7 +287,7 @@
 
 		<section id="testing" class="space-y-4">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<CirclePlay class="w-5 h-5 text-emerald-400" />
 				<h2>5. Demo Testing Guidelines</h2>
@@ -325,7 +331,7 @@
 
 		<section id="feedback" class="space-y-4">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<MessageSquareText class="w-5 h-5 text-purple-400" />
 				<h2>6. User Feedback</h2>
@@ -369,7 +375,7 @@ Please reship after implementing these changes and we will take another look at 
 
 		<section id="specifics" class="space-y-4">
 			<div
-				class="flex items-center gap-2 text-white font-bold text-xl border-b border-zinc-900 pb-2"
+				class="flex items-center gap-2 text-primary-foreground font-bold text-xl border-b border-zinc-900 pb-2"
 			>
 				<Boxes class="w-5 h-5 text-teal-400" />
 				<h2>7. Specific Project Types</h2>
@@ -387,7 +393,8 @@ Please reship after implementing these changes and we will take another look at 
 					</thead>
 					<tbody class="divide-y divide-zinc-900 text-xs">
 						<tr class="hover:bg-zinc-900/20">
-							<td class="p-4 font-bold text-white whitespace-nowrap"
+							<td
+								class="p-4 font-bold text-primary-foreground whitespace-nowrap"
 								>Web Apps</td
 							>
 							<td class="p-4 text-zinc-300"
@@ -400,7 +407,8 @@ Please reship after implementing these changes and we will take another look at 
 							</td>
 						</tr>
 						<tr class="hover:bg-zinc-900/20">
-							<td class="p-4 font-bold text-white whitespace-nowrap"
+							<td
+								class="p-4 font-bold text-primary-foreground whitespace-nowrap"
 								>Executables</td
 							>
 							<td class="p-4 text-zinc-300"
@@ -412,7 +420,8 @@ Please reship after implementing these changes and we will take another look at 
 							>
 						</tr>
 						<tr class="hover:bg-zinc-900/20">
-							<td class="p-4 font-bold text-white whitespace-nowrap"
+							<td
+								class="p-4 font-bold text-primary-foreground whitespace-nowrap"
 								>Mobile (Android/iOS)</td
 							>
 							<td class="p-4 text-zinc-300"
@@ -424,7 +433,8 @@ Please reship after implementing these changes and we will take another look at 
 							>
 						</tr>
 						<tr class="hover:bg-zinc-900/20">
-							<td class="p-4 font-bold text-white whitespace-nowrap"
+							<td
+								class="p-4 font-bold text-primary-foreground whitespace-nowrap"
 								>APIs & Bots</td
 							>
 							<td class="p-4 text-zinc-300"
@@ -436,7 +446,8 @@ Please reship after implementing these changes and we will take another look at 
 							>
 						</tr>
 						<tr class="hover:bg-zinc-900/20">
-							<td class="p-4 font-bold text-white whitespace-nowrap"
+							<td
+								class="p-4 font-bold text-primary-foreground whitespace-nowrap"
 								>Libraries</td
 							>
 							<td class="p-4 text-zinc-300"

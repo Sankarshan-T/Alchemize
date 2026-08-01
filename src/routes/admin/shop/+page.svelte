@@ -86,7 +86,6 @@
 	}
 </script>
 
-
 <svelte:head>
 	<title>Alchemize | Manage Shop</title>
 	<meta name="description" content="Alchemize Manage Shop" />
@@ -127,7 +126,7 @@
 				type="text"
 				placeholder="SEARCH SHOP BY NAME OR DESCRIPTION..."
 				bind:value={searchQuery}
-				class="pl-10 uppercase text-xs tracking-widest h-10 border-2 border-admin-primary/40 bg-black/80 rounded-none text-white focus-visible:ring-1 focus-visible:ring-admin-primary focus-visible:border-admin-primary placeholder:text-zinc-600 font-mono"
+				class="pl-10 uppercase text-xs tracking-widest h-10 border-2 border-admin-primary/40 bg-black/80 rounded-none text-primary-foreground focus-visible:ring-1 focus-visible:ring-admin-primary focus-visible:border-admin-primary placeholder:text-zinc-600 font-mono"
 			/>
 		</div>
 
@@ -169,7 +168,7 @@
 
 						<div class="col-span-1 md:col-span-5 flex flex-col gap-1 min-w-0">
 							<h2
-								class="text-sm font-black uppercase text-white tracking-tight font-alchemize"
+								class="text-sm font-black uppercase text-primary-foreground tracking-tight font-alchemize"
 							>
 								{item.name}
 							</h2>

@@ -85,7 +85,7 @@
 		<button
 			class="px-8 h-full bg-primary text-primary-foreground rounded-lg font-bold uppercase tracking-widest text-xs transition-all duration-150 font-mono active:scale-[0.98] flex items-center justify-center min-w-[140px] shadow-lg shadow-primary/10 relative z-30"
 			class:bg-emerald-600={copied}
-			class:text-white={copied}
+			class:text-primary-foreground={copied}
 			onclick={onCopy}
 		>
 			{copied ? "Copied!" : "Copy Link"}
