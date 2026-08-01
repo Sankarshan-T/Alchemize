@@ -56,6 +56,13 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	if (!clientId || !clientSecret || !redirectUri) {
 		throw error(500, "Missing OAuth environment variables")
 	}
+	
+
+		const state = url.searchParams.get("state")
+		const storedState = cookies.get("oauth_state")
+		if (!state || !storedState || state !== storedState) {
+			throw error(400, "Invalid state parameter")
+		}
 
 	const [tokenResponse, keysResponse] = await Promise.all([fetch("https://auth.hackclub.com/oauth/token", {
 		method: "POST",
