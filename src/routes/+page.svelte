@@ -171,12 +171,12 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-note font-alchemize tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-note tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
 				<h3
-					class="text-xl font-bold font-display font-alchemize tracking-tighter text-foreground text-shadow-sm text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-xl font-bold font-display tracking-tighter text-foreground text-shadow-sm text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					With more mixing this time
 				</h3>
@@ -214,92 +214,88 @@
 			id="features"
 			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
 		>
-			<h2
-				class="text-5xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
-			>
+			<h2 class="text-5xl font-note tracking-tight uppercase text-foreground">
 				HOW IT WORKS
 			</h2>
 
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
 				<div
-					class=" h-full flex flex-col gap-2 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
-							class="p-2 border border-primary bg-background/60 bg-primary/20 text-primary transition-colors rounded-md"
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
 						>
 							<Blocks class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
 						>
 							01 - Create
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-sm leading-relaxed">
+					<p class="text-muted-foreground font-body text-sm leading-relaxed">
 						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
 						hours via Hackatime.
 					</p>
 				</div>
-
 				<div
-					class=" h-full flex flex-col gap-2 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
-							class="p-2 border border-primary bg-background/60 bg-primary/20 text-primary transition-colors rounded-md"
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
 						>
 							<Rocket class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
 						>
 							02 - Ship
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-sm leading-relaxed">
+					<p class="text-muted-foreground font-body text-sm leading-relaxed">
 						Submit your project for review by the Alchinspectors to earn theme
 						stones.
 					</p>
 				</div>
 
 				<div
-					class=" h-full flex flex-col gap-2 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
-							class="p-2 border border-primary bg-primary/20 text-primary transition-colors rounded-md"
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
 						>
 							<FlaskConical class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
 						>
 							03 - Trade
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-sm leading-relaxed">
+					<p class="text-muted-foreground font-body text-sm leading-relaxed">
 						Trade your awesome theme based stones (redstone, glowstone and
 						aqua-regia) to get potion mix!
 					</p>
 				</div>
-
 				<div
-					class=" h-full flex flex-col gap-2 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
-							class="p-2 border border-primary bg-background/60 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors rounded-md"
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
 						>
 							<ShoppingCart class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black uppercase tracking-tight text-primary-foreground"
+							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
 						>
-							04 - Epic Shop
+							04 - Spend!
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-sm leading-relaxed">
+					<p class="text-muted-foreground font-body text-sm leading-relaxed">
 						Spend your precious stones and potion mix on rewards. New items are
 						added frequently!
 					</p>
@@ -311,23 +307,23 @@
 			id="themes"
 			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
-			<h2
-				class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
-			>
+			<h2 class="text-5xl font-note tracking-tight uppercase text-foreground">
 				Themes for Season 2
 			</h2>
 
 			<div class="grid grid-cols-2 gap-4 w-full">
 				<div
-					class="w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
+						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
 						1. Endless
 					</h3>
 					<div class="flex-1">
-						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
+						<p
+							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						>
 							Create a project with an infinite Canvas. It can be a game where
 							levels generate endlessly(like pacman), It can be a paint app with
 							infinite canvas, It can also be a scientific simulation which
@@ -336,44 +332,43 @@
 						</p>
 					</div>
 				</div>
-
 				<div
-					class="relative w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
+						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						2. Endless
+						1. Endless
 					</h3>
 					<div class="flex-1">
-						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
-							Make something that works without an internet connection, No APIs,
-							No CDNs, No fetching data from the internet, (and obviously no
-							websites), it can be a game that doesn't require an internet
-							connection, an app that uses Bluetooth to chat with friends, a
-							robot that does something cool, anything as long as it works
-							without internet.
+						<p
+							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						>
+							Create a project with an infinite Canvas. It can be a game where
+							levels generate endlessly(like pacman), It can be a paint app with
+							infinite canvas, It can also be a scientific simulation which
+							keeps on running indefinitely. It can be anything as long as it
+							has an element of infinity to it(and it never ends).
 						</p>
 					</div>
 				</div>
-
 				<div
-					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
 				>
 					<h3
-						class="text-xl font-black uppercase tracking-tight text-primary-foreground font-alchemize"
+						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						3. Endless
+						1. Endless
 					</h3>
 					<div class="flex-1">
-						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
-							Make a game inspired by the indie game genre. It can be a
-							platformer with a unique art style, a narrative-driven experience,
-							a puzzle game with innovative mechanics, or anything else that
-							captures the spirit of indie games. Create your own artstyles here
-							that gives vibes of indie pixel art, hand drawn aesthetics, The
-							game should reflect the creativity and innovation that indie games
-							are known for.
+						<p
+							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						>
+							Create a project with an infinite Canvas. It can be a game where
+							levels generate endlessly(like pacman), It can be a paint app with
+							infinite canvas, It can also be a scientific simulation which
+							keeps on running indefinitely. It can be anything as long as it
+							has an element of infinity to it(and it never ends).
 						</p>
 					</div>
 				</div>
@@ -384,9 +379,7 @@
 			id="faq"
 			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
 		>
-			<h2
-				class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
-			>
+			<h2 class="text-3xl font-black tracking-tight uppercase text-foreground">
 				FAQ
 			</h2>
 
@@ -401,11 +394,11 @@
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
+					Content="Software development time is tracked using <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"
-					Content="If you have any questions or need help with anything, just join the <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-primary-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
+					Content="If you have any questions or need help with anything, just join the <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
 				/>
 			</div>
 		</section>
@@ -418,9 +411,7 @@
 			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
 		>
 			<div class="flex flex-col gap-4 max-w-xs">
-				<h3
-					class="text-xl font-black font-alchemize text-primary-foreground tracking-wide uppercase"
-				>
+				<h3 class="text-xl font-black text-foreground tracking-wide uppercase">
 					Hack Club
 				</h3>
 				<p class="text-zinc-500 text-xs leading-relaxed">
@@ -434,37 +425,37 @@
 			>
 				<div class="flex flex-col gap-3">
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/philosophy/">Philosophy</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/team/">The Team</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/brand/">Branding</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/philanthropy/">Philanthropy</a
 					>
 				</div>
 				<div class="flex flex-col gap-3">
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/jams/">Jams</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://toolbox.hackclub.com/">Toolbox</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/conduct/">Code of Conduct</a
 					>
 					<a
-						class="text-muted-foreground hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/privacy/">Privacy</a
 					>
 				</div>
