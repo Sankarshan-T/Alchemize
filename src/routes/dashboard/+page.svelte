@@ -327,8 +327,7 @@
 										<p
 											class="text-zinc-500 text-[11px] font-sans tracking-normal line-clamp-1 flex gap-2"
 										>
-											{@html renderBadge(project.fields.Theme) ??
-												project.fields.type}
+											{@html renderBadge(project.fields.Theme)}
 										</p>
 									</div>
 								{/each}
