@@ -171,7 +171,7 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-note tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
