@@ -45,7 +45,9 @@ body {
   --font-hero: 'Comic Sans', cursive, sans-serif;
   --font-saira: 'Saira Stencil', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
-  --background-image-gradbg: radial-gradient(circle, rgba(0, 49, 83, 1) 24%, rgba(9, 11, 15, 1) 92%);
+  --background-image-gradbg:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    radial-gradient(circle, rgba(0, 49, 83, 1) 24%, rgba(9, 11, 15, 1) 92%);
   --background-image-admin: linear-gradient(to bottom right,
       var(--color-neutral-900),
       var(--color-blue-950),

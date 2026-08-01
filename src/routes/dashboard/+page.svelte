@@ -502,15 +502,6 @@
 </div>
 
 <style>
-	.bg-gradbg {
-		background: linear-gradient(
-			to bottom right,
-			var(--color-neutral-950),
-			#1a090c,
-			#2e030f
-		);
-	}
-
 	:global(.no-scrollbar::-webkit-scrollbar) {
 		display: none;
 	}

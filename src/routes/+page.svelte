@@ -482,6 +482,14 @@
 </div>
 
 <style>
+	.bg-gradbg {
+		background: radial-gradient(
+			circle,
+			rgba(0, 49, 83, 1) 24%,
+			rgba(9, 11, 15, 1) 92%
+		);
+	}
+
 	main {
 		transform: translateZ(0);
 	}
