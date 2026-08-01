@@ -38,7 +38,7 @@
 			? `./turned-off`
 			: hasaccessToken
 				? `./dashboard`
-				: `https://auth.hackclub.com/oauth/authorize?client_id=${clientId}&response_type=code&scope=${scopes}&redirect_uri=${uri}`
+				: `/auth`
 	)
 
 	let referUrl = $state(`./refer`)
@@ -92,7 +92,7 @@
 				? `./turned-off`
 				: hasaccessToken
 					? `./dashboard`
-					: `https://auth.hackclub.com/oauth/authorize?client_id=${clientId}&response_type=code&scope=${scopes}&redirect_uri=${uri}`
+					: `/auth`
 		fetch("/rsvp")
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
