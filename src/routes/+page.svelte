@@ -220,7 +220,7 @@
 
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -240,7 +240,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -261,7 +261,7 @@
 				</div>
 
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -281,7 +281,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -313,7 +313,7 @@
 
 			<div class="grid grid-cols-2 gap-4 w-full">
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
@@ -333,7 +333,7 @@
 					</div>
 				</div>
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
@@ -353,7 +353,7 @@
 					</div>
 				</div>
 				<div
-					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"

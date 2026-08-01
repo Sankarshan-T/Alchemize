@@ -21,10 +21,14 @@
   --parchment-light: #F3ECD8;
   --parchment-dark: #DDD0AC;
 
-  background: linear-gradient(135deg,
-      var(--parchment-light) 0%,
-      var(--parchment) 50%,
-      var(--parchment-dark) 100%);
+  --background: #f5ecd8 radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.35), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.06), transparent 60%),
+    repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.015) 0px,
+      rgba(0, 0, 0, 0.015) 1px,
+      transparent 1px,
+      transparent 3px);
+  ;
   --foreground: #1f3c56;
   --card: #F7F0DD;
   --card-foreground: #111827;
