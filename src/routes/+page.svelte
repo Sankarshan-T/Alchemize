@@ -187,7 +187,7 @@
 				<div class="p-3 w-full flex items-center justify-center">
 					<a href={authUrl}>
 						<Button
-							class="p-6 w-full text-xl bg-primary/40 border border-border hover:border-primary hover:bg-primary/50 hover:-translate-y-px justify-between flex"
+							class="p-6 w-full text-xl bg-primary/40 border border-primary hover:border-border hover:bg-primary/50 hover:-translate-y-px justify-between flex"
 						>
 							<p>Get Started</p>
 							<ChevronsRight />
@@ -230,7 +230,7 @@
 							01 - Create
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-md leading-relaxed">
+					<p class="text-muted-foreground text-sm leading-relaxed">
 						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
 						hours via Hackatime.
 					</p>
@@ -251,7 +251,7 @@
 							02 - Ship
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-md leading-relaxed">
+					<p class="text-muted-foreground text-sm leading-relaxed">
 						Submit your project for review by the Alchinspectors to earn theme
 						stones.
 					</p>
@@ -272,7 +272,7 @@
 							03 - Trade
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-md leading-relaxed">
+					<p class="text-muted-foreground text-sm leading-relaxed">
 						Trade your awesome theme based stones (redstone, glowstone and
 						aqua-regia) to get potion mix!
 					</p>
@@ -293,7 +293,7 @@
 							04 - Epic Shop
 						</h3>
 					</div>
-					<p class="text-muted-foreground text-md leading-relaxed">
+					<p class="text-muted-foreground text-sm leading-relaxed">
 						Spend your precious stones and potion mix on rewards. New items are
 						added frequently!
 					</p>
@@ -303,7 +303,7 @@
 
 		<section
 			id="themes"
-			class="flex flex-col gap-12 py-24 min-h-screen border-t-2 border-border relative"
+			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
 			<h2
 				class="text-3xl font-black font-alchemize tracking-tight uppercase text-primary-foreground"
