@@ -250,7 +250,7 @@
 
 		<section
 			id="themes"
-			class="flex flex-col gap-12 py-24 border-t-2 border-zinc-900 relative"
+			class="flex flex-col gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
 			<h2
 				class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
@@ -258,106 +258,64 @@
 				Themes for Season 2
 			</h2>
 
-			<div class="flex flex-col gap-4 w-full">
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+			<div class="grid grid-cols-2 gap-4 w-full">
+				<div
+					class="w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				>
+					<h3
+						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_01
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								Endless
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Create a project with an infinite Canvas. It can be a game where
-								levels generate endlessly(like pacman), It can be a paint app
-								with infinite canvas, It can also be a scientific simulation
-								which keeps on running indefinitely. It can be anything as long
-								as it has an element of infinity to it(and it never ends).
-							</p>
-						</div>
+						1. Endless
+					</h3>
+					<div class="flex-1">
+						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
+							Create a project with an infinite Canvas. It can be a game where
+							levels generate endlessly(like pacman), It can be a paint app with
+							infinite canvas, It can also be a scientific simulation which
+							keeps on running indefinitely. It can be anything as long as it
+							has an element of infinity to it(and it never ends).
+						</p>
 					</div>
 				</div>
 
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				<div
+					class="relative w-full flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				>
+					<h3
+						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_02
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								No Internet
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Make something that works without an internet connection, No
-								APIs, No CDNs, No fetching data from the internet, (and
-								obviously no websites), it can be a game that doesn't require an
-								internet connection, an app that uses Bluetooth to chat with
-								friends, a robot that does something cool, anything as long as
-								it works without internet.
-							</p>
-						</div>
+						2. Endless
+					</h3>
+					<div class="flex-1">
+						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
+							Make something that works without an internet connection, No APIs,
+							No CDNs, No fetching data from the internet, (and obviously no
+							websites), it can be a game that doesn't require an internet
+							connection, an app that uses Bluetooth to chat with friends, a
+							robot that does something cool, anything as long as it works
+							without internet.
+						</p>
 					</div>
 				</div>
 
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				<div
+					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				>
+					<h3
+						class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_03
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								Indie Gamedev
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Make a game inspired by the indie game genre. It can be a
-								platformer with a unique art style, a narrative-driven
-								experience, a puzzle game with innovative mechanics, or anything
-								else that captures the spirit of indie games. Create your own
-								artstyles here that gives vibes of indie pixel art, hand drawn
-								aesthetics, The game should reflect the creativity and
-								innovation that indie games are known for.
-							</p>
-						</div>
+						3. Endless
+					</h3>
+					<div class="flex-1">
+						<p class="text-muted-foreground text-xs leading-relaxed font-mono">
+							Make a game inspired by the indie game genre. It can be a
+							platformer with a unique art style, a narrative-driven experience,
+							a puzzle game with innovative mechanics, or anything else that
+							captures the spirit of indie games. Create your own artstyles here
+							that gives vibes of indie pixel art, hand drawn aesthetics, The
+							game should reflect the creativity and innovation that indie games
+							are known for.
+						</p>
 					</div>
 				</div>
 			</div>
@@ -365,7 +323,7 @@
 
 		<section
 			id="faq"
-			class="flex flex-col gap-12 py-24 border-t-2 border-zinc-900 relative"
+			class="flex flex-col gap-12 py-24 border-t-2 border-border relative"
 		>
 			<div class="flex flex-col gap-1 items-center text-center">
 				<div class="text-xs uppercase text-primary font-bold tracking-[0.25em]">
