@@ -20,6 +20,7 @@
 	import { scopes } from "$lib/utils"
 	import Accordion from "$lib/components/accordion.svelte"
 	import { CircleCheck, ShoppingBag, User } from "@lucide/svelte"
+	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
@@ -115,7 +116,7 @@
 	<div class="fixed inset-0 bg-black/40 z-0 pointer-events-none"></div>
 
 	<div
-		class="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-80"
+		class="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_2px,transparent_2px),linear-gradient(to_bottom,#8080800a_2px,transparent_2px)] bg-[size:56px_56px] pointer-events-none opacity-100"
 	></div>
 
 	<div
@@ -165,7 +166,7 @@
 		>
 			<div class="flex flex-col items-center gap-2">
 				<div
-					class="flex items-center gap-2 text-xs font-bold text-primary-foreground tracking-[0.3em] uppercase"
+					class="flex items-center gap-2 text-sm font-bold text-primary-foreground tracking-[0.3em] uppercase"
 				>
 					<CircleCheck class="h-3 w-3" />
 					<span>Season 1 -</span>
@@ -174,10 +175,25 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-primary-foreground [text-shadow:4px_4px_0px_rgba(var(--primary),0.15)] selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-primary-foreground text-shadow-lg text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
+				<h3
+					class="text-xl font-bold font-mono font-alchemize tracking-tighter text-primary-foreground text-shadow-lg text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+				>
+					With more mixing this time
+				</h3>
+				<div class="p-3 w-full flex items-center justify-center">
+					<a href={authUrl}>
+						<Button
+							class="p-6 w-full text-xl bg-primary/40 border border-border hover:border-primary hover:bg-primary/50 hover:-translate-y-px justify-between flex"
+						>
+							<p>Get Started</p>
+							<ChevronsRight />
+						</Button>
+					</a>
+				</div>
 			</div>
 
 			<a
