@@ -105,7 +105,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background)
+  background: var(--card)
 }
 
 ::-webkit-scrollbar-thumb {

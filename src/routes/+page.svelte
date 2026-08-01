@@ -410,18 +410,20 @@
 		<div
 			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
 		>
-			<div class="flex flex-col gap-4 max-w-xs">
-				<h3 class="text-xl font-black text-foreground tracking-wide uppercase">
+			<div class="flex flex-col gap-2 max-w-xs">
+				<h3
+					class="text-xl font-black font-decor text-foreground tracking-wide uppercase"
+				>
 					Hack Club
 				</h3>
-				<p class="text-zinc-500 text-xs leading-relaxed">
+				<p class="text-muted-foreground font-display text-xs leading-relaxed">
 					Hack Club is the world’s largest nonprofit movement of teenagers
 					making cool projects.
 				</p>
 			</div>
 
 			<div
-				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider"
+				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider font-decor"
 			>
 				<div class="flex flex-col gap-3">
 					<a
