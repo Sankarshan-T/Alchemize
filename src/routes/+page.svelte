@@ -171,15 +171,18 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-md transition-shadow select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
 				<h3
-					class="text-xl font-bold font-display tracking-tighter text-foreground text-shadow-sm text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-xl font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
 					With more mixing this time
 				</h3>
+				<span class="mt-2 font-display font-semibold tracking-wider">
+					Starts form 8th August
+				</span>
 				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>
 						<Button
@@ -411,7 +414,7 @@
 	</main>
 
 	<footer
-		class="w-full border-t-2 border-border bg-background/40 relative z-20 mt-24 py-16"
+		class="w-full border-t-2 border-border bg-secondary/50 relative z-20 mt-24 py-16"
 	>
 		<div
 			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
