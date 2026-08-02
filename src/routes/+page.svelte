@@ -220,7 +220,7 @@
 
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-md shadow-sm shadow-primary"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -240,7 +240,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-md shadow-sm shadow-primary"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -261,7 +261,7 @@
 				</div>
 
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-md shadow-sm shadow-primary"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -281,7 +281,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5 rounded-tl-2xl rounded-br-2xl"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-md shadow-sm shadow-primary"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -313,64 +313,70 @@
 
 			<div class="grid grid-cols-2 gap-4 w-full">
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-md shadow-sm shadow-primary rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						1. Endless
+						1. Bots
 					</h3>
-					<div class="flex-1">
-						<p
-							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
-						>
-							Create a project with an infinite Canvas. It can be a game where
-							levels generate endlessly(like pacman), It can be a paint app with
-							infinite canvas, It can also be a scientific simulation which
-							keeps on running indefinitely. It can be anything as long as it
-							has an element of infinity to it(and it never ends).
-						</p>
-					</div>
+					<p
+						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+					>
+						Make a bot! Can be anything from a discord bot or a chatbot to a
+						crazy robot or an autonomous drone.
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+					>
+						Rewards: Redstone
+						<img src="/alch-redstone.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-md shadow-sm shadow-primary rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						1. Endless
+						2. Co-Op
 					</h3>
-					<div class="flex-1">
-						<p
-							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
-						>
-							Create a project with an infinite Canvas. It can be a game where
-							levels generate endlessly(like pacman), It can be a paint app with
-							infinite canvas, It can also be a scientific simulation which
-							keeps on running indefinitely. It can be anything as long as it
-							has an element of infinity to it(and it never ends).
-						</p>
-					</div>
+					<p
+						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+					>
+						Create a project with that involves <strong>team play</strong>...
+						could be literally anything multiplayer! Like maybe a multiplayer
+						tic-tac-toe game or a simple collaborative canvas or even a pair of
+						walkie talkies.
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+					>
+						Rewards: Glowstone
+						<img src="/alch-glowstone.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
 				<div
-					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl"
+					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-md shadow-sm shadow-primary"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						1. Endless
+						3. ElectroArt
 					</h3>
-					<div class="flex-1">
-						<p
-							class="text-card-foreground text-xs font-body leading-relaxed font-mono"
-						>
-							Create a project with an infinite Canvas. It can be a game where
-							levels generate endlessly(like pacman), It can be a paint app with
-							infinite canvas, It can also be a scientific simulation which
-							keeps on running indefinitely. It can be anything as long as it
-							has an element of infinity to it(and it never ends).
-						</p>
-					</div>
+					<p
+						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+					>
+						Make something by which your code returns art. Like a dynamic
+						website creating various patterns, or a strip of leds blinking in a
+						specific order and colors. It could be something cooler!
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+					>
+						Rewards: Aquaregia
+						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
 			</div>
 		</section>
