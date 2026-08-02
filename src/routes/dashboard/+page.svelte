@@ -91,11 +91,46 @@
 </svelte:head>
 
 <div
-	class="h-screen w-full bg-gradbg text-foreground font-mono tracking-wide selection:bg-primary selection:text-primary-foreground relative flex flex-col overflow-hidden p-4 md:p-6 lg:p-8 gap-4 md:gap-6"
+	class="h-screen w-full bg-background text-foreground font-mono tracking-wide selection:bg-primary selection:text-primary-foreground relative flex flex-col overflow-hidden p-4 md:p-6 lg:p-8 gap-4 md:gap-6"
 >
 	<main
-		class="flex-1 min-h-0 relative z-20 w-full mx-auto max-w-7xl flex flex-col gap-6"
+		class="flex-1 min-h-0 relative z-20 w-full mx-auto max-w-[95%] flex flex-col gap-6"
 	>
+		<div
+			class="w-full relative z-30 bg-card rounded-tl-2xl rounded-br-2xl border-2 border-border hover:shadow-sm transition shadow-primary px-4 py-2 md:px-10"
+		>
+			<div
+				class="mx-auto h-full flex items-center justify-between gap-2 sm:gap-4"
+			>
+				<div class="flex items-center gap-1 sm:gap-3 h-full w-full">
+					{#each navItems as item}
+						<a href={item.href}>
+							<Button variant="primary">
+								<item.icon class="w-4 h-4 stroke-2" />
+								<span
+									class="font-display font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
+								>
+									{item.label}
+								</span>
+							</Button>
+						</a>
+					{/each}
+				</div>
+				{#if !!data.admin}
+					<a href="/admin">
+						<Button variant="secondary">
+							<ShieldUser class="w-4 h-4 stroke-2 text-secondary-foreground" />
+							<span
+								class="font-display font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
+							>
+								Admin
+							</span>
+						</Button>
+					</a>
+				{/if}
+			</div>
+		</div>
+
 		<div
 			class="flex justify-between items-end border-b-2 pb-3 border-primary/30 shrink-0"
 		>
@@ -103,7 +138,7 @@
 				<img
 					alt="Profile Picture"
 					src={data.pfp}
-					class="border-2 border-primary bg-black/90 w-12 h-12 rounded-md shadow-[2px_2px_0px_0px_rgba(var(--primary),0.3)]"
+					class="border-2 border-primary bg-black/90 w-12 h-12 rounded-md"
 				/>
 				<div>
 					<h1
@@ -456,49 +491,6 @@
 			</div>
 		</div>
 	</main>
-
-	<div class="w-full relative z-30 flex justify-center shrink-0">
-		<div
-			class="w-full md:w-[95%] max-w-5xl bg-black/90 border-2 border-primary/60 backdrop-blur-md px-4 py-3 md:px-10 rounded-xl"
-		>
-			<div class="mx-auto flex items-center justify-between gap-2 sm:gap-4">
-				<div
-					class="flex items-center gap-1 sm:gap-3 overflow-x-auto no-scrollbar w-full"
-				>
-					{#each navItems as item}
-						<a
-							href={item.href}
-							class="flex items-center gap-2 bg-black border-2 border-primary/30 px-3 py-2 rounded text-zinc-300 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all shadow-[2px_2px_0px_0px_rgba(var(--primary),0.1)] active:translate-x-0.5 active:translate-y-0.5 shrink-0"
-						>
-							<svelte:component this={item.icon} class="w-4 h-4 stroke-2" />
-							<span
-								class="font-alchemize font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-								>{item.label}</span
-							>
-						</a>
-					{/each}
-
-					{#if !!data.admin}
-						<a
-							href="/admin"
-							class="flex items-center gap-2 bg-black border-2 border-red-500/30 px-3 py-2 rounded text-zinc-300 hover:text-red-400 hover:border-red-500 hover:bg-red-500/5 transition-all shadow-[2px_2px_0px_0px_rgba(239,68,68,0.1)] active:translate-x-0.5 active:translate-y-0.5 shrink-0"
-						>
-							<ShieldUser class="w-4 h-4 stroke-2 text-red-500" />
-							<span
-								class="font-alchemize font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-								>Admin</span
-							>
-						</a>
-					{/if}
-				</div>
-				<div
-					class="font-alchemize font-black uppercase text-xs tracking-widest text-primary/60 hidden md:block select-none shrink-0 pl-4"
-				>
-					Quick Actions
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 
 <style>

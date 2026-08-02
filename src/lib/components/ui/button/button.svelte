@@ -20,7 +20,7 @@
 					"rounded-lg bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30",
 				link: "rounded-lg text-primary underline-offset-4 hover:underline",
 				primary:
-					"bg-primary text-primary-foreground border border-border hover:border-primary-hover hover:bg-primary-hover hover:-translate-y-px rounded-tr-0 rounded-bl-0 rounded-tl-xl rounded-br-xl shadow-sm shadow-foreground",
+					"bg-primary text-primary-foreground hover:bg-primary-hover hover:-translate-y-px rounded-tr-0 rounded-bl-0 rounded-tl-xl rounded-br-xl shadow-xs shadow-foreground",
 				secondary:
 					"bg-secondary text-secondary-foreground border border-border hover:-translate-y-px rounded-tl-xl rounded-tr-0 rounded-bl-0 rounded-br-xl shadow-sm shadow-foreground",
 			},
