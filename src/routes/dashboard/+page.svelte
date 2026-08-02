@@ -89,7 +89,7 @@
 	<meta property="og:title" content="Alchemize | Dashboard" />
 </svelte:head>
 
-<main class="bg-background h-full w-full flex gap-6 p-7">
+<main class="h-full w-full flex gap-6 p-7">
 	<nav
 		class="h-full w-64 shrink-0 flex flex-col justify-between relative z-30 bg-card rounded-tl-2xl rounded-br-2xl border-2 border-border hover:shadow-sm transition shadow-primary p-4"
 	>
@@ -126,12 +126,16 @@
 	<div class="flex flex-col gap-6 flex-1 min-h-0">
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0">
 			<div
-				class="shadow-primary hover:shadow-sm transition flex items-center gap-3 bg-card border-2 border-border p-4 rounded-md"
+				class="shadow-primary hover:shadow-sm transition flex items-center gap-3 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl"
 			>
 				<div
-					class="bg-primary/10 rounded-md text-primary border border-primary"
+					class="bg-primary/10 rounded-tl-2xl rounded-br-2xl text-primary border border-primary"
 				>
-					<img src={data.pfp} alt={data?.name} class="h-10 w-10 rounded-md" />
+					<img
+						src={data.pfp}
+						alt={data?.name}
+						class="h-10 w-10 rounded-tl-2xl rounded-br-2xl"
+					/>
 				</div>
 				<div class="flex flex-col min-w-0">
 					<p
@@ -148,7 +152,7 @@
 			</div>
 
 			<div
-				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-md justify-center"
+				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl justify-center"
 			>
 				<div class="flex items-center justify-between">
 					<p
@@ -185,7 +189,7 @@
 			</div>
 
 			<div
-				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-md justify-center"
+				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl justify-center"
 			>
 				<p
 					class="text-card-foreground text-xs font-bold uppercase tracking-widest"
@@ -211,7 +215,7 @@
 
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
 			<div
-				class="shadow-primary hover:shadow-sm transition w-full flex flex-col bg-card border-2 border-border p-5 rounded-md h-full min-h-0"
+				class="shadow-primary hover:shadow-sm transition w-full flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl h-full min-h-0"
 			>
 				<div
 					class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
@@ -248,7 +252,7 @@
 			</div>
 
 			<div
-				class="shadow-primary hover:shadow-sm transition flex flex-col bg-card border-2 border-border p-5 rounded-md w-full h-full min-h-0"
+				class="shadow-primary hover:shadow-sm transition flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl w-full h-full min-h-0"
 			>
 				<div
 					class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
@@ -267,7 +271,7 @@
 					{#if projects && projects.length > 0}
 						{#each projects as project}
 							<div
-								class="bg-secondary/40 p-4 text-secondary-foreground rounded-md border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
+								class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
 							>
 								<div class="flex justify-between items-start gap-4">
 									<p
@@ -306,7 +310,7 @@
 		</div>
 
 		<div
-			class="shadow-primary hover:shadow-sm transition w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-md"
+			class="shadow-primary hover:shadow-sm transition w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl"
 		>
 			<h2
 				class="font-display font-black text-card-foreground text-md uppercase tracking-wider"
@@ -315,7 +319,7 @@
 			</h2>
 			<div class="gap-3 grid grid-cols-2 sm:grid-cols-4">
 				<div
-					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="p-1 shrink-0 rounded">
 						<img
@@ -339,7 +343,7 @@
 				</div>
 
 				<div
-					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="p-1 shrink-0 rounded">
 						<img
@@ -363,7 +367,7 @@
 				</div>
 
 				<div
-					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="p-1 shrink-0 rounded">
 						<img
@@ -387,7 +391,7 @@
 				</div>
 
 				<div
-					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl"
 				>
 					<div class="p-1 shrink-0 rounded">
 						<img
