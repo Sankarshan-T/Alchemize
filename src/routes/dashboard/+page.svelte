@@ -41,8 +41,8 @@
 		Users,
 		Clock,
 		Newspaper,
+		User as UserIcon,
 	} from "lucide-svelte"
-	import { Compass } from "@lucide/svelte"
 
 	let hacks: HackatimeProject[] = $derived(getHackatimeProjects(data?.hacks))
 
@@ -51,7 +51,6 @@
 		new Map(
 			hacks.map(hack => [
 				hack.name ?? hack.project_name ?? hack.project ?? "",
-
 				hack.total_seconds ?? 0,
 			])
 		)
@@ -59,8 +58,9 @@
 	let userCurrencies = $derived(
 		looseJson(data.user?.currency ?? "{}")
 	) as UserCurrency
+
 	const renderBadge = (text: string) => {
-		switch (text.toLowerCase()) {
+		switch (text?.toLowerCase()) {
 			case "endless":
 				return "<img src='/alch-aquaregia.png' alt='Aqua Regia' class='w-4 h-4 object-contain' /> Endless"
 			case "no-internet":
@@ -76,7 +76,6 @@
 
 	const navItems = [
 		{ href: "/dashboard/projects", label: "Projects", icon: Blocks },
-		// { href: "/dashboard/explore", label: "Explore", icon: Compass },
 		{ href: "/dashboard/shop", label: "Shop", icon: ShoppingBasket },
 		{ href: "/dashboard/trade", label: "Trade", icon: ArrowRightLeft },
 		{ href: "/refer", label: "Refer!", icon: Users },
@@ -90,408 +89,330 @@
 	<meta property="og:title" content="Alchemize | Dashboard" />
 </svelte:head>
 
-<div
-	class="h-screen w-full bg-background text-foreground font-mono tracking-wide selection:bg-primary selection:text-primary-foreground relative flex flex-col overflow-hidden p-4 md:p-6 lg:p-8 gap-4 md:gap-6"
->
-	<main
-		class="flex-1 min-h-0 relative z-20 w-full mx-auto max-w-[95%] flex flex-col gap-6"
+<main class="bg-background h-full w-full flex gap-6 p-7">
+	<nav
+		class="h-full w-64 shrink-0 flex flex-col justify-between relative z-30 bg-card rounded-tl-2xl rounded-br-2xl border-2 border-border hover:shadow-sm transition shadow-primary p-4"
 	>
-		<div
-			class="w-full relative z-30 bg-card rounded-tl-2xl rounded-br-2xl border-2 border-border hover:shadow-sm transition shadow-primary px-4 py-2 md:px-10"
-		>
+		<div class="flex flex-col gap-6">
 			<div
-				class="mx-auto h-full flex items-center justify-between gap-2 sm:gap-4"
-			>
-				<div class="flex items-center gap-1 sm:gap-3 h-full w-full">
-					{#each navItems as item}
-						<a href={item.href}>
-							<Button variant="primary">
-								<item.icon class="w-4 h-4 stroke-2" />
-								<span
-									class="font-display font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-								>
-									{item.label}
-								</span>
-							</Button>
-						</a>
-					{/each}
-				</div>
-				{#if !!data.admin}
-					<a href="/admin">
-						<Button variant="secondary">
-							<ShieldUser class="w-4 h-4 stroke-2 text-secondary-foreground" />
-							<span
-								class="font-display font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-							>
-								Admin
-							</span>
-						</Button>
-					</a>
-				{/if}
-			</div>
-		</div>
-
-		<div
-			class="flex justify-between items-end border-b-2 pb-3 border-primary/30 shrink-0"
-		>
-			<div class="flex items-center gap-4">
-				<img
-					alt="Profile Picture"
-					src={data.pfp}
-					class="border-2 border-primary bg-black/90 w-12 h-12 rounded-md"
-				/>
-				<div>
-					<h1
-						class="font-alchemize text-primary text-xl font-black uppercase tracking-wider"
-					>
-						{data.name}
-					</h1>
-					<p class="text-zinc-400 text-xs font-sans tracking-normal">
-						{data.email}
-					</p>
-				</div>
-			</div>
-			<div
-				class="font-alchemize font-black uppercase tracking-widest leading-none text-primary text-2xl flex items-center gap-x-1"
+				class="font-decor font-black uppercase leading-none text-card-foreground text-3xl text-center py-2"
 			>
 				Alchemize
 			</div>
+			<div class="flex flex-col gap-2 w-full">
+				{#each navItems as item}
+					<a href={item.href} class="w-full">
+						<Button variant="secondary" class="w-full justify-start gap-2 p-2">
+							<item.icon class="w-4 h-4 stroke-2" />
+							<span class="text-lg tracking-wider inline">
+								{item.label}
+							</span>
+						</Button>
+					</a>
+				{/each}
+			</div>
+		</div>
+
+		{#if !!data.admin}
+			<a href="/admin" class="w-full mt-auto">
+				<Button variant="primary" class="w-full justify-start gap-2 p-2">
+					<ShieldUser class="w-4 h-4 stroke-2" />
+					<span class="text-lg tracking-wider inline"> Admin </span>
+				</Button>
+			</a>
+		{/if}
+	</nav>
+
+	<div class="flex flex-col gap-6 flex-1 min-h-0">
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0">
+			<div
+				class="shadow-primary hover:shadow-sm transition flex items-center gap-3 bg-card border-2 border-border p-4 rounded-md"
+			>
+				<div
+					class="bg-primary/10 rounded-md text-primary border border-primary"
+				>
+					<img src={data.pfp} alt={data?.name} class="h-10 w-10 rounded-md" />
+				</div>
+				<div class="flex flex-col min-w-0">
+					<p
+						class="text-card-foreground text-xs font-bold uppercase tracking-widest"
+					>
+						{data?.name}
+					</p>
+					<span
+						class="font-body font-bold text-xs tracking-wide text-muted-foreground truncate"
+					>
+						{data?.email}
+					</span>
+				</div>
+			</div>
+
+			<div
+				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-md justify-center"
+			>
+				<div class="flex items-center justify-between">
+					<p
+						class="text-card-foreground text-xs font-bold uppercase tracking-widest flex items-center"
+					>
+						HCA Configs
+						<a href="/docs/issues/hca-configs" target="_blank" rel="noreferrer">
+							<CircleQuestionMark class="ml-1.5 size-3" />
+						</a>
+					</p>
+					{#if data.misconfigured.length > 0}
+						<a href="/auth">
+							<Button variant="primary">Re-login</Button>
+						</a>
+					{/if}
+				</div>
+				<div class="flex items-center gap-2">
+					<span
+						class="h-2 w-2 rounded-full {data.misconfigured.length === 0
+							? 'bg-primary'
+							: 'bg-red-700'}"
+					></span>
+					<span
+						class="font-body font-bold uppercase text-xs tracking-wider {data
+							.misconfigured.length === 0
+							? 'text-primary'
+							: 'text-red-700'}"
+					>
+						{data.misconfigured.length === 0
+							? "Complete"
+							: data.misconfigured.join(", ") + " Misconfigured"}
+					</span>
+				</div>
+			</div>
+
+			<div
+				class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-md justify-center"
+			>
+				<p
+					class="text-card-foreground text-xs font-bold uppercase tracking-widest"
+				>
+					YSWS Eligibility
+				</p>
+				<div class="flex items-center gap-2">
+					<span
+						class="h-2 w-2 rounded-full {data.eligiblity
+							? 'bg-primary'
+							: 'bg-red-700'}"
+					></span>
+					<span
+						class="font-body font-bold uppercase text-xs tracking-wider {data.eligiblity
+							? 'text-primary'
+							: 'text-red-700'}"
+					>
+						{data.eligiblity ? "Eligible" : "Not Eligible"}
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
+			<div
+				class="shadow-primary hover:shadow-sm transition w-full flex flex-col bg-card border-2 border-border p-5 rounded-md h-full min-h-0"
+			>
+				<div
+					class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
+				>
+					<Newspaper class="w-5 h-5 text-card-foreground" />
+					<h2
+						class="font-display font-black text-card-foreground text-lg uppercase tracking-wider"
+					>
+						News & Updates
+					</h2>
+				</div>
+				<div class="flex-1 overflow-y-auto pr-1 text-sm no-scrollbar">
+					<div class="flex flex-col gap-3">
+						<div
+							class="border-l-2 border-border bg-secondary/50 p-3 rounded-r-md"
+						>
+							<span
+								class="text-[11px] font-bold text-muted-foreground tracking-widest uppercase"
+							>
+								August 8th 2026
+							</span>
+							<h3 class="text-xs font-bold text-secondary-foreground mt-0.5">
+								Alchemize Season 2
+							</h3>
+							<p
+								class="text-secondary-foreground text-[11px] font-sans mt-1 leading-relaxed"
+							>
+								Alchemize season 2 has officially started! Go make new projects
+								now!
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="shadow-primary hover:shadow-sm transition flex flex-col bg-card border-2 border-border p-5 rounded-md w-full h-full min-h-0"
+			>
+				<div
+					class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
+				>
+					<Blocks class="w-5 h-5 text-card-foreground" />
+					<h2
+						class="font-display font-black text-card-foreground text-lg uppercase tracking-wider"
+					>
+						Your Mixes
+					</h2>
+				</div>
+
+				<div
+					class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 no-scrollbar"
+				>
+					{#if projects && projects.length > 0}
+						{#each projects as project}
+							<div
+								class="bg-secondary/40 p-4 text-secondary-foreground rounded-md border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
+							>
+								<div class="flex justify-between items-start gap-4">
+									<p
+										class="font-alchemize font-bold text-secondary-foreground text-md tracking-wide group-hover/item:text-secondary-foreground/80 transition-colors"
+									>
+										{project.fields.Name || "Untitled Project"}
+									</p>
+									<span
+										class="text-xs font-bold flex items-center gap-1 shrink-0"
+									>
+										<Clock class="size-3.5 text-primary" />
+										{formatHours(
+											hackSecondsByName.get(project.fields.hackatime ?? "") ?? 0
+										)}h
+									</span>
+								</div>
+								<p
+									class=" text-xs font-body tracking-normal line-clamp-1 flex gap-2"
+								>
+									{@html renderBadge(project.fields.Theme)}
+								</p>
+							</div>
+						{/each}
+					{:else}
+						<div class="text-sm py-4">No projects yet.....</div>
+					{/if}
+				</div>
+
+				<a
+					href="/dashboard/projects"
+					class="self-end text-card-foreground font-bold text-xs uppercase tracking-widest hover:underline pt-3 flex items-center gap-1 shrink-0"
+				>
+					View all mixes →
+				</a>
+			</div>
 		</div>
 
 		<div
-			class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch w-full flex-1 min-h-0"
+			class="shadow-primary hover:shadow-sm transition w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-md"
 		>
-			<div class="flex flex-col gap-6 w-full min-h-0">
-				<div class="gap-6 grid grid-cols-1 sm:grid-cols-2 w-full shrink-0">
-					<div class="relative group">
-						<div
-							class="absolute inset-0 bg-primary/20 translate-x-[4px] translate-y-[4px] rounded-md"
-						></div>
-						<div
-							class="relative flex flex-col gap-2 bg-black/90 border-2 border-primary/80 p-4 rounded-md"
-						>
-							<p
-								class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest flex items-center"
-							>
-								HCA Configs <a href="/docs/issues/hca-configs" target="_blank"
-									><CircleQuestionMark class="ml-2 size-3" /></a
-								>
-								{#if data.misconfigured.length > 0}<a href="/auth"
-										><Button
-											class="bg-primary px-1 h-6 ml-3 text-xs tracking-tight"
-											>Re-login</Button
-										></a
-									>
-								{/if}
-							</p>
-							<div class="flex items-center gap-2">
-								<span
-									class="h-2 w-2 rounded-full {data.misconfigured.length === 0
-										? 'bg-emerald-500'
-										: 'bg-red-500'}"
-								></span>
-								<span
-									class="font-alchemize font-bold uppercase text-sm tracking-wider {data
-										.misconfigured.length === 0
-										? 'text-emerald-400'
-										: 'text-red-400'}"
-								>
-									{data.misconfigured.length === 0
-										? "Complete"
-										: data.misconfigured.join(", ") + " Misconfigured"}
-								</span>
-							</div>
-						</div>
+			<h2
+				class="font-display font-black text-card-foreground text-md uppercase tracking-wider"
+			>
+				Inventory Currencies
+			</h2>
+			<div class="gap-3 grid grid-cols-2 sm:grid-cols-4">
+				<div
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+				>
+					<div class="p-1 shrink-0 rounded">
+						<img
+							src="/alch-redstone.png"
+							alt="Redstone"
+							class="w-5 h-5 object-contain"
+						/>
 					</div>
-
-					<div class="relative group">
-						<div
-							class="absolute inset-0 bg-primary/20 translate-x-[4px] translate-y-[4px] rounded-md"
-						></div>
-						<div
-							class="relative flex flex-col gap-2 bg-black/90 border-2 border-primary/80 p-4 rounded-md"
+					<div class="min-w-0">
+						<p
+							class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
 						>
-							<p
-								class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest"
-							>
-								YSWS Eligibility
-							</p>
-							<div class="flex items-center gap-2">
-								<span
-									class="h-2 w-2 rounded-full {data.eligiblity
-										? 'bg-emerald-500'
-										: 'bg-red-500'}"
-								></span>
-								<span
-									class="font-alchemize font-bold uppercase text-sm tracking-wider {data.eligiblity
-										? 'text-emerald-400'
-										: 'text-red-400'}"
-								>
-									{data.eligiblity ? "Eligible" : "Not Eligible"}
-								</span>
-							</div>
-						</div>
+							Redstone
+						</p>
+						<p
+							class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+						>
+							{userCurrencies.redstone ?? 0}
+						</p>
 					</div>
 				</div>
 
-				<div class="relative w-full flex-1 min-h-0">
-					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[6px] translate-y-[6px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col bg-black/90 border-2 border-primary p-5 rounded-md h-full min-h-0"
-					>
-						<div class="flex items-center gap-2 pb-3 shrink-0">
-							<Newspaper class="w-5 h-5 text-primary" />
-							<h2
-								class="font-alchemize font-black text-primary text-lg uppercase tracking-wider"
-							>
-								News & Updates
-							</h2>
-						</div>
-						<div
-							class="flex-1 overflow-y-auto pr-1 text-zinc-400 text-sm no-scrollbar"
-						>
-							<div class="flex flex-col gap-3 max-h-full overflow-y-auto pr-1">
-								<div
-									class="border-l-2 border-white bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-zinc-500 tracking-widest uppercase"
-										>July 10th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-300 mt-0.5">
-										NPS survey
-									</h3>
-									<p
-										class="text-zinc-500 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Go tell us what you think about our ysws from
-										<a href="/forms/nps" class="font-bold text-primary italic">
-											this
-										</a>
-										page. Only two of the orgs get to read your results
-									</p>
-								</div>
-								<div
-									class="border-l-2 border-white bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-zinc-500 tracking-widest uppercase"
-										>July 9th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-300 mt-0.5">
-										Fulfillment updates
-									</h3>
-									<p
-										class="text-zinc-500 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Fulfillment has started! Now go buy some stuff from the
-										shop!
-									</p>
-								</div>
-								<div
-									class="border-l-2 border-primary/40 bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-primary tracking-widest uppercase"
-										>June 24th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-200 mt-0.5">
-										Shop Suggestions!
-									</h3>
-									<p
-										class="text-zinc-400 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Go suggest new items to be added to the shop every week from
-										the
-										<a
-											href="/dashboard/shop"
-											class="font-bold text-primary italic"
-										>
-											shop
-										</a> page!
-									</p>
-								</div>
-							</div>
-							<!-- No news or updates currently.... -->
-						</div>
+				<div
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+				>
+					<div class="p-1 shrink-0 rounded">
+						<img
+							src="/alch-glowstone.png"
+							alt="Glowstone"
+							class="w-5 h-5 object-contain"
+						/>
 					</div>
-				</div>
-			</div>
-
-			<div class="flex flex-col gap-6 w-full min-h-0">
-				<div class="relative w-full flex-1 min-h-0">
-					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[6px] translate-y-[6px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col bg-black/90 border-2 border-primary p-5 rounded-md h-full min-h-0"
-					>
-						<h2
-							class="font-alchemize font-black text-primary text-lg uppercase tracking-wider pb-3 shrink-0"
+					<div class="min-w-0">
+						<p
+							class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
 						>
-							Recent Mixes
-						</h2>
-
-						<div
-							class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 no-scrollbar"
+							Glowstone
+						</p>
+						<p
+							class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
 						>
-							{#if projects}
-								{#each projects as project}
-									<div
-										class="bg-background/40 p-4 rounded-md border border-primary hover:border-primary/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
-									>
-										<div class="flex justify-between items-start gap-4">
-											<p
-												class="font-alchemize font-bold text-primary-foreground text-sm tracking-wide group-hover/item:text-primary transition-colors"
-											>
-												{project.fields.Name || "Untitled Project"}
-											</p>
-											<span
-												class="text-[11px] font-bold text-zinc-400 flex items-center gap-1 shrink-0"
-											>
-												<Clock class="size-3.5 text-primary" />
-												{formatHours(
-													hackSecondsByName.get(
-														project.fields.hackatime ?? ""
-													) ?? 0
-												)}h
-											</span>
-										</div>
-										<p
-											class="text-zinc-500 text-[11px] font-sans tracking-normal line-clamp-1 flex gap-2"
-										>
-											{@html renderBadge(project.fields.Theme)}
-										</p>
-									</div>
-								{/each}
-							{:else}
-								<div>No projects yet.....</div>
-							{/if}
-						</div>
-
-						<a
-							href="/dashboard/projects"
-							class="self-end text-primary font-bold text-xs uppercase tracking-widest hover:underline pt-2 flex items-center gap-1 shrink-0"
-						>
-							View all mixes →
-						</a>
+							{userCurrencies.glowstone ?? 0}
+						</p>
 					</div>
 				</div>
 
-				<div class="relative w-full shrink-0">
-					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[4px] translate-y-[4px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col gap-3 bg-black/90 border-2 border-primary p-4 rounded-md"
-					>
-						<h2
-							class="font-alchemize font-black text-primary text-sm uppercase tracking-wider"
+				<div
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+				>
+					<div class="p-1 shrink-0 rounded">
+						<img
+							src="/alch-aquaregia.png"
+							alt="Aqua Regia"
+							class="w-5 h-5 object-contain"
+						/>
+					</div>
+					<div class="min-w-0">
+						<p
+							class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
 						>
-							Inventory Currencies
-						</h2>
-						<div class="gap-3 grid grid-cols-2">
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-redstone.png"
-										alt="Redstone"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Redstone
-									</p>
-									<p
-										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
-									>
-										{userCurrencies.redstone ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-glowstone.png"
-										alt="Glowstone"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Glowstone
-									</p>
-									<p
-										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
-									>
-										{userCurrencies.glowstone ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-aquaregia.png"
-										alt="Aqua Regia"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Aqua Regia
-									</p>
-									<p
-										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
-									>
-										{userCurrencies.aqua_regia ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/Alchemize.png"
-										alt="Potion Mix"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Potion Mix
-									</p>
-									<p
-										class="font-alchemize font-black text-primary-foreground text-base leading-none mt-0.5"
-									>
-										{userCurrencies.potion_mix ?? 0}
-									</p>
-								</div>
-							</div>
-						</div>
+							Aqua Regia
+						</p>
+						<p
+							class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+						>
+							{userCurrencies.aqua_regia ?? 0}
+						</p>
+					</div>
+				</div>
+
+				<div
+					class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-md"
+				>
+					<div class="p-1 shrink-0 rounded">
+						<img
+							src="/Alchemize.png"
+							alt="Potion Mix"
+							class="w-5 h-5 object-contain"
+						/>
+					</div>
+					<div class="min-w-0">
+						<p
+							class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
+						>
+							Potion Mix
+						</p>
+						<p
+							class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+						>
+							{userCurrencies.potion_mix ?? 0}
+						</p>
 					</div>
 				</div>
 			</div>
 		</div>
-	</main>
-</div>
+	</div>
+</main>
 
 <style>
 	:global(.no-scrollbar::-webkit-scrollbar) {
