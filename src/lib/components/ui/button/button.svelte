@@ -7,39 +7,30 @@
 	import { type VariantProps, tv } from "tailwind-variants"
 
 	export const buttonVariants = tv({
-		base: "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 border border-transparent bg-clip-padding text-sm font-medium focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px aria-invalid:ring-3 [&_svg:not([class*='size-'])]:size-4 group/button inline-flex shrink-0 items-center justify-center whitespace-nowrap transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+		base: "inline-flex items-center justify-center gap-2 font-note whitespace-nowrap cursor-pointer select-none border-2 border-border rounded-tl-xl rounded-br-xl rounded-tr-sm rounded-bl-sm shadow-primary transition-all duration-150 hover:-translate-y-px hover:shadow-sm active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
 		variants: {
 			variant: {
-				default:
-					"rounded-lg bg-primary text-primary-foreground [a]:hover:bg-primary/80",
-				outline:
-					"rounded-lg border-border bg-background hover:bg-muted hover:text-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 aria-expanded:bg-muted aria-expanded:text-foreground",
-				ghost:
-					"rounded-lg hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground",
-				destructive:
-					"rounded-lg bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30",
-				link: "rounded-lg text-primary underline-offset-4 hover:underline",
-				primary:
-					"bg-primary text-primary-foreground hover:bg-primary-hover hover:-translate-y-px rounded-tr-0 rounded-bl-0 rounded-tl-xl rounded-br-xl shadow-xs shadow-foreground",
+				primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
 				secondary:
-					"bg-secondary text-secondary-foreground border border-border hover:-translate-y-px rounded-tl-xl rounded-tr-0 rounded-bl-0 rounded-br-xl shadow-sm shadow-foreground",
+					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
+				outline: "bg-card text-card-foreground hover:bg-secondary",
+				ghost:
+					"border-transparent shadow-none bg-transparent hover:bg-secondary",
+				destructive: "bg-red-700 text-white hover:bg-red-800",
 			},
 			size: {
-				default:
-					"h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-				xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-				sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-				lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-				icon: "size-8",
-				"icon-xs":
-					"size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-				"icon-sm":
-					"size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
-				"icon-lg": "size-9",
+				xs: "h-8 px-3 text-xs",
+				sm: "h-9 px-4 text-sm",
+				default: "h-10 px-5 text-sm",
+				lg: "h-12 px-6 text-base",
+				xl: "h-14 px-8 text-lg",
+				icon: "size-10 p-0",
+				"icon-sm": "size-9 p-0",
+				"icon-lg": "size-12 p-0",
 			},
 		},
 		defaultVariants: {
-			variant: "default",
+			variant: "primary",
 			size: "default",
 		},
 	})
@@ -57,7 +48,7 @@
 <script lang="ts">
 	let {
 		class: className,
-		variant = "default",
+		variant = "primary",
 		size = "default",
 		ref = $bindable(null),
 		href = undefined,
