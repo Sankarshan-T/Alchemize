@@ -1,11 +1,11 @@
 import { env } from "$env/dynamic/private"
-import {PUBLIC_HACKCLUB_AUTH, PUBLIC_HACKCLUB_REDIRECT} from "$env/static/public"
+import { PUBLIC_HACKCLUB_AUTH, PUBLIC_HACKCLUB_REDIRECT } from "$env/static/public"
 import { hackatimeAuthUrl, getDataFromAccessToken } from "$lib/utils"
 import { error, redirect } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 import type { UserAuthToken } from "$lib/types"
 import type { AirtableUser } from "$lib/types"
-import {encryptAES} from "$lib/utils.server"
+import { encryptAES } from "$lib/utils.server"
 import jwt from "jsonwebtoken"
 import crypto from "crypto"
 import { createNewUser, getUserByEmail, createReferRecord, addUserToAuthTable } from "$lib/db"
@@ -41,10 +41,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	// User Token stored for 4 months
 	// Hack Club Auth tokens stored for 6 months (refresh tokens not used, so access tokens are long-lived)
 
-	
+
 	const code = url.searchParams.get("code")
 	const referCookie = cookies.get("refer")
-	
+
 	let userHackatime = ""
 	if (!code) {
 		throw error(400, "Missing authorization code")
@@ -56,13 +56,15 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	if (!clientId || !clientSecret || !redirectUri) {
 		throw error(500, "Missing OAuth environment variables")
 	}
-	
 
-		const state = url.searchParams.get("state")
-		const storedState = cookies.get("oauth_state")
-		if (!state || !storedState || state !== storedState) {
-			throw error(400, "Invalid state parameter")
-		}
+
+	const state = url.searchParams.get("state")
+	const storedState = cookies.get("oauth_state")
+	if (!state || !storedState || state !== storedState) {
+		cookies.delete("oauth_state", { path: "/" })
+		throw error(400, "Invalid state parameter")
+	}
+	cookies.delete("oauth_state", { path: "/" })
 
 	const [tokenResponse, keysResponse] = await Promise.all([fetch("https://auth.hackclub.com/oauth/token", {
 		method: "POST",
@@ -83,7 +85,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const jwk = keysBody.keys[0]
 	const publicKey = crypto.createPublicKey({
 		key: jwk,
-		format:"jwk",
+		format: "jwk",
 	})
 	if (!tokenResponse.ok) {
 		console.error("Token exchange failed:", tokenBody)
@@ -93,7 +95,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		)
 	}
 	const meResponse = await getDataFromAccessToken(tokenBody.access_token)
-	
+
 	const decodedToken: any = jwt.verify(tokenBody.id_token, publicKey, { algorithms: ["RS256"] })
 	const email = decodedToken.email
 	const name = decodedToken.name
@@ -108,7 +110,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const iv = ""
 	let encryptedAddress = "null"
 	if (meResponse.address && meResponse.address.length > 0) {
-	encryptedAddress = encryptAES(JSON.stringify(meResponse.address)).finalString
+		encryptedAddress = encryptAES(JSON.stringify(meResponse.address)).finalString
 
 	}
 	const encryptedBirthdate = encryptAES(meResponse.birthday).finalString
@@ -116,13 +118,13 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const encryptedLastName = encryptAES(name.split(" ").at(-1)).finalString
 	let userRecordId = ""
 	//Look for user in DB, if not found create new user
-	const [userResponse] = await Promise.all([getUserByEmail(email), addUserToAuthTable( email, encryptedAddress, encryptedBirthdate, encryptedFirstName, encryptedLastName, iv, hackClubId)])
+	const [userResponse] = await Promise.all([getUserByEmail(email), addUserToAuthTable(email, encryptedAddress, encryptedBirthdate, encryptedFirstName, encryptedLastName, iv, hackClubId)])
 	if (!userResponse.ok) {
 		console.error("Database error:", await userResponse.text())
 		return error(userResponse.status, "Database error")
 	}
 	let userData: AirtableUser[] = (await userResponse.json()).records
-	
+
 	if (userData.length === 0) {
 		newUser = true
 		const createResponse = await createNewUser(email, hackClubId, slackId)
@@ -131,8 +133,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 			return error(createResponse.status, "Database error")
 		}
 		userRecordId = (await createResponse.json()).id
-	}else{
-		
+	} else {
+
 		userRecordId = userData[0].id
 	}
 	if (referCookie && newUser) {
@@ -197,8 +199,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		maxAge: 60 * 60 * 24 * 365, // 1 year
 		path: "/",
 	})
-	if(userData.length > 0 && userData[0].fields.hackatime){
-		
+	if (userData.length > 0 && userData[0].fields.hackatime) {
+
 		cookies.set("hackatime_verified", "true", {
 			httpOnly: false,
 			secure: true,
@@ -206,7 +208,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 			maxAge: 60 * 60 * 24 * 365, // 1 year
 			path: "/",
 		})
-	}else{
+	} else {
 		throw redirect(303, hackatimeAuthUrl)
 	}
 	throw redirect(303, "/dashboard")
