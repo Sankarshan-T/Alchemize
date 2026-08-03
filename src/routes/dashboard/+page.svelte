@@ -207,7 +207,7 @@
 							<p
 								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
 							>
-								{userCurrencies.redstone ?? 0}
+								{userCurrencies.redstone.toFixed(2) ?? 0}
 							</p>
 						</div>
 					</div>
@@ -231,7 +231,7 @@
 							<p
 								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
 							>
-								{userCurrencies.glowstone ?? 0}
+								{userCurrencies.glowstone.toFixed(2) ?? 0}
 							</p>
 						</div>
 					</div>
@@ -255,7 +255,7 @@
 							<p
 								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
 							>
-								{userCurrencies.aqua_regia ?? 0}
+								{userCurrencies.aqua_regia.toFixed(2) ?? 0}
 							</p>
 						</div>
 					</div>
@@ -279,7 +279,7 @@
 							<p
 								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
 							>
-								{userCurrencies.potion_mix ?? 0}
+								{userCurrencies.potion_mix.toFixed(2) ?? 0}
 							</p>
 						</div>
 					</div>
@@ -308,31 +308,34 @@
 					>
 						{#if projects && projects.length > 0}
 							{#each projects as project}
-								<div
-									class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl rounded-md border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
-								>
-									<div class="flex justify-between items-start gap-4">
-										<p
-											class="font-alchemize font-bold text-secondary-foreground text-md tracking-wide group-hover/item:text-secondary-foreground/80 transition-colors"
-										>
-											{project.fields.Name || "Untitled Project"}
-										</p>
-										<span
-											class="text-xs font-bold flex items-center gap-1 shrink-0"
-										>
-											<Clock class="size-3.5 text-primary" />
-											{formatHours(
-												hackSecondsByName.get(project.fields.hackatime ?? "") ??
-													0
-											)}h
-										</span>
-									</div>
-									<p
-										class=" text-xs font-body tracking-normal line-clamp-1 flex gap-2"
+								<a href="/dashboard/projects">
+									<div
+										class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl rounded-md border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
 									>
-										{@html renderBadge(project.fields.Theme)}
-									</p>
-								</div>
+										<div class="flex justify-between items-start gap-4">
+											<p
+												class="font-alchemize font-bold text-secondary-foreground text-md tracking-wide group-hover/item:text-secondary-foreground/80 transition-colors"
+											>
+												{project.fields.Name || "Untitled Project"}
+											</p>
+											<span
+												class="text-xs font-bold flex items-center gap-1 shrink-0"
+											>
+												<Clock class="size-3.5 text-primary" />
+												{formatHours(
+													hackSecondsByName.get(
+														project.fields.hackatime ?? ""
+													) ?? 0
+												)}h
+											</span>
+										</div>
+										<p
+											class=" text-xs font-body tracking-normal line-clamp-1 flex gap-2"
+										>
+											{@html renderBadge(project.fields.Theme)}
+										</p>
+									</div>
+								</a>
 							{/each}
 						{:else}
 							<div class="text-sm py-4">No projects yet.....</div>
@@ -341,7 +344,7 @@
 
 					<a
 						href="/dashboard/projects"
-						class="self-end text-card-foreground font-bold text-xs uppercase tracking-widest hover:underline pt-3 flex items-center gap-1 shrink-0"
+						class="self-end font-body text-card-foreground font-bold text-md uppercase tracking-widest hover:underline pt-3 flex items-center gap-1 shrink-0"
 					>
 						View all mixes →
 					</a>
