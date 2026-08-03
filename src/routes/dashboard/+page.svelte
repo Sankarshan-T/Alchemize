@@ -124,7 +124,7 @@
 	<div class="flex flex-col gap-6 flex-1 min-h-0">
 		<div class="w-full flex items-center justify-start gap-4">
 			<div
-				class="shadow-primary hover:shadow-sm transition w-64 shrink-0 bg-card border-2 border-border px-3 p-2 rounded-tl-2xl rounded-br-2xl rounded-md flex flex-col gap-4 font-note"
+				class="  w-64 shrink-0 bg-card border-2 border-border px-3 p-2 rounded-tl-2xl rounded-br-2xl rounded-md flex flex-col gap-4 font-note"
 			>
 				<div class="flex items-center gap-3">
 					<img
@@ -172,7 +172,7 @@
 				</div>
 			</div>
 			<div
-				class="shadow-primary hover:shadow-sm transition w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md"
+				class="  w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md"
 			>
 				<div class="flex items-center justify-between">
 					<h1
@@ -180,10 +180,12 @@
 					>
 						Your Inventory
 					</h1>
-					<Button variant="primary" size="sm">
-						<ArrowRightLeft class="w-3 h-3 stroke-2" />
-						Trade Station
-					</Button>
+					<a href="/dashboard/trade">
+						<Button variant="primary" size="sm">
+							<ArrowRightLeft class="w-3 h-3 stroke-2" />
+							Trade Station
+						</Button>
+					</a>
 				</div>
 				<div class="gap-3 grid grid-cols-2 sm:grid-cols-4">
 					<div
@@ -288,7 +290,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
 			<div class="flex flex-col gap-4 flex-1 min-h-0">
 				<div
-					class="shadow-primary hover:shadow-sm transition flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md w-full flex-2 min-h-0"
+					class="  flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md w-full flex-2 min-h-0"
 				>
 					<div
 						class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
@@ -346,7 +348,7 @@
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
 					<div
-						class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
+						class="  flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
 						<div class="flex items-center justify-between">
 							<p
@@ -387,7 +389,7 @@
 					</div>
 
 					<div
-						class="shadow-primary hover:shadow-sm transition flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
+						class="  flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
 						<p
 							class="text-card-foreground text-xs font-bold uppercase tracking-widest"
@@ -413,7 +415,7 @@
 			</div>
 			<div class="flex flex-col gap-4 flex-1 min-h-0">
 				<div
-					class="shadow-primary hover:shadow-sm transition w-full flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md flex-2 min-h-0"
+					class="  w-full flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md flex-2 min-h-0"
 				>
 					<div
 						class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
@@ -451,7 +453,7 @@
 				<div class="grid grid-cols-2 gap-4 flex-1 min-h-0">
 					<div class="grid flex-1 grid-rows-[1fr_1fr] gap-4 min-h-0">
 						<div
-							class="shadow-primary hover:shadow-sm transition flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
+							class="  flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
 						>
 							<Users class="size-7 text-secondary-foreground" />
 							<a href="/refer">
@@ -459,7 +461,7 @@
 							</a>
 						</div>
 						<div
-							class="shadow-primary hover:shadow-sm transition flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
+							class="  flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
 						>
 							<Newspaper class="size-7 text-secondary-foreground" />
 							<a href="/docs">
@@ -468,7 +470,7 @@
 						</div>
 					</div>
 					<div
-						class="w-full shadow-primary hover:shadow-sm transition flex flex-col items-center bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
+						class="w-full flex flex-col items-center bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
 					>
 						<ShoppingBasket class="size-20 text-secondary-foreground" />
 						<a href="/dashboard/shop">
