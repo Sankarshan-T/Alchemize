@@ -264,7 +264,7 @@
 				size="sm"
 				variant="outline"
 				class="border-2 border-primary bg-background text-primary hover:bg-primary hover:text-primary-foreground font-bold tracking-wider uppercase rounded-xl transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.3)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none mr-10"
-				onclick={() => (newProjWindowOpened = true)}
+				// onclick={() => (newProjWindowOpened = true)}
 			>
 				<Plus class="size-4 mr-1 stroke-3" />
 				<span>New Mix</span>
@@ -360,8 +360,8 @@
 
 				<button
 					class="relative w-full flex flex-col items-center justify-center bg-black/90 border-2 border-dashed border-zinc-700 hover:border-primary/80 rounded-sm h-[190px] p-6 text-center transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px] active:translate-x-[4px] active:translate-y-[4px] focus:outline-none"
-					onclick={() => (newProjWindowOpened = true)}
-				>
+					// onclick={() => (newProjWindowOpened = true)}				
+>
 					<div class="flex flex-col items-center justify-center gap-3">
 						<div
 							class="p-2.5 bg-zinc-900 border border-zinc-800 rounded-none group-hover:border-primary/40 group-hover:bg-primary/5 transition-colors"
