@@ -168,7 +168,7 @@
 				delta += entry.deltaTime
 			}
 		}
-		return Math.floor(delta / 60)
+		return Number((delta / 60).toFixed(2))
 	}
 	// The push-to-HQ action appends a synthetic "Currency Awarded" log entry —
 	// skip it when rebuilding the review history.

@@ -9,20 +9,21 @@ import { decryptAES, encryptAES } from "$lib/utils.server"
 import { submitProjectToAirtable } from "$lib/airtable"
 import loosejson from "loose-json"
 import crypto from "crypto"
-	const wasEverApproved = (project: AirtableProject) => {
-		//Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
-		const logs = JSON.parse(project.fields.log || "[]") as Log[]
-		return logs.some(log => log.status === 1)
-	}
-    	const areAllPushedToHQ = (log: Log[]): boolean => {
-		return log.every(entry => entry.submmitedToHQ || entry.status !== 1)
-	}
-    const checkIfAllApprovedLogsArePushed = (log: Log[]): boolean => {
-        if (log.length === 0) {
-            return true
-        }
-        const approvedLogs = log.filter(entry => entry.status === 1)
-        return approvedLogs.every(entry => entry.submmitedToHQ)}
+const wasEverApproved = (project: AirtableProject) => {
+    //Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
+    const logs = JSON.parse(project.fields.log || "[]") as Log[]
+    return logs.some(log => log.status === 1)
+}
+const areAllPushedToHQ = (log: Log[]): boolean => {
+    return log.every(entry => entry.submmitedToHQ || entry.status !== 1)
+}
+const checkIfAllApprovedLogsArePushed = (log: Log[]): boolean => {
+    if (log.length === 0) {
+        return true
+    }
+    const approvedLogs = log.filter(entry => entry.status === 1)
+    return approvedLogs.every(entry => entry.submmitedToHQ)
+}
 const checkSubmittedToHQ = (log: Log[], justification: string, reviewerName: string): Log[] => {
     let newLog = log.map(entry => {
         if (entry.status === 1 && !entry.submmitedToHQ) {
@@ -90,7 +91,7 @@ const calculateNewHours = (log: Log[]) => {
             minsSpent += entry.deltaTime
         }
     })
-    return minsSpent / 60
+    return Number((minsSpent / 60).toFixed(2))
 }
 const themeToKeys = (theme: string): keyof UserCurrency => {
     const themeMap = themeCurrencyMaps as Record<string, keyof UserCurrency>
@@ -144,7 +145,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         project
     })
     const [updateUserCurrencyResponse, airtableResponse] = await Promise.all([
-        updateUserCurrency((Math.floor(calculateNewHours(log)) - subtraction), project.fields.owner, currencyType),
+        updateUserCurrency((Number(calculateNewHours(log).toFixed(2)) - subtraction), project.fields.owner, currencyType),
         submitProjectToAirtable({
             githubUsername: findGithubUsernameFromCodeUrl(project.fields.code || "") ?? "",
             email: project.fields.owner,
@@ -158,14 +159,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             country: address.country,
             zip: address.postal_code,
             birthday: decryptedBirthdate,
-            overrideHoursSpent: (Math.floor(calculateNewHours(log)) - subtraction),
+            overrideHoursSpent: Number((calculateNewHours(log) - subtraction).toFixed(2)),
             overrideHoursJustification: justification,
             firstName: decryptedFirstName,
             lastName: decryptedLastName
         })
     ])
 
-    if (!airtableResponse.ok ) {
+    if (!airtableResponse.ok) {
         console.error("Failed to send project to Airtable:", {
             status: airtableResponse.status,
             statusText: airtableResponse.statusText,
@@ -195,7 +196,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             country: encryptAES(address.country ?? "").finalString,
             zip: encryptAES(address.postal_code ?? "").finalString,
             birthdate: encryptAES(decryptedBirthdate).finalString,
-            overrideHoursSpent: (calculateNewHours(log) - subtraction) + "",
+            overrideHoursSpent: Number((calculateNewHours(log) - subtraction).toFixed(2)) + "",
             justification: justification,
             firstName: encryptAES(decryptedFirstName).finalString,
             lastName: encryptAES(decryptedLastName).finalString,
@@ -210,7 +211,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
                 "Authorization": `Bearer ${BOT_AUTH}`
             },
             body: JSON.stringify(
-                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Math.floor(calculateNewHours(log) - subtraction)} ${currencyType}` }
+                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Number((calculateNewHours(log) - subtraction).toFixed(2))} ${currencyType}` }
             )
         })
     ])
