@@ -91,7 +91,7 @@ const calculateNewHours = (log: Log[]) => {
             minsSpent += entry.deltaTime
         }
     })
-    return Number((minsSpent / 60).toFixed(2))
+    return minsSpent / 60
 }
 const themeToKeys = (theme: string): keyof UserCurrency => {
     const themeMap = themeCurrencyMaps as Record<string, keyof UserCurrency>
@@ -145,7 +145,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         project
     })
     const [updateUserCurrencyResponse, airtableResponse] = await Promise.all([
-        updateUserCurrency((Number(calculateNewHours(log).toFixed(2)) - subtraction), project.fields.owner, currencyType),
+        updateUserCurrency((Math.floor(calculateNewHours(log)) - subtraction), project.fields.owner, currencyType),
         submitProjectToAirtable({
             githubUsername: findGithubUsernameFromCodeUrl(project.fields.code || "") ?? "",
             email: project.fields.owner,
@@ -159,7 +159,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             country: address.country,
             zip: address.postal_code,
             birthday: decryptedBirthdate,
-            overrideHoursSpent: Number((calculateNewHours(log) - subtraction).toFixed(2)),
+            overrideHoursSpent: (Math.floor(calculateNewHours(log)) - subtraction),
             overrideHoursJustification: justification,
             firstName: decryptedFirstName,
             lastName: decryptedLastName
@@ -196,7 +196,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             country: encryptAES(address.country ?? "").finalString,
             zip: encryptAES(address.postal_code ?? "").finalString,
             birthdate: encryptAES(decryptedBirthdate).finalString,
-            overrideHoursSpent: Number((calculateNewHours(log) - subtraction).toFixed(2)) + "",
+            overrideHoursSpent: (calculateNewHours(log) - subtraction) + "",
             justification: justification,
             firstName: encryptAES(decryptedFirstName).finalString,
             lastName: encryptAES(decryptedLastName).finalString,
@@ -211,7 +211,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
                 "Authorization": `Bearer ${BOT_AUTH}`
             },
             body: JSON.stringify(
-                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Number((calculateNewHours(log) - subtraction).toFixed(2))} ${currencyType}` }
+                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Math.floor(calculateNewHours(log) - subtraction)} ${currencyType}` }
             )
         })
     ])
