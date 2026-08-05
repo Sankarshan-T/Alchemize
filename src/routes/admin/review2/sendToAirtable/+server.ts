@@ -145,7 +145,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         project
     })
     const [updateUserCurrencyResponse, airtableResponse] = await Promise.all([
-        updateUserCurrency((Math.floor(calculateNewHours(log)) - subtraction), project.fields.owner, currencyType),
+        updateUserCurrency(Math.floor(Math.floor(calculateNewHours(log)) - subtraction), project.fields.owner, currencyType),
         submitProjectToAirtable({
             githubUsername: findGithubUsernameFromCodeUrl(project.fields.code || "") ?? "",
             email: project.fields.owner,
@@ -196,7 +196,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
             country: encryptAES(address.country ?? "").finalString,
             zip: encryptAES(address.postal_code ?? "").finalString,
             birthdate: encryptAES(decryptedBirthdate).finalString,
-            overrideHoursSpent: (calculateNewHours(log) - subtraction) + "",
+            overrideHoursSpent: (Math.floor(calculateNewHours(log)) - subtraction) + "",
             justification: justification,
             firstName: encryptAES(decryptedFirstName).finalString,
             lastName: encryptAES(decryptedLastName).finalString,
@@ -211,7 +211,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
                 "Authorization": `Bearer ${BOT_AUTH}`
             },
             body: JSON.stringify(
-                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Math.floor(calculateNewHours(log) - subtraction)} ${currencyType}` }
+                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": `${Math.floor(Math.floor(calculateNewHours(log))- subtraction)} ${currencyType}` }
             )
         })
     ])
