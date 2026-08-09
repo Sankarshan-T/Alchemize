@@ -84,6 +84,10 @@ function updateLog(log: Log[], deltaTime: number, changelog: string): Log[] {
 					},
 				],
 				submmitedToHQ: false,
+				fraudApproved: false,
+				fraudApprovedBy: undefined,
+				fraudJustification: undefined,
+				fraudTimestamp: undefined,
 			},
 		]
 	}
@@ -105,6 +109,10 @@ function updateLog(log: Log[], deltaTime: number, changelog: string): Log[] {
 					},
 				],
 				submmitedToHQ: false,
+				fraudApproved: false,
+				fraudApprovedBy: undefined,
+				fraudJustification: undefined,
+				fraudTimestamp: undefined,
 			},
 		]
 	} else if (lastLog.status === 0 || lastLog.status === 2) {
@@ -127,6 +135,10 @@ function updateLog(log: Log[], deltaTime: number, changelog: string): Log[] {
 					},
 				],
 				submmitedToHQ: false,
+				fraudApproved: false,
+				fraudApprovedBy: undefined,
+				fraudJustification: undefined,
+				fraudTimestamp: undefined,
 			},
 		]
 	} else {
