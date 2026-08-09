@@ -16,6 +16,10 @@ export type Log = {
 	deltaTime: number //in minutes
 	message: message[]
 	submmitedToHQ: boolean
+	fraudApproved: boolean
+	fraudApprovedBy?: string
+	fraudJustification?: string
+	fraudTimestamp?: string
 }
 
 export type message = {
