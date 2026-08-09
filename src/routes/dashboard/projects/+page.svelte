@@ -238,7 +238,7 @@
 	</AlertDialog.Root>
 </div>
 
-<main class="h-full overflow-y-auto w-full py-6 px-10 flex flex-col gap-8">
+<main class="h-full max-h-full w-full py-6 px-10 flex flex-col gap-8">
 	<div
 		class="flex items-end justify-between border-b-2 py-3 px-8 border-border"
 	>
@@ -261,11 +261,11 @@
 		</Button>
 	</div>
 
-	<div class="flex flex-col gap-6 px-15 py-5">
+	<div class="overflow-y-auto flex flex-col gap-6 px-15 py-5">
 		{#if projects.length}
 			{#each projects as project}
 				<button
-					class="w-full h-[28vh] bg-card border-2 border-border rounded-md rounded-tl-2xl rounded-br-2xl overflow-hidden flex items-center gap-5 p-2 py-2 hover:-translate-x-0.5 hover:-translate-y-0.5 transition text-card-foreground"
+					class="w-full min-h-[28vh] bg-card border-2 border-border rounded-md rounded-tl-2xl rounded-br-2xl overflow-hidden flex items-center gap-5 p-2 py-2 hover:-translate-x-0.5 hover:-translate-y-0.5 transition text-card-foreground"
 					onclick={() => openUpdateProjWindow(project)}
 				>
 					<div class="w-[35%] h-full shrink-0 overflow-hidden">
