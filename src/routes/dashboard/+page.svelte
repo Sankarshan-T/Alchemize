@@ -41,6 +41,7 @@
 		Users,
 		Clock,
 		Newspaper,
+		ArrowUpRight,
 		User as UserIcon,
 	} from "lucide-svelte"
 
@@ -88,43 +89,10 @@
 </svelte:head>
 
 <main class="h-full w-full flex gap-6 p-7">
-	<!-- <div class="flex items-center gap-3 p-1">
-		<div
-			class="bg-primary/10 rounded-tl-2xl rounded-br-2xl rounded-md text-primary border border-primary"
-		>
-			<img
-				src={data.pfp}
-				alt={data?.name}
-				class="h-10 w-10 rounded-tl-2xl rounded-br-2xl rounded-md"
-			/>
-		</div>
-		<div class="flex flex-col min-w-0">
-			{#if !!data.admin}
-				<a
-					href="/admin"
-					class="flex gap-1 items-center w-full mt-auto text-card-foreground hover:underline"
-				>
-					<ShieldUser class="w-3 h-3 stroke-2" />
-					<span class="text-xs tracking-wider inline"> Admin </span>
-				</a>
-			{/if}
-			<p
-				class="text-card-foreground text-xs font-bold uppercase tracking-widest"
-			>
-				{data?.name}
-			</p>
-			<span
-				class="font-body font-bold text-xs tracking-wide text-muted-foreground truncate"
-			>
-				{data?.email}
-			</span>
-		</div>
-	</div> -->
-
 	<div class="flex flex-col gap-6 flex-1 min-h-0">
 		<div class="w-full flex items-center justify-start gap-4">
 			<div
-				class="  w-64 shrink-0 bg-card border-2 border-border px-3 p-2 rounded-tl-2xl rounded-br-2xl rounded-md flex flex-col gap-4 font-note"
+				class="  w-64 shrink-0 bg-card border border-border/60 px-3 p-2 rounded-tl-2xl rounded-br-2xl rounded-md flex flex-col gap-4 font-note"
 			>
 				<div class="flex items-center gap-3">
 					<img
@@ -172,7 +140,7 @@
 				</div>
 			</div>
 			<div
-				class="  w-full flex flex-col gap-3 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md"
+				class="  w-full flex flex-col gap-3 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md"
 			>
 				<div class="flex items-center justify-between">
 					<h1
@@ -189,7 +157,7 @@
 				</div>
 				<div class="gap-3 grid grid-cols-2 sm:grid-cols-4">
 					<div
-						class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
 					>
 						<div class="p-1 shrink-0 rounded">
 							<img
@@ -213,7 +181,7 @@
 					</div>
 
 					<div
-						class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
 					>
 						<div class="p-1 shrink-0 rounded">
 							<img
@@ -237,7 +205,7 @@
 					</div>
 
 					<div
-						class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
 					>
 						<div class="p-1 shrink-0 rounded">
 							<img
@@ -261,7 +229,7 @@
 					</div>
 
 					<div
-						class="flex items-center gap-2 bg-secondary/80 border border-border p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
 					>
 						<div class="p-1 shrink-0 rounded">
 							<img
@@ -290,7 +258,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
 			<div class="flex flex-col gap-4 flex-1 min-h-0">
 				<div
-					class="  flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md w-full flex-2 min-h-0"
+					class="  flex flex-col bg-card border border-border/60 p-5 rounded-tl-2xl rounded-br-2xl rounded-md w-full flex-2 min-h-0"
 				>
 					<div
 						class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
@@ -310,7 +278,7 @@
 							{#each projects as project}
 								<a href="/dashboard/projects">
 									<div
-										class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl rounded-md border border-border hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
+										class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl rounded-md border border-border/60 hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
 									>
 										<div class="flex justify-between items-start gap-4">
 											<p
@@ -351,7 +319,7 @@
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
 					<div
-						class="  flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
+						class="  flex flex-col gap-2 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
 						<div class="flex items-center justify-between">
 							<p
@@ -392,7 +360,7 @@
 					</div>
 
 					<div
-						class="  flex flex-col gap-2 bg-card border-2 border-border p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
+						class="  flex flex-col gap-2 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
 						<p
 							class="text-card-foreground text-xs font-bold uppercase tracking-widest"
@@ -418,68 +386,155 @@
 			</div>
 			<div class="flex flex-col gap-4 flex-1 min-h-0">
 				<div
-					class="  w-full flex flex-col bg-card border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md flex-2 min-h-0"
+					class="flex flex-col bg-card border border-border/70 p-5
+						   rounded-tl-2xl rounded-br-2xl rounded-md
+						   flex-2 min-h-0"
 				>
 					<div
-						class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
+						class="flex items-center justify-between pb-3 shrink-0
+							   border-b border-border/50 mb-3"
 					>
-						<Newspaper class="w-5 h-5 text-card-foreground" />
-						<h2
-							class="font-display font-black text-card-foreground text-lg uppercase tracking-wider"
-						>
-							News & Updates
-						</h2>
-					</div>
-					<div class="flex-1 overflow-y-auto pr-1 text-sm no-scrollbar">
-						<div class="flex flex-col gap-3">
-							<div
-								class="border-l-2 border-border bg-secondary/50 p-3 rounded-r-md"
+						<div class="flex items-center gap-2">
+							<Newspaper class="size-5 text-primary" />
+							<h2
+								class="font-display font-black text-card-foreground
+									   text-lg uppercase tracking-wider"
 							>
+								News & Updates
+							</h2>
+						</div>
+					</div>
+
+					<div class="flex-1 overflow-y-auto pr-1 no-scrollbar">
+						<div
+							class="group border-l-2 border-primary/60
+								   bg-secondary/40 p-4 rounded-r-md
+								   transition-colors hover:bg-secondary/70"
+						>
+							<div class="flex items-center justify-between gap-3">
 								<span
-									class="text-[11px] font-bold text-muted-foreground tracking-widest uppercase"
+									class="text-[10px] font-bold text-muted-foreground
+										   tracking-widest uppercase"
 								>
 									August 8th 2026
 								</span>
-								<h3 class="text-xs font-bold text-secondary-foreground mt-0.5">
-									Alchemize Season 2
-								</h3>
-								<p
-									class="text-secondary-foreground text-[11px] font-sans mt-1 leading-relaxed"
+
+								<span
+									class="text-[9px] font-bold uppercase tracking-widest
+										   text-primary"
 								>
-									Alchemize season 2 has officially started! Go make new
-									projects now!
-								</p>
+									Season 2
+								</span>
 							</div>
+
+							<h3 class="text-sm font-bold text-secondary-foreground mt-1">
+								Alchemize Season 2
+							</h3>
+
+							<p
+								class="text-secondary-foreground/70 text-xs font-sans
+									   mt-1.5 leading-relaxed"
+							>
+								Alchemize Season 2 has officially started! Go make new projects
+								now!
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="grid grid-cols-2 gap-4 flex-1 min-h-0">
-					<div class="grid flex-1 grid-rows-[1fr_1fr] gap-4 min-h-0">
-						<div
-							class="  flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
-						>
-							<Users class="size-7 text-secondary-foreground" />
-							<a href="/refer">
-								<Button variant="primary">Refer people!</Button>
-							</a>
-						</div>
-						<div
-							class="  flex items-center justify-between bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
-						>
-							<Newspaper class="size-7 text-secondary-foreground" />
-							<a href="/docs">
-								<Button variant="primary">Read the Docs</Button>
-							</a>
-						</div>
-					</div>
-					<div
-						class="w-full flex flex-col items-center bg-secondary border-2 border-border p-5 rounded-tl-2xl rounded-br-2xl rounded-md min-h-0"
+
+				<div class="grid grid-cols-2 grid-rows-2 gap-4 flex-1 min-h-0">
+					<a
+						href="/refer"
+						class="group flex items-center justify-between gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
 					>
-						<ShoppingBasket class="size-20 text-secondary-foreground" />
-						<a href="/dashboard/shop">
-							<Button variant="primary">Shop now!</Button>
-						</a>
-					</div>
+						<div class="flex items-center gap-3 min-w-0">
+							<div
+								class="size-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center"
+							>
+								<Users class="size-5 text-primary" />
+							</div>
+
+							<div class="min-w-0">
+								<h3 class="font-bold text-sm text-secondary-foreground">
+									Refer people
+								</h3>
+
+								<p class="text-xs text-muted-foreground truncate">
+									Invite friends to Alchemize
+								</p>
+							</div>
+						</div>
+
+						<ArrowUpRight
+							class="size-4 shrink-0 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+						/>
+					</a>
+
+					<a
+						href="/dashboard/shop"
+						class="group row-span-2 flex flex-col items-center justify-center gap-1 bg-secondary border border-primary/30 p-2 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary/70"
+					>
+						<div
+							class="size-15 px-2 py-1 rounded-2xl bg-primary/10 flex items-center justify-center"
+						>
+							<ShoppingBasket class="size-11 text-primary" />
+						</div>
+
+						<div class="text-center">
+							<h3
+								class="font-display font-black uppercase tracking-wider text-lg text-secondary-foreground"
+							>
+								Shop
+							</h3>
+
+							<p class="text-xs text-muted-foreground">
+								Browse the Alchemize shop
+							</p>
+						</div>
+
+						<div
+							class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-primary"
+						>
+							Explore
+							<ArrowUpRight
+								class="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+							/>
+						</div>
+					</a>
+
+					<a
+						href="/docs"
+						class="group flex items-center justify-between gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
+					>
+						<div class="flex items-center gap-3 min-w-0">
+							<div
+								class="size-10 shrink-0 rounded-lg bg-primary/10
+									   flex items-center justify-center"
+							>
+								<Newspaper class="size-5 text-primary transition-transform" />
+							</div>
+
+							<div class="min-w-0">
+								<h3 class="font-bold text-sm text-secondary-foreground">
+									Documentation
+								</h3>
+
+								<p
+									class="text-[11px] text-muted-foreground mt-0.5
+										   truncate"
+								>
+									Learn how everything works
+								</p>
+							</div>
+						</div>
+
+						<ArrowUpRight
+							class="size-4 shrink-0 text-muted-foreground
+								   transition-all group-hover:text-primary
+								   group-hover:translate-x-0.5
+								   group-hover:-translate-y-0.5"
+						/>
+					</a>
 				</div>
 			</div>
 		</div>
