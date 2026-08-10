@@ -370,9 +370,7 @@
 	{/if}
 
 	<div
-		class="relative z-10 flex-1 min-h-0 overflow-y-auto pr-2 pt-4 pb-6
-       grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]
-       gap-4 content-start"
+		class="relative z-10 flex-1 min-h-0 overflow-y-auto pr-2 pt-4 pb-6 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 content-start"
 	>
 		{#each finalItems as item}
 			{@const theme = currencyTheme[item.primaryCurrency]}
