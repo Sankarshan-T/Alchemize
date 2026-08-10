@@ -11,7 +11,6 @@
 		Newspaper,
 		ShieldUser,
 	} from "lucide-svelte"
-	import { Compass } from "@lucide/svelte"
 
 	const isAdmin = $derived(!page.data?.admin)
 
@@ -62,15 +61,15 @@
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class="fixed top-5 right-5 z-99 flex items-center justify-center bg-black/20 border-2 border-primary/80 hover:border-primary hover:bg-primary/5 p-2 rounded-md transition-all duration-200 shadow-sm shadow-primary active:translate-x-0.5 active:translate-y-0.5 group"
+			class="fixed top-5 right-5 z-99 flex items-center justify-center bg-secondary/90 border-2 border-border/80 hover:border-border hover:bg-border/5 p-2 rounded-md transition-all duration-200 shadow-sm shadow-primary active:translate-x-0.5 active:translate-y-0.5 group"
 		>
 			<CompassIcon
-				class="w-5 h-5 text-zinc-400 group-hover:text-primary transition-colors"
+				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"
 			/>
 		</Dialog.Trigger>
 
 		<Dialog.Content
-			class="bg-black/60 backdrop-blur-2xl border-2 border-primary rounded-md max-w-3xl min-w-[60vw] p-6 sm:p-8  overflow-hidden z-9999"
+			class="bg-secondary/30 backdrop-blur-2xl border-2 border-border shadow-lg shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
 		>
 			<div
 				class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center w-full"
@@ -80,15 +79,16 @@
 						<Dialog.Close class="w-full text-left">
 							<a
 								href={item.href}
-								class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-primary hover:border-primary hover:bg-black/20 transition-all duration-150 group shadow-sm shadow-primary"
+								class="flex items-center gap-3 bg-card border-2 border-primary/40 px-4 py-3 rounded-md text-foreground hover:text-primary hover:border-primary hover:bg-card/70 transition-all duration-150 group shadow-sm shadow-primary"
 							>
 								<div
-									class="p-1.5 bg-black/50 border border-primary/20 rounded text-zinc-400 group-hover:text-primary group-hover:border-primary/50 transition-colors"
+									class="p-1.5 bg-secondary border border-primary/20 rounded text-secondary-foreground group-hover:text-primary group-hover:border-primary/50 transition-colors"
 								>
 									<item.icon class="w-4 h-4 stroke-2" />
 								</div>
+
 								<span
-									class="font-alchemize font-bold text-xs uppercase tracking-wider"
+									class="font-display font-bold text-xs uppercase tracking-wider"
 								>
 									{item.label}
 								</span>
@@ -109,24 +109,27 @@
 							class="w-16 h-16 object-contain"
 						/>
 					</div>
+
 					<div>
 						<Dialog.Title
-							class="font-alchemize font-extrabold  uppercase tracking-widest text-primary text-2xl sm:text-3xl leading-none"
+							class="font-decor font-extrabold uppercase tracking-tight text-secondary-foreground text-2xl sm:text-3xl leading-none"
 						>
 							Alchemize
 						</Dialog.Title>
+
 						<p
-							class="text-zinc-400 text-xs mt-2 max-w-[200px] mx-auto font-sans tracking-normal leading-relaxed"
+							class="text-muted-foreground text-xs mt-2 max-w-[200px] mx-auto font-body tracking-normal leading-relaxed"
 						>
 							Where do you want to go today?
 						</p>
 					</div>
+
 					<div class="flex items-center justify-evenly w-full">
 						{#each centerItems as item}
 							<Dialog.Close class="text-left" title={item.label}>
 								<a
 									href={item.href}
-									class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 p-2 rounded-md text-zinc-300 hover:text-primary hover:border-primary transition-all duration-150 group shadow-sm shadow-primary"
+									class="flex items-center gap-3 bg-card border-2 border-primary/40 p-2 rounded-md text-foreground hover:text-primary hover:border-primary transition-all duration-150 group shadow-sm shadow-primary"
 								>
 									<item.icon class="w-4 h-4 stroke-2" />
 								</a>
@@ -140,15 +143,16 @@
 						<Dialog.Close class="w-full text-left">
 							<a
 								href={item.href}
-								class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-primary hover:border-primary hover:bg-black/20 transition-all duration-150 group shadow-sm shadow-primary"
+								class="flex items-center gap-3 bg-card border-2 border-primary/40 px-4 py-3 rounded-md text-foreground hover:text-primary hover:border-primary hover:bg-card/70 transition-all duration-150 group shadow-sm shadow-primary"
 							>
 								<div
-									class="p-1.5 bg-black/50 border border-primary/20 rounded text-zinc-400 group-hover:text-primary group-hover:border-primary/50 transition-colors"
+									class="p-1.5 bg-secondary border border-primary/20 rounded text-secondary-foreground group-hover:text-primary group-hover:border-primary/50 transition-colors"
 								>
 									<item.icon class="w-4 h-4 stroke-2" />
 								</div>
+
 								<span
-									class="font-alchemize font-bold text-xs uppercase tracking-wider"
+									class="font-display font-bold text-xs uppercase tracking-wider"
 								>
 									{item.label}
 								</span>
@@ -160,15 +164,16 @@
 						<Dialog.Close class="w-full text-left">
 							<a
 								href="/admin"
-								class="flex items-center gap-3 bg-black/90 border-2 border-red-500/40 hover:border-red-500 px-4 py-3 rounded-md text-red-400 hover:bg-red-500/5 transition-all duration-150 group shadow-sm shadow-red-500/40"
+								class="flex items-center gap-3 bg-card border-2 border-blue-900/60 hover:border-blue-900 px-4 py-3 rounded-md text-blue-700 transition-all duration-150 group shadow-sm shadow-blue-900/40"
 							>
 								<div
-									class="p-1.5 bg-black/50 border border-red-500/20 rounded text-red-400/70 group-hover:text-red-400 group-hover:border-red-500/50 transition-colors"
+									class="p-1.5 bg-secondary border border-blue-500/20 rounded text-blue-800/70 group-hover:text-blue-400 group-hover:border-blue-500/50 transition-colors"
 								>
 									<ShieldUser class="w-4 h-4 stroke-2" />
 								</div>
+
 								<span
-									class="font-alchemize font-bold text-xs uppercase tracking-wider"
+									class="font-display font-bold text-xs uppercase tracking-wider"
 								>
 									Admin Dash
 								</span>
