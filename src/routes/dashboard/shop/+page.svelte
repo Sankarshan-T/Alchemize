@@ -245,9 +245,9 @@
 				<Button
 					onclick={() => toggleCurrency("redstone")}
 					class={cn(
-						"justify-between rounded-md px-3 py-2 shadow-sm shadow-red-900/20 border-2 transition-all hover:border-red-700 hover:bg-red-800/20",
+						"justify-between rounded-md px-3 py-2 shadow-sm shadow-red-900/20 border-2 transition-all hover:bg-red-800/20 hover:border-red-700",
 						activeCurrencies.has("redstone")
-							? "border-red-700 bg-red-700/40 text-red-900"
+							? "border-red-700 bg-red-700/80 text-white hover:bg-red-700/50"
 							: "border-red-700/50 bg-red-800/10 text-red-800"
 					)}
 				>
@@ -264,7 +264,7 @@
 					class={cn(
 						"justify-between rounded-md px-3 py-2 shadow-sm shadow-amber-900/20 border-2 transition-all hover:border-amber-700 hover:bg-amber-800/20",
 						activeCurrencies.has("glowstone")
-							? "border-amber-700 bg-amber-700/25 text-amber-900"
+							? "border-amber-700 bg-amber-800/80 text-white hover:bg-amber-800/50"
 							: "border-amber-700/50 bg-amber-800/10 text-amber-800"
 					)}
 				>
@@ -281,7 +281,7 @@
 					class={cn(
 						"justify-between rounded-md px-3 py-2 shadow-sm shadow-blue-900/20 border-2 transition-all hover:border-blue-700 hover:bg-blue-800/20",
 						activeCurrencies.has("aqua_regia")
-							? "border-blue-700 bg-blue-700/25 text-blue-900"
+							? "border-blue-700 bg-blue-700/80 text-white hover:bg-blue-700/50"
 							: "border-blue-700/50 bg-blue-800/10 text-blue-800"
 					)}
 				>
@@ -298,7 +298,7 @@
 					class={cn(
 						"justify-between rounded-md px-3 py-2 shadow-sm shadow-rose-900/20 border-2 transition-all hover:border-rose-700 hover:bg-rose-800/20",
 						activeCurrencies.has("potion_mix")
-							? "border-rose-700 bg-rose-700/25 text-rose-900"
+							? "border-rose-700 bg-rose-700/80 text-white hover:bg-rose-700/50"
 							: "border-rose-700/50 bg-rose-800/10 text-rose-800"
 					)}
 				>
@@ -370,8 +370,9 @@
 	{/if}
 
 	<div
-		class="relative z-10 flex-1 min-h-0 overflow-y-auto pr-2 pt-4 pb-6 grid gap-4 content-start justify-items-center"
-		style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));"
+		class="relative z-10 flex-1 min-h-0 overflow-y-auto pr-2 pt-4 pb-6
+       grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))]
+       gap-4 content-start"
 	>
 		{#each finalItems as item}
 			{@const theme = currencyTheme[item.primaryCurrency]}
