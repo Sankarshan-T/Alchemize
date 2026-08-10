@@ -259,7 +259,7 @@
 				class="w-full flex flex-col gap-y-2 items-start justify-start order-3"
 			>
 				<h2
-					class="font-display text-muted-foreground uppercase text-sm font-semibold lg:text-right w-full"
+					class="font-display text-foreground uppercase text-sm font-semibold lg:text-right w-full"
 				>
 					Result
 				</h2>
@@ -268,12 +268,12 @@
 					class="h-full w-full bg-card border-2 border-primary/50 rounded-2xl flex flex-col gap-y-6 items-center justify-center py-8 px-5 z-20"
 				>
 					<div
-						class="bg-secondary/20 rounded-full p-4 sm:p-5 w-24 sm:w-28 border-2 border-primary/50 flex items-center justify-center shadow-primary"
+						class="bg-secondary/20 rounded-full p-4 w-24 sm:w-28 border-2 border-primary/50 flex items-center justify-center shadow-primary"
 					>
 						<img
-							src="/Alchemize.png"
+							src="/pmix_v2.png"
 							alt="Potion Mix"
-							class="h-16 sm:h-20 text-primary object-contain"
+							class="h-20 text-primary object-contain"
 						/>
 					</div>
 

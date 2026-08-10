@@ -69,7 +69,7 @@
 			case "indie-gamedev":
 				return "<img src='/alch-redstone.png' alt='Redstone' class='w-4 h-4 object-contain' /> Indie Game Dev"
 			case "potion mix":
-				return "<img src='/Alchemize.png' alt='Potion Mix' class='w-4 h-4 object-contain' /> Potion Mix"
+				return "<img src='/pmix_v2.png' alt='Potion Mix' class='w-5 h-5 object-contain' /> Potion Mix"
 			default:
 				return null
 		}
@@ -233,9 +233,9 @@
 					>
 						<div class="p-1 shrink-0 rounded">
 							<img
-								src="/Alchemize.png"
+								src="/pmix_v2.png"
 								alt="Potion Mix"
-								class="w-5 h-5 object-contain"
+								class="w-7 h-7 object-contain"
 							/>
 						</div>
 						<div class="min-w-0">

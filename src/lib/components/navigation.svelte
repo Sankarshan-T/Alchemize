@@ -104,9 +104,9 @@
 						class="relative flex items-center justify-center w-20 h-20 rounded-md p-2"
 					>
 						<img
-							src="/Alchemist.webp"
+							src="/pmix_v2.png"
 							alt="Alchemize Logo"
-							class="w-16 h-16 object-contain"
+							class="w-20 h-20 object-contain"
 						/>
 					</div>
 

@@ -92,7 +92,7 @@
 							class="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-45 group-hover:opacity-65 transition-opacity duration-200"
 						>
 							<img
-								src="/Alchemize.png"
+								src="/pmix_v2.png"
 								alt=""
 								class="w-full h-full object-cover scale-100 group-hover:scale-[1.03] transition-transform duration-300"
 							/>
