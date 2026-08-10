@@ -77,7 +77,9 @@
 	const shippedTime = $derived.by(() =>
 		log.reduce((total, entry) => total + entry.deltaTime, 0)
 	)
+
 	let shipLoading = $state(false)
+
 	const ship = () => {
 		if (changelog.trim().length < 20) {
 			toast.error("Please provide a changelog before shipping.")
@@ -89,16 +91,20 @@
 		changelog = ""
 		shipLoading = false
 	}
+
 	const hoursShipped = $derived(Math.floor((shippedTime * 10) / 60) / 10)
+
 	const selectClass =
-		"flex h-10 w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-100"
+		"flex h-10 w-full rounded-lg border border-border bg-input px-3 py-2 text-sm font-body text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
 
 	let files: any = $state()
 	let fileinputPreview: any = $state("")
 	let hasFile = $derived(files && files.length > 0)
+
 	let files2: any = $state()
 	let fileinputPreview2: any = $state("")
 	let hasFile2 = $derived(files2 && files2.length > 0)
+
 	$effect(() => {
 		if (files && files.length > 0) {
 			const file = files[0]
@@ -115,6 +121,7 @@
 			fileinputPreview = ""
 		}
 	})
+
 	$effect(() => {
 		if (files2 && files2.length > 0) {
 			const file2 = files2[0]
@@ -131,9 +138,11 @@
 			fileinputPreview2 = ""
 		}
 	})
+
 	let allFieldsFilled = $derived(
 		name && description && descriptionCharCount >= 50
 	)
+
 	let shipButtonDisabled = $derived(
 		!(
 			changelogCharCount >= 20 &&
@@ -146,6 +155,7 @@
 			originalProject.fields.hackatime
 		)
 	)
+
 	$effect(() => {
 		shipButtonDisabled = !(
 			changelogCharCount >= 20 &&
@@ -162,166 +172,188 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-zinc-800 bg-zinc-950 text-zinc-50 p-0 gap-0 shadow-2xl"
+		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-border bg-card text-foreground p-0 gap-0 shadow-2xl rounded-2xl"
 	>
-		<Dialog.Header class="p-0 shrink-0 border-b border-zinc-800">
+		<Dialog.Header
+			class="relative shrink-0 overflow-hidden bg-card px-6 py-5 sm:px-8 sm:py-6 border-b"
+		>
 			<div
-				class="relative overflow-hidden bg-gradient-to-r from-red-950/20 via-zinc-900/40 to-zinc-950 p-6"
+				class="relative flex flex-col sm:flex-row sm:items-end justify-between gap-5"
 			>
-				{#if mode === "update" && project?.fields.screenshot}
-					<img
-						src={project.fields.screenshot}
-						alt=""
-						class="absolute inset-0 h-full w-full object-cover opacity-10 pointer-events-none filter blur-sm"
-					/>
-				{/if}
+				<div class="min-w-0">
+					<p
+						class="font-note text-[10px] uppercase tracking-[0.25em] text-card-foreground mb-2"
+					>
+						Alchemize
+					</p>
 
-				<div
-					class="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-				>
-					<div>
-						<p
-							class="text-[10px] font-bold uppercase tracking-[0.2em] text-red-500 mb-1"
-						>
-							Alchemize Projects
-						</p>
-						<h1
-							class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-100"
-						>
-							{mode === "create"
-								? "Create New Project"
-								: name || "Untitled Project"}
-						</h1>
-					</div>
-
-					{#if mode === "update"}
-						<div class="flex items-center gap-3 self-start sm:self-auto">
-							<div
-								class="rounded-lg border border-zinc-800 bg-zinc-900/50 backdrop-blur px-4 py-2 text-center min-w-[80px]"
-							>
-								<div
-									class="text-[10px] font-medium uppercase tracking-wider text-zinc-400"
-								>
-									Shipped
-								</div>
-								<div class="text-lg font-bold text-red-400">
-									{hoursShipped}h
-								</div>
-							</div>
-							<div
-								class="rounded-lg border border-zinc-800 bg-zinc-900/50 backdrop-blur px-4 py-2 text-center min-w-[80px]"
-							>
-								<div
-									class="text-[10px] font-medium uppercase tracking-wider text-zinc-400"
-								>
-									Type
-								</div>
-								<div class="text-lg font-bold text-zinc-200 capitalize">
-									{type || "—"}
-								</div>
-							</div>
-						</div>
-					{/if}
+					<h1
+						class="font-display text-2xl sm:text-3xl font-black uppercase tracking-wide text-foreground truncate"
+					>
+						{mode === "create"
+							? "Create New Project"
+							: name || "Untitled Project"}
+					</h1>
 				</div>
+
+				{#if mode === "update"}
+					<div class="flex items-center gap-3 shrink-0">
+						<div
+							class="rounded-lg bg-secondary/70 px-4 py-2.5 text-center min-w-[82px]"
+						>
+							<p
+								class="font-note text-[9px] uppercase tracking-widest text-muted-foreground"
+							>
+								Shipped
+							</p>
+							<p class="font-body text-lg font-black text-primary">
+								{hoursShipped}hrs
+							</p>
+						</div>
+
+						<div
+							class="rounded-lg bg-secondary/70 px-4 py-2.5 text-center min-w-[82px]"
+						>
+							<p
+								class="font-note text-[9px] uppercase tracking-widest text-muted-foreground"
+							>
+								Type
+							</p>
+							<p
+								class="font-display text-sm font-bold text-foreground capitalize"
+							>
+								{type || "—"}
+							</p>
+						</div>
+					</div>
+				{/if}
 			</div>
 		</Dialog.Header>
 
-		<div class="flex-1 min-h-0 overflow-hidden bg-zinc-950">
+		<div
+			class="flex-1 min-h-0 overflow-hidden bg-secondary/30 backdrop-blur-md"
+		>
 			<div
 				class={mode === "update"
-					? "grid grid-cols-1 lg:grid-cols-12 h-full items-stretch"
-					: "max-w-3xl mx-auto w-full p-6 overflow-y-auto h-full custom-scrollbar"}
+					? "grid grid-cols-1 lg:grid-cols-12 h-full"
+					: "max-w-4xl mx-auto w-full p-6 overflow-y-auto h-full custom-scrollbar"}
 			>
 				{#if mode === "update"}
-					<div
-						class="lg:col-span-4 flex flex-col gap-4 border-b lg:border-b-0 lg:border-r border-zinc-900 p-6 h-full min-h-0"
+					<aside
+						class="lg:col-span-4 flex flex-col gap-5 p-6 sm:p-8 min-h-0 bg-card/40"
 					>
-						<h3
-							class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2 shrink-0"
-						>
-							<span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-							Review Timeline & Activity
-						</h3>
+						<div class="flex items-center justify-between">
+							<div>
+								<p
+									class="font-note text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+								>
+									Project Logs
+								</p>
+								<h2
+									class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
+								>
+									Activity
+								</h2>
+							</div>
 
-						<div
-							class="flex-1 flex flex-col gap-3 overflow-y-auto max-w-full wrap-break-word pr-2 custom-scrollbar"
-						>
-							{#each [...log].reverse() as entry}
-								{#each [...entry.message].reverse() as msg, i}
-									{#if msg.reviewerName !== "user"}
-										<div
-											class="group border border-zinc-800 bg-zinc-900/30 rounded-xl p-4 transition hover:bg-zinc-900/50 border-l-4 {i ===
-												0 || msg.reviewerName?.includes('APPROVED')
-												? entry.status === 1 ||
-													msg.reviewerName?.includes('APPROVED')
-													? 'border-l-emerald-500'
-													: 'border-l-rose-500'
-												: 'border-l-rose-500'}"
-										>
-											<p
-												class="text-sm text-zinc-300 leading-relaxed font-medium mb-2"
-											>
-												{msg.userExternal}
-											</p>
-											<div
-												class="flex items-center gap-1.5 text-[11px] text-zinc-500"
-											>
-												{msg.reviewerName}
-												<span>•</span>
-												<span
-													>{new Date(msg.timestamp).toLocaleString([], {
-														dateStyle: "short",
-														timeStyle: "short",
-													})}</span
-												>
-											</div>
-										</div>
-									{:else}
-										<div
-											class="group border border-zinc-800 bg-zinc-900/30 rounded-xl p-4 transition hover:bg-zinc-900/50 border-l-4 border-l-amber-500"
-										>
-											<p
-												class="text-sm text-zinc-300 leading-relaxed font-medium mb-2"
-											>
-												{msg.userExternal}
-											</p>
-											<div
-												class="flex items-center gap-1.5 text-[11px] text-zinc-500"
-											>
-												<span class="font-semibold text-amber-500/90"
-													>New Ship Update</span
-												>
-												<span>•</span>
-												<span
-													>{new Date(msg.timestamp).toLocaleString([], {
-														dateStyle: "short",
-														timeStyle: "short",
-													})}</span
-												>
-											</div>
-										</div>
-									{/if}
-								{/each}
-							{/each}
-						</div>
-
-						<div
-							class="pt-2 shrink-0 border-t border-zinc-900/60 mt-auto bg-zinc-950"
-						>
-							<Button
-								variant="default"
-								class="w-full hover:bg-primary/70 hover:-translate-y-px h-10 font-bold uppercase tracking-wider text-xs"
-								onclick={ship}
+							<span
+								class="font-display text-sm font-bold text-primary border p-3 rounded-md"
 							>
-								{#if showRotator}
-									<div
-										class="size-4 border-2 border-gray-500 border-t-white rounded-full animate-spin mr-2"
-									></div>
-								{/if}
-								<i class="fa-solid fa-plus mr-1"></i> Ship
-							</Button>
+								{log.length}
+							</span>
 						</div>
-					</div>
+
+						<div
+							class="flex-1 max-w-full min-h-0 overflow-y-auto space-y-3 p-2 scrollbar-thin"
+						>
+							{#if log.length === 0}
+								<div
+									class="flex items-center justify-center h-full text-center"
+								>
+									<p class="font-note text-sm text-muted-foreground">
+										No activity yet.
+									</p>
+								</div>
+							{:else}
+								{#each [...log].reverse() as entry}
+									{#each [...entry.message].reverse() as msg, i}
+										{#if msg.reviewerName !== "user"}
+											<div
+												class={cn(
+													"rounded-xl bg-secondary/60 p-4 transition-colors hover:bg-secondary",
+													i === 0 || msg.reviewerName?.includes("APPROVED")
+														? entry.status === 1 ||
+															msg.reviewerName?.includes("APPROVED")
+															? "shadow-[inset_3px_0_0_0] shadow-emerald-600"
+															: "shadow-[inset_3px_0_0_0] shadow-rose-600"
+														: "shadow-[inset_3px_0_0_0] shadow-rose-600"
+												)}
+											>
+												<p
+													class="font-body text-sm text-foreground leading-relaxed mb-2"
+												>
+													{msg.userExternal}
+												</p>
+
+												<div
+													class="flex flex-wrap items-center gap-1.5 font-note text-[10px] text-muted-foreground"
+												>
+													<span>{msg.reviewerName}</span>
+													<span>•</span>
+													<span>
+														{new Date(msg.timestamp).toLocaleString([], {
+															dateStyle: "short",
+															timeStyle: "short",
+														})}
+													</span>
+												</div>
+											</div>
+										{:else}
+											<div
+												class="rounded-xl bg-secondary/60 p-4 shadow-[inset_3px_0_0_0] shadow-amber-600 transition-colors hover:bg-secondary"
+											>
+												<p
+													class="font-body text-sm text-foreground wrap-break-word leading-relaxed mb-2"
+												>
+													{msg.userExternal}
+												</p>
+
+												<div
+													class="flex flex-wrap items-center gap-1.5 font-note text-[10px] text-muted-foreground"
+												>
+													<span class="font-bold text-amber-700">
+														New Ship Update
+													</span>
+													<span>•</span>
+													<span>
+														{new Date(msg.timestamp).toLocaleString([], {
+															dateStyle: "short",
+															timeStyle: "short",
+														})}
+													</span>
+												</div>
+											</div>
+										{/if}
+									{/each}
+								{/each}
+							{/if}
+						</div>
+
+						<Button
+							variant="primary"
+							class="w-full h-10 font-display font-bold uppercase tracking-wider text-xs"
+							onclick={ship}
+						>
+							{#if showRotator}
+								<div
+									class="size-4 border-2 border-muted-foreground border-t-primary-foreground rounded-full animate-spin mr-2"
+								></div>
+							{/if}
+
+							<i class="fa-solid fa-plus mr-1"></i>
+							Ship
+						</Button>
+					</aside>
 				{/if}
 
 				{#if mode === "update" || mode === "create"}
@@ -329,7 +361,7 @@
 						enctype="multipart/form-data"
 						method="POST"
 						action={mode === "create" ? "?/create" : "?/update"}
-						class="space-y-6 flex flex-col h-full min-h-0 {mode === 'update'
+						class="flex flex-col h-full min-h-0 {mode === 'update'
 							? 'lg:col-span-8'
 							: 'w-full'}"
 						use:enhance={() => {
@@ -337,6 +369,7 @@
 
 							return async ({ result }) => {
 								showSecondRotator = false
+
 								if (result.type === "success") {
 									invalidater?.()
 									open = false
@@ -348,113 +381,154 @@
 							<input type="hidden" name="recordId" value={project?.id} />
 						{/if}
 
-						<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-							<div class="space-y-2">
-								<Label
-									for="name"
-									class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-									>Project Name</Label
+						<div
+							class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-8 custom-scrollbar"
+						>
+							<section class="space-y-5">
+								<h2
+									class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
 								>
-								<Input
-									id="name"
-									name="name"
-									required
-									placeholder="Give your masterpiece a name"
-									bind:value={name}
-									class="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-red-500 focus-visible:border-transparent"
-								/>
-							</div>
+									Project Details
+								</h2>
 
-							<div class="space-y-2">
-								<div class="flex items-center justify-between">
+								<div class="space-y-2">
 									<Label
-										for="description"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Project Description</Label
+										for="name"
+										class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
 									>
-									{#if mode === "create"}
-										<span
-											class="text-[11px] font-medium px-2 py-0.5 rounded-full {descriptionCharCount <
-											50
-												? 'bg-amber-500/10 text-amber-400'
-												: 'bg-emerald-500/10 text-emerald-400'}"
+										Project Name
+									</Label>
+
+									<Input
+										id="name"
+										name="name"
+										required
+										placeholder="Give your cool project a name"
+										bind:value={name}
+										class="bg-input border-border text-foreground placeholder:text-muted-foreground font-body"
+									/>
+								</div>
+
+								<div class="space-y-2">
+									<div class="flex items-center justify-between gap-3">
+										<Label
+											for="description"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
 										>
-											{descriptionCharCount < 50
-												? `${50 - descriptionCharCount} more chars needed`
-												: "Length OK"}
-										</span>
-									{/if}
-								</div>
-								<Textarea
-									id="description"
-									name="description"
-									required
-									placeholder="Describe what you are building. Markdown is fully supported."
-									class="h-36 bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-red-500 focus-visible:border-transparent resize-none leading-relaxed"
-									bind:value={description}
-								/>
-							</div>
+											Project Description
+										</Label>
 
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-								<div class="space-y-2">
-									<Label
-										for="github"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>GitHub Repository</Label
-									>
-									<Input
-										type="url"
-										id="github"
-										name="github"
-										placeholder="https://github.com/..."
-										bind:value={github}
-										class="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-red-500"
+										{#if mode === "create"}
+											<span
+												class={cn(
+													"font-note text-[10px] font-semibold px-2 py-1 rounded-full",
+													descriptionCharCount < 50
+														? "bg-amber-500/10 text-amber-700"
+														: "bg-emerald-500/10 text-emerald-700"
+												)}
+											>
+												{descriptionCharCount < 50
+													? `${50 - descriptionCharCount} more chars needed`
+													: "Length OK"}
+											</span>
+										{/if}
+									</div>
+
+									<Textarea
+										id="description"
+										name="description"
+										required
+										placeholder="Describe what you are building. Markdown is fully supported."
+										class="h-36 bg-input border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary resize-none leading-relaxed font-body"
+										bind:value={description}
 									/>
 								</div>
 
-								<div class="space-y-2">
-									<Label
-										for="demo"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Live Demo URL</Label
-									>
-									<Input
-										type="url"
-										id="demo"
-										name="demo"
-										placeholder="https://..."
-										bind:value={demo}
-										class="bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-red-500"
-									/>
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div class="space-y-2">
+										<Label
+											for="github"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											GitHub Repository
+										</Label>
+
+										<Input
+											type="url"
+											id="github"
+											name="github"
+											placeholder="https://github.com/..."
+											bind:value={github}
+											class="bg-input border-border text-foreground placeholder:text-muted-foreground font-body"
+										/>
+									</div>
+
+									<div class="space-y-2">
+										<Label
+											for="demo"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Live Demo URL
+										</Label>
+
+										<Input
+											type="url"
+											id="demo"
+											name="demo"
+											placeholder="https://..."
+											bind:value={demo}
+											class="bg-input border-border text-foreground placeholder:text-muted-foreground font-body"
+										/>
+									</div>
 								</div>
-							</div>
-							<div class="flex items-center justify-between gap-x-3">
-								<div class="space-y-2 w-full">
-									<Label
-										for="screenshot-1"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Screenshot 1</Label
-									>
-									<div class="flex items-center justify-center w-full">
+							</section>
+
+							<section class="space-y-5">
+								<h2
+									class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
+								>
+									Project Screenshots
+								</h2>
+
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div class="space-y-2">
+										<Label
+											for="screenshot-1"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Screenshot 1
+										</Label>
+
 										<label
 											for="screenshot-1"
-											class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer border-zinc-800 hover:border-zinc-700 transition"
+											class="relative flex flex-col items-center justify-center w-full h-36 rounded-xl cursor-pointer bg-card border-2 border-dashed border-border hover:border-primary/60 transition overflow-hidden"
 											style={fileinputPreview
-												? `background-image: url('${fileinputPreview}'); background-size: contain; background-position: center; filter: backdrop-blur(2px);`
-												: "background-color: transparent;"}
+												? `background-image: url('${fileinputPreview}'); background-size: contain; background-position: center; background-repeat: no-repeat;`
+												: ""}
 										>
 											<div
-												class="flex flex-col items-center justify-center pt-3 pb-3"
+												class={cn(
+													"absolute inset-0 flex flex-col items-center justify-center text-center p-4",
+													fileinputPreview
+														? "bg-background/70 backdrop-blur-[2px]"
+														: ""
+												)}
 											>
-												<p class="text-xs text-zinc-400 font-medium">
+												<p
+													class="font-body text-xs text-foreground font-medium"
+												>
 													{hasFile
 														? "Screenshot ready to upload"
 														: "Click to upload a screenshot"}
 												</p>
-												<p class="text-[10px] text-zinc-600 mt-1">
+
+												<p
+													class="font-note text-[10px] text-muted-foreground mt-1"
+												>
 													PNG, JPG, GIF up to 5MB
 												</p>
 											</div>
+
 											<input
 												id="screenshot-1"
 												name="screenshot"
@@ -465,33 +539,45 @@
 											/>
 										</label>
 									</div>
-								</div>
-								<div class="space-y-2 w-full">
-									<Label
-										for="screenshot-2"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Screenshot 2</Label
-									>
-									<div class="flex items-center justify-center w-full">
+
+									<div class="space-y-2">
+										<Label
+											for="screenshot-2"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Screenshot 2
+										</Label>
+
 										<label
 											for="screenshot-2"
-											class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer border-zinc-800 hover:border-zinc-700 transition"
+											class="relative flex flex-col items-center justify-center w-full h-36 rounded-xl cursor-pointer bg-card border-2 border-dashed border-border hover:border-primary/60 transition overflow-hidden"
 											style={fileinputPreview2
-												? `background-image: url('${fileinputPreview2}'); background-size: contain; background-position: center; filter: backdrop-blur(2px);`
-												: "background-color: transparent;"}
+												? `background-image: url('${fileinputPreview2}'); background-size: contain; background-position: center; background-repeat: no-repeat;`
+												: ""}
 										>
 											<div
-												class="flex flex-col items-center justify-center pt-3 pb-3"
+												class={cn(
+													"absolute inset-0 flex flex-col items-center justify-center text-center p-4",
+													fileinputPreview2
+														? "bg-background/70 backdrop-blur-[2px]"
+														: ""
+												)}
 											>
-												<p class="text-xs text-zinc-400 font-medium">
+												<p
+													class="font-body text-xs text-foreground font-medium"
+												>
 													{hasFile2
 														? "Screenshot ready to upload"
 														: "Click to upload a screenshot"}
 												</p>
-												<p class="text-[10px] text-zinc-600 mt-1">
+
+												<p
+													class="font-note text-[10px] text-muted-foreground mt-1"
+												>
 													PNG, JPG, GIF up to 5MB
 												</p>
 											</div>
+
 											<input
 												id="screenshot-2"
 												name="screenshot-2"
@@ -503,155 +589,189 @@
 										</label>
 									</div>
 								</div>
-							</div>
+							</section>
 
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-								<div class="space-y-2">
-									<Label
-										for="type"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Project Type</Label
-									>
-									<select
-										id="type"
-										name="type"
-										class={selectClass}
-										bind:value={type}
-									>
-										<option value="" disabled selected={!type}
-											>Choose Type</option
-										>
-										<option value="web">Web Playable</option>
-										<option value="mobile">Mobile App</option>
-										<option value="desktop">Desktop App</option>
-										<option value="terminal">Terminal App</option>
-										<option value="terminal">Cross platform playable</option>
-										<!-- <option value="hardware">Hardware Build</option> -->
-									</select>
-								</div>
-
-								<div class="space-y-2">
-									<Label
-										for="theme"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Project Theme</Label
-									>
-									<select
-										id="theme"
-										name="theme"
-										class={selectClass}
-										bind:value={theme}
-									>
-										<option value="" disabled selected>Choose Theme</option>
-										<option value="endless">Endless</option>
-										<option value="no-internet">No Internet</option>
-										<option value="indie-game">Indie Game</option>
-									</select>
-								</div>
-
-								<div
-									class="space-y-2 {mode === 'update' ? 'sm:col-span-2' : ''}"
+							<section class="space-y-5">
+								<h2
+									class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
 								>
-									<Label
-										for="hackatime"
-										class="text-xs font-semibold uppercase tracking-wider text-zinc-400"
-										>Hackatime Project</Label
-									>
-									<select
-										id="hackatime"
-										name="hackatime"
-										class={selectClass}
-										bind:value={hackatime}
-									>
-										<option value="" disabled selected={!hackatime}
-											>Choose</option
-										>
-										{#if mode === "update" && project?.fields.hackatime}
-											<option value={project.fields.hackatime}>
-												{project.fields.hackatime} (Currently connected)
-											</option>
-										{/if}
-										{#each availableHacks as hack}
-											<option value={hack.name}>{hack.name}</option>
-										{/each}
-									</select>
-								</div>
-							</div>
+									Project Settings
+								</h2>
 
-							<div
-								class="flex items-start gap-3 p-4 bg-zinc-900/30 border border-zinc-900 rounded-xl"
-							>
-								<Checkbox
-									id="projectUpdate"
-									name="projectUpdate"
-									bind:checked={projectUpdate}
-									class="mt-1 border-zinc-700 data-[state=checked]:bg-red-500 data-[state=checked]:border-red-500"
-								/>
-								<div class="grid gap-1 leading-none">
-									<Label
-										for="projectUpdate"
-										class="text-xs font-semibold text-zinc-200 cursor-pointer"
-										>This is an update</Label
+								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+									<div class="space-y-2">
+										<Label
+											for="type"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Project Type
+										</Label>
+
+										<select
+											id="type"
+											name="type"
+											class={selectClass}
+											bind:value={type}
+										>
+											<option value="" disabled selected={!type}>
+												Choose Type
+											</option>
+											<option value="web">Web Playable</option>
+											<option value="mobile">Mobile App</option>
+											<option value="desktop">Desktop App</option>
+											<option value="terminal">Terminal App</option>
+											<option value="terminal">
+												Cross platform playable
+											</option>
+										</select>
+									</div>
+
+									<div class="space-y-2">
+										<Label
+											for="theme"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Project Theme
+										</Label>
+
+										<select
+											id="theme"
+											name="theme"
+											class={selectClass}
+											bind:value={theme}
+										>
+											<option value="" disabled selected> Choose Theme </option>
+											<option value="endless">Endless</option>
+											<option value="no-internet">No Internet</option>
+											<option value="indie-game">Indie Game</option>
+										</select>
+									</div>
+
+									<div
+										class="space-y-2 {mode === 'update' ? 'sm:col-span-2' : ''}"
 									>
-									<p class="text-[11px] text-zinc-500 leading-normal">
-										Check this if your project was started before June 18th
-										2026.
-									</p>
+										<Label
+											for="hackatime"
+											class="font-display text-xs font-bold uppercase tracking-wider text-foreground"
+										>
+											Hackatime Project
+										</Label>
+
+										<select
+											id="hackatime"
+											name="hackatime"
+											class={selectClass}
+											bind:value={hackatime}
+										>
+											<option value="" disabled selected={!hackatime}>
+												Choose
+											</option>
+
+											{#if mode === "update" && project?.fields.hackatime}
+												<option value={project.fields.hackatime}>
+													{project.fields.hackatime} (Currently connected)
+												</option>
+											{/if}
+
+											{#each availableHacks as hack}
+												<option value={hack.name}>{hack.name}</option>
+											{/each}
+										</select>
+									</div>
 								</div>
-							</div>
+
+								<div class="flex items-start gap-3 rounded-xl bg-card p-4">
+									<Checkbox
+										id="projectUpdate"
+										name="projectUpdate"
+										bind:checked={projectUpdate}
+										class="mt-1 border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+									/>
+
+									<div class="grid gap-1 leading-none">
+										<Label
+											for="projectUpdate"
+											class="font-display text-xs font-bold text-foreground cursor-pointer"
+										>
+											This is an update
+										</Label>
+
+										<p
+											class="font-note text-[11px] text-muted-foreground leading-normal"
+										>
+											Check this if your project was started before June 18th
+											2026.
+										</p>
+									</div>
+								</div>
+							</section>
 
 							{#if mode === "update"}
-								<div class="space-y-2 border-t border-zinc-900 pt-6">
-									<div class="flex items-center justify-between">
-										<Label
-											for="changelog"
-											class="text-xs font-bold uppercase tracking-wider text-red-400"
-											>Changelog</Label
-										>
+								<section class="space-y-4">
+									<div class="flex items-end justify-between gap-3">
+										<div>
+											<p
+												class="font-note text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+											>
+												Shipping
+											</p>
+
+											<h2
+												class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
+											>
+												Changelog
+											</h2>
+										</div>
+
 										<span
-											class="text-[11px] font-medium px-2 py-0.5 rounded-full {changelogCharCount <
-											20
-												? 'bg-amber-500/10 text-amber-400'
-												: 'bg-emerald-500/10 text-emerald-400'}"
+											class={cn(
+												"font-note text-[10px] font-semibold px-2 py-1 rounded-full",
+												changelogCharCount < 20
+													? "bg-amber-500/10 text-amber-700"
+													: "bg-emerald-500/10 text-emerald-700"
+											)}
 										>
 											{changelogCharCount < 20
 												? `${20 - changelogCharCount} more chars needed to ship`
 												: "Ready to ship"}
 										</span>
 									</div>
+
 									<Textarea
 										id="changelog"
 										name="changelog"
-										placeholder="Describe what changes you made sice your last ship, or if it is your first ship, describe what you made..."
-										class="h-32 bg-zinc-900/50 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-red-500 focus-visible:border-transparent resize-none"
+										placeholder="Describe what changes you made since your last ship, or if it is your first ship, describe what you made..."
+										class="h-32 bg-input border-border text-foreground placeholder:text-muted-foreground focus-visible:ring-primary resize-none leading-relaxed font-body"
 										bind:value={changelog}
 									/>
-								</div>
+								</section>
 							{/if}
 						</div>
 
 						<div
-							class="shrink-0 flex items-center justify-end gap-3 p-4 border-t border-zinc-900 bg-zinc-950"
+							class="shrink-0 flex flex-wrap items-center justify-end gap-3 border-t px-6 sm:px-8 py-4"
 						>
 							<Button
 								type="button"
 								variant="outline"
-								class="text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-zinc-200 h-10"
+								class="font-display text-xs font-bold uppercase tracking-wider h-10"
 								onclick={() => (open = false)}
 							>
 								Cancel
 							</Button>
+
 							{#if mode === "update"}
 								<Button
 									type="button"
 									variant="destructive"
-									class="text-xs font-semibold uppercase tracking-wider h-10"
+									class="font-display text-xs font-bold uppercase tracking-wider h-10"
 									onclick={onDelete}
 									disabled={shipLoading ||
 										showSecondRotator ||
 										JSON.parse(project?.fields?.log || "[]").length > 1}
 								>
-									<Trash class="size-4 mr-1" /> Delete Project
+									<Trash class="size-4 mr-1" />
+									Delete Project
 								</Button>
 							{/if}
 
@@ -666,13 +786,16 @@
 										showSecondRotator ||
 										shipLoading}
 									type="submit"
-									class="bg-primary hover:bg-primary/80 text-primary-foreground text-xs font-bold uppercase tracking-wider px-6 h-10 shadow-lg shadow-red-950/20 {!allFieldsFilled &&
-										'pointer-events-none'}"
+									class={cn(
+										"bg-primary hover:bg-primary/80 text-primary-foreground font-display text-xs font-bold uppercase tracking-wider px-6 h-10",
+										!allFieldsFilled && "pointer-events-none"
+									)}
 									onclick={() => {
 										if (!name || !description) {
 											toast.error("Please fill in all required fields.")
 											return
 										}
+
 										if (mode === "create" && descriptionCharCount < 50) {
 											toast.error(
 												"Please provide a description with at least 50 characters."
@@ -683,9 +806,10 @@
 								>
 									{#if showSecondRotator}
 										<div
-											class="w-3.5 h-3.5 border-2 border-zinc-400 border-t-white rounded-full animate-spin mr-2"
+											class="w-3.5 h-3.5 border-2 border-muted-foreground border-t-primary-foreground rounded-full animate-spin mr-2"
 										></div>
 									{/if}
+
 									{mode === "create" ? "Initialize Project" : "Update Project"}
 								</Button>
 							</div>
@@ -696,19 +820,3 @@
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
-
-<style>
-	.custom-scrollbar::-webkit-scrollbar {
-		width: 4px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: #27272a;
-		border-radius: 2px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-		background: #3f3f46;
-	}
-</style>
