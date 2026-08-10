@@ -17,13 +17,7 @@
 	} from "$env/static/public"
 	import { scopes } from "$lib/utils"
 	import Accordion from "$lib/components/accordion.svelte"
-	import {
-		CircleCheck,
-		Newspaper,
-		ShoppingBag,
-		User,
-		Users,
-	} from "@lucide/svelte"
+	import { CircleCheck, ShoppingBag } from "@lucide/svelte"
 	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
@@ -171,7 +165,7 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-md transition-shadow select-none break-all sm:break-normal"
+					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
@@ -197,9 +191,9 @@
 							{/if}
 						</Button>
 					</a>
-					<a href="/docs">
+					<a href="/shop">
 						<Button variant="secondary" class="py-6">
-							<Newspaper class="size-6" />
+							<ShoppingCart class="size-8" />
 						</Button>
 					</a>
 				</div>
