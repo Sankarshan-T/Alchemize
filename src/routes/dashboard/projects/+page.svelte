@@ -239,9 +239,7 @@
 </div>
 
 <main class="h-full max-h-full w-full py-6 px-10 flex flex-col gap-8">
-	<div
-		class="flex items-end justify-between border-b-2 py-3 px-8 border-border"
-	>
+	<div class="flex items-end justify-between border-b-2 py-3 px-8">
 		<div class="flex items-center gap-3 text-foreground">
 			<Blocks class="size-5" />
 			<h1

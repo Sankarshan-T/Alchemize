@@ -88,7 +88,7 @@
 								</div>
 
 								<span
-									class="font-display font-bold text-xs uppercase tracking-wider"
+									class="font-note font-bold text-xs uppercase tracking-wider"
 								>
 									{item.label}
 								</span>
@@ -152,7 +152,7 @@
 								</div>
 
 								<span
-									class="font-display font-bold text-xs uppercase tracking-wider"
+									class="font-note font-bold text-xs uppercase tracking-wider"
 								>
 									{item.label}
 								</span>
@@ -173,7 +173,7 @@
 								</div>
 
 								<span
-									class="font-display font-bold text-xs uppercase tracking-wider"
+									class="font-note font-bold text-xs uppercase tracking-wider"
 								>
 									Admin Dash
 								</span>
