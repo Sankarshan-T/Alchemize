@@ -120,7 +120,6 @@
 			/>
 		</a>
 	</div>
-
 	<nav
 		class="fixed top-2 right-2 py-3 px-8 text-sm text-secondary-foreground font-display font-semibold bg-secondary backdrop-blur-sm border border-border rounded-tl-2xl rounded-br-2xl rounded-md flex items-center gap-3 z-100 hover:border-primary divide-x shadow-sm shadow-foreground"
 	>
@@ -150,7 +149,11 @@
 		</a>
 	</nav>
 
-	<main class="z-10 relative w-full px-4 sm:px-6 md:px-10">
+	<div
+		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
+	></div>
+	<div class="fixed inset-0 z-0 bg-background/90 bg-contain bg-scale"></div>
+	<main class="relative w-full px-4 sm:px-6 md:px-10">
 		<section
 			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
 		>
