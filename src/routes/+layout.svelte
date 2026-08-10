@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head
-	><link rel="icon" href="/Alchemist.webp" />
+	><link rel="icon" href="/pmix_v2.png" />
 	<title>Alchemize</title>
 </svelte:head>
 <Toaster position="top-center" richColors expand={true} />

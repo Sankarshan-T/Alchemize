@@ -28,7 +28,7 @@
 	let unVerified = $state(false)
 </script>
 
-<svelte:head><link rel="icon" href="/Alchemist.webp" /></svelte:head>
+<svelte:head><link rel="icon" href="/pmix_v2.png" /></svelte:head>
 
 {#if $navigating || $loaderStore}
 	<div
