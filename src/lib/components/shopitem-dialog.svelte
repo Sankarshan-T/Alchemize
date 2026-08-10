@@ -143,24 +143,26 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="min-w-[80vw] bg-background border border-border rounded-3xl p-8 shadow-2xl transition-all"
+		class="min-w-[80vw] bg-card border rounded-3xl p-8 shadow-2xl transition-all"
 	>
 		<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
 			<div
-				class="md:col-span-5 flex flex-col gap-4 border border-zinc-800/60 p-4 rounded-2xl bg-zinc-900/20"
+				class="md:col-span-5 flex flex-col gap-4 border rounded-2xl bg-secondary/20"
 			>
 				<div
-					class="overflow-hidden rounded-xl bg-zinc-950 aspect-video md:h-48 w-full flex items-center justify-center"
+					class="overflow-hidden rounded-xl bg-secondary aspect-video md:h-48 w-full flex items-center justify-center"
 				>
 					<img
 						src={item.image}
 						alt={item.name}
-						class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+						class="w-full h-full object-cover"
 					/>
 				</div>
 
-				<div class="space-y-2">
-					<Dialog.Title class="text-2xl font-bold tracking-tight text-zinc-100">
+				<div class="space-y-2 p-2">
+					<Dialog.Title
+						class="text-2xl font-bold tracking-tight text-secondary-foreground"
+					>
 						{item.name}
 					</Dialog.Title>
 					<div
@@ -182,7 +184,7 @@
 						</div>
 						<div class="flex justify-between items-center text-sm font-medium">
 							<span class="text-muted-foreground">Your Balance:</span>
-							<span class="text-zinc-300"
+							<span class=""
 								>{currency[currentCurrencyKey]}
 								{currencyNames[currentCurrencyKey]}</span
 							>
@@ -206,15 +208,17 @@
 						)}
 					>
 						<div
-							class="flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-zinc-950/40 px-4"
+							class="flex items-center justify-between p-3 rounded-xl border bg-secondary/40 px-4"
 						>
-							<span class="text-sm font-medium text-zinc-400">Quantity</span>
+							<span class="text-sm font-medium text-secondary-foreground"
+								>Quantity</span
+							>
 							<div class="flex items-center gap-2">
 								<input
 									type="number"
 									min="1"
 									value={qty}
-									class="w-20 bg-zinc-900/60 text-zinc-100 font-mono text-right p-1.5 px-3 border border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm"
+									class="w-20 bg-input text-right p-1.5 px-3 border rounded-lg outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm"
 									oninput={e =>
 										handleQtyInput(
 											parseInt((e.target as HTMLInputElement).value) || 1
@@ -225,9 +229,11 @@
 
 						{#if isGrant}
 							<div
-								class="flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-zinc-950/40 px-4"
+								class="flex items-center justify-between p-3 rounded-xl border bg-secondary/40 px-4"
 							>
-								<span class="text-sm font-medium text-zinc-400">Amount</span>
+								<span class="text-sm font-medium text-secondary-foreground"
+									>Amount</span
+								>
 								<div class="flex items-center gap-1">
 									<Button
 										variant="outline"
@@ -244,7 +250,7 @@
 										min={unitValue}
 										step={unitValue}
 										value={grantAmount}
-										class="max-w-20 bg-zinc-900/60 text-zinc-100 font-mono text-center py-1.5 border border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+										class="max-w-20 bg-input text-center py-1.5 border rounded-lg outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
 										onblur={e =>
 											handleGrantInput(
 												parseInt((e.target as HTMLInputElement).value) || 0
@@ -264,13 +270,12 @@
 					</div>
 				</div>
 
-				<div class="space-y-4 pt-4 border-t border-zinc-900">
+				<div class="space-y-4 pt-4 border-t">
 					<div class="flex justify-between items-baseline px-1">
-						<span class="text-sm font-medium text-zinc-400">Total Expense:</span
-						>
+						<span class="text-sm font-medium">Total Expense:</span>
 						<span
 							class="text-2xl font-bold tracking-tight {disabled
-								? 'text-zinc-500'
+								? 'text-muted-foreground'
 								: activeTheme.text}"
 						>
 							{totalCost}
@@ -279,11 +284,7 @@
 					</div>
 
 					<div class="flex gap-3 justify-end w-full">
-						<Button
-							variant="outline"
-							onclick={() => (open = false)}
-							class="py-5 px-6 rounded-xl hover:bg-zinc-900 transition-colors"
-						>
+						<Button variant="outline" onclick={() => (open = false)}>
 							Cancel
 						</Button>
 
@@ -293,7 +294,7 @@
 								open = false
 							}}
 							{disabled}
-							class="py-5 px-8 rounded-xl font-medium tracking-wide shadow-lg transition-all hover:bg-primary/70"
+							variant="primary"
 						>
 							Confirm Order
 						</Button>
