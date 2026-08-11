@@ -24,7 +24,7 @@
 		class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 border-0 bg-transparent p-0 max-w-2xl min-w-[80vw] h-[66vh] text-foreground overflow-visible shadow-none outline-none"
 	>
 		<div
-			class="relative z-10 w-full h-full flex flex-col bg-card border-2 border-border rounded-2xl p-4 sm:p-6 gap-4 backdrop-blur-sm overflow-hidden shadow-lg shadow-primary/10"
+			class="relative z-10 w-full h-full flex flex-col bg-secondary/30 border-2 border-border rounded rounded-tl-3xl rounded-br-3xl p-4 sm:p-6 gap-4 backdrop-blur-2xl overflow-hidden shadow-lg shadow-primary/10"
 		>
 			<Dialog.Header class="shrink-0 flex items-center justify-between">
 				<Dialog.Title

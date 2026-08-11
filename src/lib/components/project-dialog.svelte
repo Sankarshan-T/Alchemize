@@ -172,7 +172,7 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-border bg-card text-foreground p-0 gap-0 shadow-2xl rounded-2xl"
+		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-border bg-card text-foreground p-0 gap-0 shadow-2xl rounded rounded-tl-3xl rounded-br-3xl"
 	>
 		<Dialog.Header
 			class="relative shrink-0 overflow-hidden bg-card px-6 py-5 sm:px-8 sm:py-6 border-b"
