@@ -161,10 +161,10 @@ body {
   --background-image-admin: var(--background-image-gradbg);
   --background-image-parchment: var(--background-texture);
 
-  --shadow-neo: 2px 2px 0px var(--primary);
   --shadow-neo-lg: 5px 5px 0px var(--primary);
-  --shadow-color-neo: var(--shadow-neo);
-  --shadow-color-neo-lg: var(--shadow-neo-lg);
+  --shadow-neo: 2px 2px 0px var(--primary);
+  --shadow-neo-sec: 2px 2px 0px var(--secondary);
+  --shadow-neo-lg-sec: 5px 5px 0px var(--secondary);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
