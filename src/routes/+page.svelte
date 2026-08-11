@@ -177,7 +177,7 @@
 					With more mixing this time
 				</h3>
 				<span class="mt-2 font-display font-semibold tracking-wider">
-					Starts form 8th August
+					Starts form 17th August
 				</span>
 				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>
@@ -219,7 +219,7 @@
 
 			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-md shadow-sm shadow-primary"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -239,7 +239,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-md shadow-sm shadow-primary"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -260,7 +260,7 @@
 				</div>
 
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-md shadow-sm shadow-primary"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -280,7 +280,7 @@
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-md shadow-sm shadow-primary"
+					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -312,7 +312,7 @@
 
 			<div class="grid grid-cols-2 gap-4 w-full">
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-md shadow-sm shadow-primary rounded-tl-2xl rounded-br-2xl rounded-md"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
@@ -333,7 +333,7 @@
 					</p>
 				</div>
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-md shadow-sm shadow-primary rounded-tl-2xl rounded-br-2xl rounded-md"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
@@ -356,7 +356,7 @@
 					</p>
 				</div>
 				<div
-					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-md shadow-sm shadow-primary"
+					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<h3
 						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
