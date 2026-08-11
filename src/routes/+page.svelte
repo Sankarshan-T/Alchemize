@@ -164,7 +164,6 @@
 					<CircleCheck class="h-3 w-3" />
 					<span>Season 1 -</span>
 
-					<LoaderCircleIcon class="animate-spin h-3 w-3" />
 					<span>Season 2</span>
 				</div>
 				<h1
