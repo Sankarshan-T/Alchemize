@@ -88,7 +88,7 @@
 	<meta property="og:title" content="Alchemize | Dashboard" />
 </svelte:head>
 
-<main class="h-full w-full flex gap-6 p-7">
+<main class="h-full w-full flex gap-6 p-15">
 	<div class="flex flex-col gap-6 flex-1 min-h-0">
 		<div class="w-full flex items-center justify-start gap-4">
 			<div
