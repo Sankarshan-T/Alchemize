@@ -172,7 +172,7 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-border bg-card text-foreground p-0 gap-0 shadow-2xl rounded rounded-tl-3xl rounded-br-3xl"
+		class="min-w-[85vw] h-[90vh] max-h-[90vh] overflow-hidden flex flex-col border border-border bg-card text-foreground p-0 gap-0 shadow-2xl rounded rounded-tl-3xl rounded-br-3xl [&>button]:hidden"
 	>
 		<Dialog.Header
 			class="relative shrink-0 overflow-hidden bg-card px-6 py-5 sm:px-8 sm:py-6 border-b"
@@ -342,7 +342,7 @@
 						<Button
 							variant="primary"
 							class="w-full h-10 font-display font-bold uppercase tracking-wider text-xs"
-							onclick={ship}
+							// onclick={ship}
 						>
 							{#if showRotator}
 								<div
@@ -484,11 +484,17 @@
 							</section>
 
 							<section class="space-y-5">
-								<h2
-									class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
-								>
-									Project Screenshots
-								</h2>
+								<div>
+									<h2
+										class="font-display text-lg font-bold uppercase tracking-wide text-foreground"
+									>
+										Project Screenshots <br />
+									</h2>
+									<span class="text-xs font-note"
+										>Add 2 completely distinct screenshots showing different
+										angles of your project</span
+									>
+								</div>
 
 								<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 									<div class="space-y-2">
@@ -525,7 +531,7 @@
 												<p
 													class="font-note text-[10px] text-muted-foreground mt-1"
 												>
-													PNG, JPG, GIF up to 5MB
+													PNG, JPG up to 5MB
 												</p>
 											</div>
 
@@ -533,7 +539,7 @@
 												id="screenshot-1"
 												name="screenshot"
 												type="file"
-												accept="image/*"
+												accept="image/png, image/jpeg"
 												class="hidden"
 												bind:files
 											/>
@@ -574,7 +580,7 @@
 												<p
 													class="font-note text-[10px] text-muted-foreground mt-1"
 												>
-													PNG, JPG, GIF up to 5MB
+													PNG, JPG up to 5MB
 												</p>
 											</div>
 
@@ -582,7 +588,7 @@
 												id="screenshot-2"
 												name="screenshot-2"
 												type="file"
-												accept="image/*"
+												accept="image/png, image/jpeg"
 												class="hidden"
 												bind:files={files2}
 											/>
@@ -785,7 +791,7 @@
 									disabled={!allFieldsFilled ||
 										showSecondRotator ||
 										shipLoading}
-									type="submit"
+									// type="submit"
 									class={cn(
 										"bg-primary hover:bg-primary/80 text-primary-foreground font-display text-xs font-bold uppercase tracking-wider px-6 h-10",
 										!allFieldsFilled && "pointer-events-none"

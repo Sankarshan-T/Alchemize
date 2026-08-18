@@ -36,7 +36,7 @@
 		PUBLIC_TURNED_OFF !== "false"
 			? `./turned-off`
 			: hasaccessToken
-				? `./dashboard`
+				? `./dashboard/projects`
 				: `/auth`
 	)
 
@@ -121,7 +121,7 @@
 		</a>
 	</div>
 	<nav
-		class="fixed top-2 right-2 py-3 px-8 text-sm text-secondary-foreground font-display font-semibold bg-secondary backdrop-blur-sm border border-border rounded-tl-2xl rounded-br-2xl rounded-md flex items-center gap-3 z-100 hover:border-primary divide-x shadow-sm shadow-foreground"
+		class="fixed top-2 right-2 py-3 px-8 text-sm text-secondary-foreground font-display font-semibold bg-secondary/60 backdrop-blur-sm border border-border rounded-tl-2xl rounded-br-2xl rounded-md flex items-center gap-3 z-100 hover:border-primary divide-x shadow-xs shadow-foreground/70"
 	>
 		<a
 			href="/#"
@@ -157,13 +157,10 @@
 		<section
 			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
 		>
-			<div class="flex flex-col items-center gap-2">
+			<div class="flex flex-col items-center gap-5">
 				<div
-					class="flex items-center gap-2 text-sm font-decor text-foreground tracking-[0.3em] uppercase"
+					class="flex items-center gap-2 text-2xl font-decor text-foreground tracking-[0.3em] uppercase"
 				>
-					<CircleCheck class="h-3 w-3" />
-					<span>Season 1 -</span>
-
 					<span>Season 2</span>
 				</div>
 				<h1
@@ -172,10 +169,12 @@
 					ALCHEMIZE
 				</h1>
 				<h3
-					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none flex flex-col items-center break-all sm:break-normal"
 				>
-					With more mixing this time <br />
-					Make themed projects, get themed prizes!
+					Make themed projects, get themed prizes!<br />
+					<span class="text-sm shadow-none font-note font-light tracking-wider">
+						With more mixing this time</span
+					>
 				</h3>
 				<span class="mt-2 font-display font-semibold tracking-wider">
 					Starts on 23th August 1:00 AM UTC
@@ -393,11 +392,11 @@
 			<div class="flex flex-col gap-3 w-full max-w-4xl mx-auto">
 				<Accordion
 					Title="What is a 'ship'?"
-					Content="A 'ship' is the project you submit to this event. You can ship any general project or a project related to one of the themes"
+					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run adn is recreatable."
 				/>
 				<Accordion
-					Title="Who is Eligible?"
-					Content="Anyone ages 13-18 who isn't banned from Hack Club can participate."
+					Title="Who can participate here?"
+					Content="Anyone ages 13-18 (inclusive) can participate."
 				/>
 				<Accordion
 					Title="How is time tracked?"
@@ -424,8 +423,9 @@
 					Hack Club
 				</h3>
 				<p class="text-muted-foreground font-display text-xs leading-relaxed">
-					Hack Club is the world’s largest nonprofit movement of teenagers
-					making cool projects.
+					Hack Club is a 501(c)(3) nonprofit and network of 100k+ technical high
+					schoolers. We believe you learn best by building, so we're creating
+					community and providing grants so you can make awesome projects.
 				</p>
 			</div>
 

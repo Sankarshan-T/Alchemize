@@ -61,11 +61,12 @@
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class="fixed top-5 right-5 z-99 flex items-center justify-center bg-secondary/90 border-2 border-border/80 hover:border-border hover:bg-border/5 p-2 rounded-md transition-all duration-200 shadow-sm shadow-primary active:translate-x-0.5 active:translate-y-0.5 group"
+			class="fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center justify-center bg-secondary/90 border-2 border-border/80 hover:border-border hover:bg-border/5 py-1 px-5 rounded-md transition-all duration-200 shadow-sm shadow-primary group text-secondary-foreground gap-3"
 		>
 			<CompassIcon
 				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"
 			/>
+			Navigate Here
 		</Dialog.Trigger>
 
 		<Dialog.Content

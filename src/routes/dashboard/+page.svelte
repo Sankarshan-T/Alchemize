@@ -306,7 +306,9 @@
 								</a>
 							{/each}
 						{:else}
-							<div class="text-sm py-4">No projects yet.....</div>
+							<div class="h-full w-full flex items-center justify-center">
+								<a href="/dashboard/projects"> Create Your first Project! </a>
+							</div>
 						{/if}
 					</div>
 

@@ -143,7 +143,7 @@
 
 <Dialog.Root bind:open>
 	<Dialog.Content
-		class="min-w-[80vw] bg-secondary/60 backdrop-blur-2xl border rounded rounded-tl-3xl rounded-br-3xl p-8 shadow-2xl transition-all"
+		class="min-w-[80vw] bg-secondary/80 backdrop-blur-2xl border rounded rounded-tl-3xl rounded-br-3xl p-8 shadow-2xl transition-all [&>button]:hidden"
 	>
 		<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
 			<div
@@ -289,10 +289,10 @@
 						</Button>
 
 						<Button
-							onclick={() => {
-								onConfirm(qty)
-								open = false
-							}}
+							// onclick={() => {
+							// 	onConfirm(qty)
+							// 	open = false
+							// }}
 							{disabled}
 							variant="primary"
 						>
