@@ -416,7 +416,7 @@
 									class="text-[10px] font-bold text-muted-foreground
 										   tracking-widest uppercase"
 								>
-									August 8th 2026
+									August 23th 2026
 								</span>
 
 								<span

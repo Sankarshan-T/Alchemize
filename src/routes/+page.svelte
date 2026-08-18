@@ -172,13 +172,13 @@
 					ALCHEMIZE
 				</h1>
 				<h3
-					class="text-xl font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none break-all sm:break-normal"
 				>
-					With more mixing this time <br/>
+					With more mixing this time <br />
 					Make themed projects, get themed prizes!
 				</h3>
 				<span class="mt-2 font-display font-semibold tracking-wider">
-					Starts from 23th August 1:00 AM UTC
+					Starts on 23th August 1:00 AM UTC
 				</span>
 				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>

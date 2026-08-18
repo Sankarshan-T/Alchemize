@@ -92,7 +92,7 @@
 	): number {
 		if (amount <= 0) return 0
 		let hours = currencyType === "potion_mix" ? amount / 4.5 : amount
-		return Number(hours.toFixed(2))
+		return Math.ceil(hours)
 	}
 	let totalEstimatedHours = $derived(
 		getEstimatedHours(currentCurrencyKey, totalCost)

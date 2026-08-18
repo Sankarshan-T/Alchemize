@@ -117,7 +117,7 @@
 		if (currency === "none" || amount <= 0) return 0
 		let hours = amount
 		if (currency === "potion_mix") hours = amount / 4.5
-		return Number(hours.toFixed(2))
+		return Math.ceil(hours)
 	}
 
 	const shopItems = $derived.by(() => {
