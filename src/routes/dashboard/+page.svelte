@@ -125,7 +125,7 @@
 						</span>
 
 						<span class="font-bold text-xs text-muted-foreground">
-							{data.admin ? "Admin" : "Member"}
+							{data.admin ? "Admin" : "Participant"}
 						</span>
 					</div>
 
@@ -294,7 +294,7 @@
 													hackSecondsByName.get(
 														project.fields.hackatime ?? ""
 													) ?? 0
-												)}h
+												)}hrs
 											</span>
 										</div>
 										<p
@@ -307,7 +307,9 @@
 							{/each}
 						{:else}
 							<div class="h-full w-full flex items-center justify-center">
-								<a href="/dashboard/projects"> Create Your first Project! </a>
+								<a href="/dashboard/projects">
+									<Button variant="primary">Create Your first Project!</Button>
+								</a>
 							</div>
 						{/if}
 					</div>
@@ -316,7 +318,7 @@
 						href="/dashboard/projects"
 						class="self-end font-body text-card-foreground font-bold text-md uppercase tracking-widest hover:underline pt-3 flex items-center gap-1 shrink-0"
 					>
-						View all mixes →
+						All Mixes
 					</a>
 				</div>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">

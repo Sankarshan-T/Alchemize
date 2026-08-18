@@ -84,7 +84,7 @@
 	class="w-full min-h-screen h-full overflow-y-auto overflow-x-hidden flex items-center justify-center py-10"
 >
 	<div
-		class="relative h-full w-full max-w-7xl px-4 sm:px-6 lg:px-8 items-center justify-center flex-col flex z-50 gap-y-6"
+		class="relative h-full w-full max-w-6xl px-6 sm:px-6 lg:px-6 items-center justify-center flex-col flex z-50 gap-y-6"
 	>
 		<div class="text-center space-y-2">
 			<h1
@@ -98,7 +98,7 @@
 		</div>
 
 		<div
-			class="w-full lg:w-[90%] grid grid-cols-1 lg:grid-cols-3 gap-8 items-center mt-4"
+			class="w-full lg:w-full xl:w-[95%] grid grid-cols-1 lg:grid-cols-3 gap-8 items-center mt-4"
 		>
 			<div
 				class="w-full flex flex-col gap-y-2 items-start justify-start order-1"
