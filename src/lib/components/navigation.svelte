@@ -66,7 +66,7 @@
 			<CompassIcon
 				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"
 			/>
-			Navigate Here
+			Wanna Go Somewhere?
 		</Dialog.Trigger>
 
 		<Dialog.Content
