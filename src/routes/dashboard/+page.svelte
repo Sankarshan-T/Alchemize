@@ -476,15 +476,9 @@
 
 					<a
 						href="/dashboard/shop"
-						class="group row-span-2 flex flex-col items-center justify-center gap-1 bg-secondary border border-primary/30 p-2 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary/70"
+						class="group row-span-2 flex items-center justify-evenly gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
 					>
-						<div
-							class="size-15 px-2 py-1 rounded-2xl bg-primary/10 flex items-center justify-center"
-						>
-							<ShoppingBasket class="size-11 text-primary" />
-						</div>
-
-						<div class="text-center">
+						<div class="flex flex-col items-center">
 							<h3
 								class="font-display font-black uppercase tracking-wider text-lg text-secondary-foreground"
 							>
@@ -494,15 +488,20 @@
 							<p class="text-xs text-muted-foreground">
 								Browse the Alchemize shop
 							</p>
+							<div
+								class="flex items-center gap-1.5 mt-2 text-xs font-bold uppercase tracking-widest text-primary"
+							>
+								Explore
+								<ArrowUpRight
+									class="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+								/>
+							</div>
 						</div>
 
 						<div
-							class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-primary"
+							class="size-15 px-2 py-1 rounded-2xl bg-primary/10 flex items-center justify-center"
 						>
-							Explore
-							<ArrowUpRight
-								class="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-							/>
+							<ShoppingBasket class="size-11 text-primary" />
 						</div>
 					</a>
 

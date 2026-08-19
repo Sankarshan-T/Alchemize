@@ -211,7 +211,7 @@
 	class="h-screen w-full px-10 py-6 tracking-wide relative overflow-hidden flex flex-col font-body"
 >
 	<header
-		class="relative z-10 w-full flex flex-col gap-4 border-b-2 border-border pb-4 shrink-0"
+		class="relative z-10 w-full flex flex-col gap-4 border-b-2 pb-4 shrink-0"
 	>
 		<div
 			class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 py-3 px-8"
@@ -245,10 +245,10 @@
 				<Button
 					onclick={() => toggleCurrency("redstone")}
 					class={cn(
-						"justify-between rounded-md px-3 py-2 shadow-sm shadow-red-900/20 border-2 transition-all hover:bg-red-800/20 hover:border-red-700",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-red-900/20 transition-all hover:border-red-700 hover:bg-red-800/20 dark:border-red-300/50 dark:hover:border-red-300 dark:hover:bg-red-300/15",
 						activeCurrencies.has("redstone")
-							? "border-red-700 bg-red-700/80 text-white hover:bg-red-700/50"
-							: "border-red-700/50 bg-red-800/10 text-red-800"
+							? "border-red-700 bg-red-700/80 text-white hover:bg-red-700/50 dark:border-red-300 dark:bg-red-700/80"
+							: "border-red-700/50 bg-red-800/10 text-red-800 dark:bg-red-300/10 dark:text-red-300"
 					)}
 				>
 					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
@@ -262,10 +262,10 @@
 				<Button
 					onclick={() => toggleCurrency("glowstone")}
 					class={cn(
-						"justify-between rounded-md px-3 py-2 shadow-sm shadow-amber-900/20 border-2 transition-all hover:border-amber-700 hover:bg-amber-800/20",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-amber-900/20 transition-all hover:border-amber-700 hover:bg-amber-800/20 dark:border-amber-300/50 dark:hover:border-amber-300 dark:hover:bg-amber-300/15",
 						activeCurrencies.has("glowstone")
-							? "border-amber-700 bg-amber-800/80 text-white hover:bg-amber-800/50"
-							: "border-amber-700/50 bg-amber-800/10 text-amber-800"
+							? "border-amber-700 bg-amber-800/80 text-white hover:bg-amber-800/50 dark:border-amber-300 dark:bg-amber-800/80"
+							: "border-amber-700/50 bg-amber-800/10 text-amber-800 dark:bg-amber-300/10 dark:text-amber-300"
 					)}
 				>
 					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
@@ -279,10 +279,10 @@
 				<Button
 					onclick={() => toggleCurrency("aqua_regia")}
 					class={cn(
-						"justify-between rounded-md px-3 py-2 shadow-sm shadow-blue-900/20 border-2 transition-all hover:border-blue-700 hover:bg-blue-800/20",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-blue-900/20 transition-all hover:border-blue-700 hover:bg-blue-800/20 dark:border-blue-300/50 dark:hover:border-blue-300 dark:hover:bg-blue-300/15",
 						activeCurrencies.has("aqua_regia")
-							? "border-blue-700 bg-blue-700/80 text-white hover:bg-blue-700/50"
-							: "border-blue-700/50 bg-blue-800/10 text-blue-800"
+							? "border-blue-700 bg-blue-700/80 text-white hover:bg-blue-700/50 dark:border-blue-300 dark:bg-blue-700/80"
+							: "border-blue-700/50 bg-blue-800/10 text-blue-800 dark:bg-blue-300/10 dark:text-blue-300"
 					)}
 				>
 					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
@@ -296,10 +296,10 @@
 				<Button
 					onclick={() => toggleCurrency("potion_mix")}
 					class={cn(
-						"justify-between rounded-md px-3 py-2 shadow-sm shadow-rose-900/20 border-2 transition-all hover:border-rose-700 hover:bg-rose-800/20",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-rose-900/20 transition-all hover:border-rose-700 hover:bg-rose-800/20 dark:border-rose-300/50 dark:hover:border-rose-300 dark:hover:bg-rose-300/15",
 						activeCurrencies.has("potion_mix")
-							? "border-rose-700 bg-rose-700/80 text-white hover:bg-rose-700/50"
-							: "border-rose-700/50 bg-rose-800/10 text-rose-800"
+							? "border-rose-700 bg-rose-700/80 text-white hover:bg-rose-700/50 dark:border-rose-300 dark:bg-rose-700/80"
+							: "border-rose-700/50 bg-rose-800/10 text-rose-800 dark:bg-rose-300/10 dark:text-rose-300"
 					)}
 				>
 					<span class="text-[10px] sm:text-xs uppercase tracking-wider">

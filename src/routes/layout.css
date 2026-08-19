@@ -115,6 +115,52 @@
   --frame-radius-alt: 14px 46px 14px 46px;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  --parchment: #292722;
+  --parchment-light: #37332b;
+  --parchment-dark: #4a4337;
+
+  --background: var(--parchment);
+  --background-texture:
+    radial-gradient(ellipse at 18% 12%, rgba(255, 246, 216, 0.08), transparent 55%),
+    radial-gradient(circle at 83% 18%, rgba(157, 126, 72, 0.12), transparent 42%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 1px, transparent 1px, transparent 4px);
+
+  --foreground: #eee4cf;
+  --card: #37332b;
+  --card-foreground: #f3ecd8;
+  --popover: #37332b;
+  --popover-foreground: #f3ecd8;
+  --primary: #8bb7eb;
+  --primary-hover: #b0cff1;
+  --primary-foreground: #292722;
+  --secondary: #4a4337;
+  --secondary-foreground: #f3ecd8;
+  --muted: #4a4337;
+  --muted-foreground: #c5b99f;
+  --accent: #5f8fd3;
+  --accent-foreground: #f3ecd8;
+  --destructive: #f07a7a;
+  --border: #ffe1b184;
+  --input: #4a4337;
+  --ring: #9bc2f2;
+  --sidebar: #302d27;
+  --sidebar-foreground: #f3ecd8;
+  --sidebar-primary: #79a9e6;
+  --sidebar-primary-foreground: #192638;
+  --sidebar-accent: #4a4337;
+  --sidebar-accent-foreground: #f3ecd8;
+  --sidebar-border: #8c7b5f;
+  --sidebar-ring: #9bc2f2;
+  --admin-bg: #403a30;
+  --admin2-bg: #302d27;
+  --admin-primary: #79a9e6;
+  --admin-primary-hover: #a3c6ef;
+  --admin-text: #f3ecd8;
+}
+
 
 body {
   overflow-x: hidden;
@@ -124,8 +170,6 @@ body {
   background:
     var(--background-texture),
     var(--background);
-  background-attachment: fixed;
-  font-family: var(--font-body);
   background-attachment: fixed;
 }
 

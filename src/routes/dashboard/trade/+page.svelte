@@ -139,7 +139,7 @@
 								type="number"
 								bind:value={redstoneAmount}
 								oninput={calculatePotionMix}
-								class="font-body h-8 text-sm border-primary bg-input text-foreground"
+								class="font-body h-8 text-sm border-border bg-input text-foreground"
 								max={hasRedstone ? data.currencies?.redstone : 0}
 								min="0"
 							/>
@@ -147,7 +147,7 @@
 					</div>
 
 					<div
-						class="p-4 bg-card border-2 border-primary/50 rounded-xl backdrop-blur-2xl flex items-center justify-between gap-x-4"
+						class="p-4 bg-card border-2 border-border/50 rounded-xl backdrop-blur-2xl flex items-center justify-between gap-x-4"
 					>
 						<img
 							src="/alch-glowstone.png"
@@ -175,7 +175,7 @@
 								type="number"
 								bind:value={glowstoneAmount}
 								oninput={calculatePotionMix}
-								class="font-body h-8 text-sm border-primary bg-input text-foreground"
+								class="font-body h-8 text-sm border-border bg-input text-foreground"
 								max={hasGlowstone ? data.currencies?.glowstone : 0}
 								min="0"
 							/>
@@ -183,7 +183,7 @@
 					</div>
 
 					<div
-						class="p-4 bg-card border-2 border-primary/50 rounded-xl backdrop-blur-2xl flex items-center justify-between gap-x-4"
+						class="p-4 bg-card border-2 border-border/50 rounded-xl backdrop-blur-2xl flex items-center justify-between gap-x-4"
 					>
 						<img
 							src="/alch-aquaregia.png"
@@ -211,7 +211,7 @@
 								type="number"
 								bind:value={aquaRegiaAmount}
 								oninput={calculatePotionMix}
-								class="font-body h-8 text-sm border-primary bg-input text-foreground"
+								class="font-body h-8 text-sm border-border bg-input text-foreground"
 								max={hasAquaRegia ? data.currencies?.aqua_regia : 0}
 								min="0"
 							/>
@@ -265,10 +265,10 @@
 				</h2>
 
 				<div
-					class="h-full w-full bg-card border-2 border-primary/50 rounded-2xl flex flex-col gap-y-6 items-center justify-center py-8 px-5 z-20"
+					class="h-full w-full bg-card border-2 border-border/50 rounded-2xl flex flex-col gap-y-6 items-center justify-center py-8 px-5 z-20"
 				>
 					<div
-						class="bg-secondary/20 rounded-full p-4 w-24 sm:w-28 border-2 border-primary/50 flex items-center justify-center shadow-primary"
+						class="bg-secondary/20 rounded-full p-4 w-24 sm:w-28 border-2 border-border/50 flex items-center justify-center shadow-primary"
 					>
 						<img
 							src="/pmix_v2.png"
@@ -289,7 +289,7 @@
 						<Input
 							type="number"
 							bind:value={potionMixAmount}
-							class="font-body h-8 text-sm border-primary bg-input text-foreground text-center"
+							class="font-body h-8 text-sm border-border bg-input text-foreground text-center"
 							readonly
 						/>
 
