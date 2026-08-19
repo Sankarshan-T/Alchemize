@@ -157,6 +157,16 @@
 		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
 	></div>
 	<div class="fixed inset-0 z-0 bg-background/90 bg-contain bg-scale"></div>
+	<img
+		src="/pmix_v2.png"
+		alt=""
+		class="absolute h-40 -rotate-25 object-contain top-[50vh] left-[10vw] opacity-80 animate-pulse"
+	/>
+	<img
+		src="/pmix_v2.png"
+		alt=""
+		class="absolute h-40 rotate-25 object-contain top-[50vh] right-[10vw] opacity-80 animate-pulse"
+	/>
 	<main class="relative w-full px-4 sm:px-6 md:px-10">
 		<section
 			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
