@@ -79,6 +79,10 @@
 	}
 
 	onMount(() => {
+		const html = document.documentElement
+
+		html.classList.remove("dark")
+
 		if (data.error) {
 			alert(data.error)
 		}
