@@ -82,23 +82,23 @@
 
 	const currencyTheme = {
 		redstone: {
-			shadow: "shadow-md shadow-red-700",
+			shadow: "shadow-red border-red-900",
 		},
 
 		glowstone: {
-			shadow: "shadow-md shadow-yellow-600",
+			shadow: "shadow-gls border-yellow-900",
 		},
 
 		aqua_regia: {
-			shadow: "shadow-md shadow-blue-700",
+			shadow: "shadow-aqr border-blue-900",
 		},
 
 		potion_mix: {
-			shadow: "shadow-md shadow-rose-700",
+			shadow: "shadow-pmix border-rose-900",
 		},
 
 		none: {
-			shadow: "shadow-md shadow-primary",
+			shadow: "shadow-neo border",
 		},
 	}
 	function isGrayedOut(userHas: UserCurrency, itemPrice: UserCurrency) {
@@ -377,17 +377,17 @@
 
 			<div
 				class={cn(
-					"relative z-10 w-full flex flex-col bg-card border-2 rounded p-3 h-full gap-3 backdrop-blur-sm transition-all",
+					"relative z-10 w-full flex flex-col bg-card border-2 rounded rounded-tl-3xl rounded-br-3xl p-3 h-full gap-3 backdrop-blur-sm transition-all",
 					theme.shadow
 				)}
 			>
 				<div
-					class="w-full aspect-square border bg-background rounded overflow-hidden relative shrink-0 flex items-center justify-center p-3"
+					class="w-full aspect-square border bg-background rounded rounded-tl-3xl rounded-br-3xl overflow-hidden relative shrink-0 flex items-center justify-center p-3"
 				>
 					<img
 						src={item.image}
 						alt={item.name}
-						class="max-w-full max-h-full object-contain transform scale-100 group-hover:scale-[1.05] transition-transform duration-300 relative z-10"
+						class="max-w-full max-h-full object-contain rounded rounded-tl-3xl rounded-br-3xl transform scale-100 group-hover:scale-[1.05] transition-transform duration-300 relative z-10"
 					/>
 				</div>
 
@@ -454,43 +454,16 @@
 {/if}
 
 <style>
-	:global(div[data-fillout-id] button),
-	:global(div[data-fillout-id] .fillout-embed-popup-button) {
-		all: unset !important;
-		box-sizing: border-box !important;
-
-		display: inline-flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		cursor: pointer !important;
-
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-			"Liberation Mono", "Courier New", monospace !important;
-		font-size: 11px !important;
-		font-weight: 700 !important;
-		text-transform: uppercase !important;
-		letter-spacing: 0.05em !important;
-
-		padding: 0.275rem 0.55rem !important;
-		border-radius: 4px !important;
-		background-color: #7e0026 !important;
-		border: 2px solid rgba(239, 68, 68, 0.4) !important;
-		color: #f4f4f5 !important;
-
-		box-shadow: 2px 2px 0px 0px rgba(239, 68, 68, 0.2) !important;
-		transition: all 0.1s ease-in-out !important;
+	.shadow-red {
+		box-shadow: 4px 4px 0px var(--color-red-700);
 	}
-
-	:global(div[data-fillout-id] button:hover),
-	:global(div[data-fillout-id] .fillout-embed-popup-button:hover) {
-		background-color: #990033 !important;
-		border-color: rgba(239, 68, 68, 0.8) !important;
-		color: #ffffff !important;
+	.shadow-aqr {
+		box-shadow: 4px 4px 0px var(--color-blue-600);
 	}
-
-	:global(div[data-fillout-id] button:active),
-	:global(div[data-fillout-id] .fillout-embed-popup-button:active) {
-		transform: translate(1px, 1px) !important;
-		box-shadow: none !important;
+	.shadow-gls {
+		box-shadow: 4px 4px 0px var(--color-yellow-600);
+	}
+	.shadow-pmix {
+		box-shadow: 4px 4px 0px var(--color-rose-400);
 	}
 </style>

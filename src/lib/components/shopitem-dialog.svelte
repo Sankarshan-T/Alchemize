@@ -33,7 +33,12 @@
 		onConfirm: (qty: number) => void
 	} = $props()
 
-	let isGrant = $derived(item.name.toLowerCase().includes("grant"))
+	let isGrant = $derived(
+		item.name.toLowerCase().includes("grant") ||
+			item.name.toLowerCase().includes("credits") ||
+			item.description.toLowerCase().includes("grant") ||
+			item.description.toLowerCase().includes("credits")
+	)
 
 	const currencyNames: Record<keyof UserCurrency, string> = {
 		redstone: "Redstone",
