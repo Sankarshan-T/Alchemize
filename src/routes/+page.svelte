@@ -164,7 +164,7 @@
 					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
+					class="text-7xl sm:text-6xl md:text-9xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
@@ -214,13 +214,17 @@
 			id="features"
 			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
 		>
-			<h2 class="text-5xl font-note tracking-tight uppercase text-foreground">
+			<h2
+				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
+			>
 				HOW IT WORKS
 			</h2>
 
-			<div class="grid grid-cols-1 md:grid-cols-4 gap-6 w-full">
+			<div
+				class="grid grid-cols-1 md:grid-cols-4 gap-6 xl:gap-8 2xl:gap-10 w-full"
+			>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -229,18 +233,20 @@
 							<Blocks class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
 						>
-							01 - Create
+							1 - Create
 						</h3>
 					</div>
-					<p class="text-muted-foreground font-body text-sm leading-relaxed">
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
 						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
 						hours via Hackatime.
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -249,19 +255,21 @@
 							<Rocket class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
 						>
-							02 - Ship
+							2 - Ship
 						</h3>
 					</div>
-					<p class="text-muted-foreground font-body text-sm leading-relaxed">
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
 						Submit your project for review by the Alchinspectors to earn theme
 						stones.
 					</p>
 				</div>
 
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -270,18 +278,20 @@
 							<FlaskConical class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
 						>
-							03 - Trade
+							3 - Trade
 						</h3>
 					</div>
-					<p class="text-muted-foreground font-body text-sm leading-relaxed">
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
 						Trade your awesome theme based stones (redstone, glowstone and
 						aqua-regia) to get potion mix!
 					</p>
 				</div>
 				<div
-					class="h-full flex flex-col gap-2 bg-card border-2 border-border p-5 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
 				>
 					<div class="shrink-0 flex items-center gap-4 pt-1">
 						<div
@@ -290,12 +300,14 @@
 							<ShoppingCart class="h-7 w-7" />
 						</div>
 						<h3
-							class="text-2xl font-black font-display uppercase tracking-tight text-foreground"
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
 						>
-							04 - Spend!
+							4 - Spend!
 						</h3>
 					</div>
-					<p class="text-muted-foreground font-body text-sm leading-relaxed">
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
 						Spend your precious stones and potion mix on rewards. New items are
 						added frequently!
 					</p>
@@ -307,42 +319,44 @@
 			id="themes"
 			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
-			<h2 class="text-5xl font-note tracking-tight uppercase text-foreground">
+			<h2
+				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
+			>
 				Themes for Season 2
 			</h2>
 
-			<div class="grid grid-cols-2 gap-4 w-full">
+			<div class="grid grid-cols-2 gap-4 xl:gap-8 2xl:gap-10 w-full">
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
-						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
 						1. Bots
 					</h3>
 					<p
-						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
 					>
 						Make a bot! Can be anything from a discord bot or a chatbot to a
 						crazy robot or an autonomous drone.
 					</p>
 					<p
-						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
 					>
 						Rewards: Redstone
 						<img src="/alch-redstone.png" alt="" class="h-6 object-contain" />
 					</p>
 				</div>
 				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
 				>
 					<h3
-						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
 						2. Co-Op
 					</h3>
 					<p
-						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
 					>
 						Create a project with that involves <strong>team play</strong>...
 						could be literally anything multiplayer! Like maybe a multiplayer
@@ -350,29 +364,29 @@
 						walkie talkies.
 					</p>
 					<p
-						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
 					>
 						Rewards: Glowstone
 						<img src="/alch-glowstone.png" alt="" class="h-6 object-contain" />
 					</p>
 				</div>
 				<div
-					class="col-span-2 justify-self-center w-1/2 flex flex-col bg-card border-2 border-border p-5 gap-4 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
+					class="col-span-2 w-1/2 justify-self-center flex flex-col bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
 					<h3
-						class="text-xl font-display font-black uppercase tracking-tight text-card-foreground"
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
 						3. ElectroArt
 					</h3>
 					<p
-						class="text-card-foreground text-xs font-body leading-relaxed font-mono"
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
 					>
 						Make something by which your code returns art. Like a dynamic
 						website creating various patterns, or a strip of leds blinking in a
 						specific order and colors. It could be something cooler!
 					</p>
 					<p
-						class="flex gap-2 text-foreground text-xs font-body font-medium leading-relaxed font-mono"
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
 					>
 						Rewards: Aquaregia
 						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
@@ -385,11 +399,13 @@
 			id="faq"
 			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
 		>
-			<h2 class="text-3xl font-black tracking-tight uppercase text-foreground">
+			<h2
+				class="text-3xl xl:text-4xl 2xl:text-5xl font-black tracking-tight uppercase text-foreground"
+			>
 				FAQ
 			</h2>
 
-			<div class="flex flex-col gap-3 w-full max-w-4xl mx-auto">
+			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
 				<Accordion
 					Title="What is a 'ship'?"
 					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run adn is recreatable."
