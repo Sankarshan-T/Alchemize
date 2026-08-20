@@ -15,9 +15,7 @@
 		PUBLIC_HACKCLUB_REDIRECT,
 		PUBLIC_TURNED_OFF,
 	} from "$env/static/public"
-	import { scopes } from "$lib/utils"
 	import Accordion from "$lib/components/accordion.svelte"
-	import { CircleCheck, ShoppingBag } from "@lucide/svelte"
 	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
@@ -80,7 +78,7 @@
 
 	onMount(() => {
 		const html = document.documentElement
-
+		const wasDark = html.classList.contains("dark")
 		html.classList.remove("dark")
 
 		if (data.error) {
@@ -109,10 +107,14 @@
 		fetch("/rsvp")
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
+
+		return () => {
+			if (wasDark) html.classList.add("dark")
+		}
 	})
 </script>
 
-<div class="relative min-h-screen w-full overflow-x-hidden">
+<div class="home-page relative min-h-screen w-full overflow-x-hidden">
 	<div
 		class="absolute top-3 left-0 z-50 transition-transform duration-100 hover:scale-[1.02]"
 	>
@@ -124,34 +126,6 @@
 			/>
 		</a>
 	</div>
-	<nav
-		class="fixed top-2 right-2 py-3 px-8 text-sm text-secondary-foreground font-display font-semibold bg-secondary/60 backdrop-blur-sm border border-border rounded-tl-2xl rounded-br-2xl rounded-md flex items-center gap-3 z-100 hover:border-primary divide-x shadow-xs shadow-foreground/70"
-	>
-		<a
-			href="/#"
-			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
-		>
-			Home
-		</a>
-		<a
-			href="#features"
-			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
-		>
-			Features
-		</a>
-		<a
-			href="#themes"
-			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
-		>
-			Themes
-		</a>
-		<a
-			href="#faq"
-			class="relative cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full pr-2"
-		>
-			Faq
-		</a>
-	</nav>
 
 	<div
 		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
@@ -167,7 +141,7 @@
 		alt=""
 		class="absolute h-40 rotate-25 object-contain top-[50vh] right-[10vw] opacity-80 animate-pulse"
 	/>
-	<main class="relative w-full px-4 sm:px-6 md:px-10">
+	<main class="relative w-full px-4 sm:px-6 md:px-10 home">
 		<section
 			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
 		>
@@ -190,7 +164,9 @@
 						With more mixing this time</span
 					>
 				</h3>
-				<span class="mt-2 font-display font-semibold tracking-wider">
+				<span
+					class="mt-2 font-display text-foreground font-semibold tracking-wider"
+				>
 					Starts on 23th August 1:00 AM UTC
 				</span>
 				<div class="p-3 w-full flex items-center justify-center gap-3">

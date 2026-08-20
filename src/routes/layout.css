@@ -161,6 +161,110 @@
   --admin-text: #f3ecd8;
 }
 
+.dark .home-page {
+  ---font-display: "Cinzel", serif;
+  --font-decor: "Cinzel Decorative", serif;
+  --font-body: "EB Garamond", serif;
+  --font-note: "IM Fell English", serif;
+  --shadow-neo: 2px 2px 0px var(--primary);
+
+  --parchment: #E9E0C9;
+  --parchment-light: #F3ECD8;
+  --parchment-dark: #DDD0AC;
+
+  --background: var(--parchment);
+  --background-texture:
+    radial-gradient(ellipse at 18% 12%,
+      rgba(255, 250, 235, 0.22),
+      transparent 55%),
+    radial-gradient(circle at 12% 22%,
+      rgba(70, 40, 12, 0.14) 0%,
+      transparent 38%),
+    radial-gradient(circle at 83% 18%,
+      rgba(90, 55, 20, 0.12) 0%,
+      transparent 42%),
+    radial-gradient(circle at 78% 82%,
+      rgba(60, 35, 12, 0.16) 0%,
+      transparent 40%),
+    radial-gradient(circle at 30% 72%,
+      rgba(95, 60, 25, 0.08) 0%,
+      transparent 35%),
+    radial-gradient(ellipse at 55% 42%,
+      rgba(170, 125, 60, 0.08),
+      transparent 50%),
+    repeating-linear-gradient(0deg,
+      rgba(55, 38, 18, 0.018) 0,
+      rgba(55, 38, 18, 0.018) 1px,
+      transparent 1px,
+      transparent 4px),
+
+    repeating-linear-gradient(90deg,
+      rgba(255, 255, 255, 0.012) 0,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 5px),
+    repeating-linear-gradient(45deg,
+      rgba(0, 0, 0, 0.01) 0,
+      rgba(0, 0, 0, 0.01) 1px,
+      transparent 1px,
+      transparent 2px);
+
+  --foreground: #1f3c56;
+  --card: #F7F0DD;
+  --card-foreground: #111827;
+  --popover: #F7F0DD;
+  --popover-foreground: #111827;
+
+  --primary: #2F5D9A;
+  --primary-hover: #234A7A;
+  --primary-foreground: #F3ECD8;
+  --secondary: #DDD0AC;
+  --secondary-foreground: #25344A;
+
+  --muted: #DDD0AC;
+  --muted-foreground: #5A6B82;
+
+  --accent: #4F79B8;
+  --accent-foreground: #F3ECD8;
+
+  --destructive: #B33A3A;
+
+  --border: #6B86B8;
+  --input: #DDD0AC;
+  --ring: #5F8FD3;
+
+  --chart-1: #3769B3;
+  --chart-2: #5F8FD3;
+  --chart-3: #6B86B8;
+  --chart-4: #25344A;
+  --chart-5: #111827;
+
+  --sidebar: #F3ECD8;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #3769B3;
+  --sidebar-primary-foreground: #F3ECD8;
+  --sidebar-accent: #6B86B8;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #6B86B8;
+  --sidebar-ring: #5F8FD3;
+
+  --admin-bg: #DDD0AC;
+  --admin2-bg: #E9E0C9;
+  --admin-primary: #214E88;
+  --admin-primary-hover: #4A7DD6;
+  --admin-text: #111827;
+
+  --radius: .625rem;
+
+  --font-display: "Cinzel", serif;
+  --font-decor: "Cinzel Decorative", serif;
+  --font-body: "EB Garamond", serif;
+  --font-note: "IM Fell English", serif;
+
+  --frame-radius: 46px 14px 46px 14px;
+  --frame-radius-alt: 14px 46px 14px 46px;
+}
+
 
 body {
   overflow-x: hidden;
