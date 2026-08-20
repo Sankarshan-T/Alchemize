@@ -100,9 +100,6 @@
 
   --admin-bg: #DDD0AC;
   --admin2-bg: #E9E0C9;
-  --admin-primary: #214E88;
-  --admin-primary-hover: #4A7DD6;
-  --admin-text: #111827;
 
   --radius: .625rem;
 
@@ -156,9 +153,6 @@
   --sidebar-ring: #9bc2f2;
   --admin-bg: #403a30;
   --admin2-bg: #302d27;
-  --admin-primary: #79a9e6;
-  --admin-primary-hover: #a3c6ef;
-  --admin-text: #f3ecd8;
 }
 
 .dark .home-page {
@@ -249,10 +243,6 @@
   --sidebar-ring: #5F8FD3;
 
   --admin-bg: #DDD0AC;
-  --admin2-bg: #E9E0C9;
-  --admin-primary: #214E88;
-  --admin-primary-hover: #4A7DD6;
-  --admin-text: #111827;
 
   --radius: .625rem;
 

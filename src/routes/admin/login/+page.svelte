@@ -19,9 +19,7 @@
 	class="login w-screen h-screen flex items-center justify-center flex-col gap-y-4"
 >
 	<img src="/pmix_v2.png" alt="alchemize" class="h-40" />
-	<h1
-		class="text-5xl font-bold font-decor uppercase select-none text-admin-text"
-	>
+	<h1 class="text-5xl font-bold font-decor uppercase select-none text-primary">
 		Alchemize Admin
 	</h1>
 	<div class="flex gap-x-5 items-center">

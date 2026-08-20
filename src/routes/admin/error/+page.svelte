@@ -18,9 +18,7 @@
 	<h1 class="text-6xl font-bold">Error {status}</h1>
 	<p class="text-2xl font-light font-mono">{message}</p>
 	<a href="/admin/login">
-		<Button
-			class="bg-admin-primary px-15 py-5 text-admin-text text-lg hover:scale-103"
-		>
+		<Button class="bg-primary px-15 py-5 text-primary text-lg hover:scale-103">
 			Are you sure????
 		</Button>
 	</a>

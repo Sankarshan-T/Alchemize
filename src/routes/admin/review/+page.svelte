@@ -209,7 +209,7 @@
 </svelte:head>
 
 <main
-	class="w-screen h-screen text-admin-text font-sans overflow-hidden p-6 flex gap-6"
+	class="w-screen h-screen text-primary font-sans overflow-hidden p-6 flex gap-6"
 >
 	<aside
 		class="w-1/4 h-full rounded-2xl bg-card/40 border border-border/80 flex flex-col overflow-hidden shadow-xl"

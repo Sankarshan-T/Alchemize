@@ -158,7 +158,7 @@
 		class="flex-none flex justify-start border-t border-white/10 px-8 py-4 bg-zinc-950/10"
 	>
 		<Button
-			class="rounded-xl bg-admin-primary px-6 py-5 text-sm font-semibold text-primary-foreground transition hover:scale-104 hover:opacity-90"
+			class="rounded-xl bg-primary px-6 py-5 text-sm font-semibold text-primary-foreground transition hover:scale-104 hover:opacity-90"
 			onclick={() => handleSaveChanges()}
 		>
 			{#if loading}

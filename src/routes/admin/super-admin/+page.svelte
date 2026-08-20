@@ -40,9 +40,7 @@
 				>
 					<p class="font-alchemize">{user.fields.email}</p>
 					<a href={`/admin/super-admin/users/${user.fields.email}`}>
-						<Button
-							class="bg-admin-primary border border-muted hover:scale-104"
-						>
+						<Button class="bg-primary border border-muted hover:scale-104">
 							View user
 						</Button>
 					</a>

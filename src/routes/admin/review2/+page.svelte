@@ -514,7 +514,7 @@
 </svelte:head>
 
 <main
-	class="w-screen h-screen text-admin-text font-sans overflow-hidden p-6 flex gap-6"
+	class="w-screen h-screen text-primary font-sans overflow-hidden p-6 flex gap-6"
 >
 	<div class="fixed inset-0 bg-black/20 -z-10"></div>
 	<div
@@ -684,7 +684,7 @@
 								href={currentProject.demo}
 								target="_blank"
 								rel="noreferrer noopener"
-								class="text-[11px] font-medium px-2.5 py-1 bg-admin-primary/20 hover:bg-admin-primary/30 text-admin-text rounded-md transition"
+								class="text-[11px] font-medium px-2.5 py-1 bg-primary/20 hover:bg-primary/30 text-primary rounded-md transition"
 								>Demo</a
 							>
 							<a
@@ -883,7 +883,7 @@
 									<div class="ai h-6 w-9/10">
 										<div class="bar h-full w-full flex">
 											<div
-												class="h-full bg-admin-primary flex items-center justify-center text-xs overflow-hidden text-zinc-200"
+												class="h-full bg-primary flex items-center justify-center text-xs overflow-hidden text-zinc-200"
 												style={`width: ${(currentHackatimeAnalysis.codingSec / totalTime) * 100}%`}
 											>
 												Normal Coding Time: {Math.round(

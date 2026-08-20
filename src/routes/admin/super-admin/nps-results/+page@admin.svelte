@@ -1,7 +1,6 @@
 <script lang="ts">
-
-	const {data} = $props();
-	const res = data.npsResults.results;
+	const { data } = $props()
+	const res = data.npsResults.results
 	console.log(res)
 	let results: any[] = []
 	res.forEach((result: any) => {
@@ -12,8 +11,8 @@
 			wentWell: result.data.well,
 			couldImprove: result.data.better,
 			anythingElse: result.data.anythingElse,
-		});
-	});
+		})
+	})
 </script>
 
 <main class="h-screen w-full p-5">
@@ -30,13 +29,13 @@
 		>
 			{#each results as result}
 				<div
-					class="card border border-admin-primary rounded-xl p-3 bg-admin-primary/10 backdrop-blur-xl overflow-auto max-h-[35vh] h-[35vh] w-full space-y-2"
+					class="card border border-primary rounded-xl p-3 bg-primary/10 backdrop-blur-xl overflow-auto max-h-[35vh] h-[35vh] w-full space-y-2"
 				>
 					<h2 class="text-xl text-zinc-200 font-mono">
 						Score: <span class="text-blue-800">{result.score}</span>
 					</h2>
 
-					<p class="text-xs text-admin-text">By: {result.slackId}</p>
+					<p class="text-xs text-primary">By: {result.slackId}</p>
 					<p class="text-xs max-w-full wrap-break-word">
 						Heard from:
 						<span class="text-blue-800">{result.headFrom}</span>

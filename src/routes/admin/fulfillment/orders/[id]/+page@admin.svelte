@@ -44,7 +44,7 @@
 </a>
 
 <main
-	class="w-full h-full flex-col max-h-screen overflow-x-hidden custom-scrollbar overflow-y-scroll flex items-center justify-center p-4 md:p-8 relative text-admin-text"
+	class="w-full h-full flex-col max-h-screen overflow-x-hidden custom-scrollbar overflow-y-scroll flex items-center justify-center p-4 md:p-8 relative text-primary"
 >
 	{#if order.fulfiller !== ""}
 		<div
@@ -79,19 +79,19 @@
 				>
 					<div class="flex items-center gap-3">
 						<Repeat class="w-4 h-4 text-slate-400" />
-						<span class="text-admin-text/60 w-24">Quantity:</span>
+						<span class="text-primary/60 w-24">Quantity:</span>
 						<span class="font-semibold text-zinc-200">{order.qty}</span>
 					</div>
 					<div class="flex items-center gap-3">
 						<Calendar class="w-4 h-4 text-slate-400" />
-						<span class="text-admin-text/60 w-24">Ordered on:</span>
+						<span class="text-primary/60 w-24">Ordered on:</span>
 						<span class="font-semibold text-zinc-200"
 							>{new Date(order.dateCreated).toLocaleDateString()}</span
 						>
 					</div>
 					<div class="flex items-center gap-3">
 						<User class="w-4 h-4 text-slate-400" />
-						<span class="text-admin-text/60 w-24">Ordered by:</span>
+						<span class="text-primary/60 w-24">Ordered by:</span>
 						<span class="font-semibold text-zinc-200">{order.email}</span>
 					</div>
 				</div>
@@ -110,7 +110,7 @@
 				{/if}
 				<!-- <Button
 					variant="outline"
-					class="border-slate-700 hover:bg-slate-800 text-admin-text font-medium transition-all w-full"
+					class="border-slate-700 hover:bg-slate-800 text-primary font-medium transition-all w-full"
 				>
 					Mark as Unfulfilled
 				</Button> -->
@@ -131,21 +131,21 @@
 				<div class="space-y-3 text-sm">
 					<div class="space-y-0.5">
 						<span
-							class="text-[11px] font-semibold text-admin-text/40 uppercase tracking-wider block"
+							class="text-[11px] font-semibold text-primary/40 uppercase tracking-wider block"
 							>Recipient</span
 						>
 						<p class="font-semibold text-zinc-200">
 							{order.firstName}
 							{order.lastName}
 						</p>
-						<p class="text-xs text-admin-text/50 font-mono">
+						<p class="text-xs text-primary/50 font-mono">
 							{order.ageNow} years old
 						</p>
 					</div>
 
 					<div class="space-y-0.5 pt-1">
 						<span
-							class="text-[11px] font-semibold text-admin-text/40 uppercase tracking-wider block"
+							class="text-[11px] font-semibold text-primary/40 uppercase tracking-wider block"
 							>Destination</span
 						>
 						<p class="text-zinc-200 leading-relaxed font-medium">
@@ -170,7 +170,7 @@
 							<h2 class="text-base font-bold font-alchemize">User Analytics</h2>
 						</div>
 						<span
-							class="text-[10px] bg-slate-800 text-admin-text/70 px-2 py-0.5 rounded-md border border-slate-700/40 font-mono"
+							class="text-[10px] bg-slate-800 text-primary/70 px-2 py-0.5 rounded-md border border-slate-700/40 font-mono"
 						>
 							@Slack ID HERE
 						</span>
@@ -181,7 +181,7 @@
 							class="flex flex-col p-3 bg-slate-900/50 rounded-lg border border-slate-800/50"
 						>
 							<span
-								class="text-[10px] text-admin-text/50 font-semibold uppercase tracking-wider mb-0.5"
+								class="text-[10px] text-primary/50 font-semibold uppercase tracking-wider mb-0.5"
 								>Total Hours</span
 							>
 							<span class="text-lg font-black text-blue-400 tracking-tight"
@@ -193,7 +193,7 @@
 							class="flex flex-col p-3 bg-slate-900/50 rounded-lg border border-slate-800/50"
 						>
 							<span
-								class="text-[10px] text-admin-text/50 font-semibold uppercase tracking-wider mb-0.5"
+								class="text-[10px] text-primary/50 font-semibold uppercase tracking-wider mb-0.5"
 								>Projects</span
 							>
 							<span class="text-lg font-black text-purple-400 tracking-tight"
@@ -205,7 +205,7 @@
 							class="flex flex-col p-3 bg-slate-900/50 rounded-lg border border-slate-800/50"
 						>
 							<span
-								class="text-[10px] text-admin-text/50 font-semibold uppercase tracking-wider mb-0.5"
+								class="text-[10px] text-primary/50 font-semibold uppercase tracking-wider mb-0.5"
 								>Potion Mixes</span
 							>
 							<span class="text-lg font-black text-pink-400 tracking-tight"
@@ -217,7 +217,7 @@
 							class="flex flex-col p-3 bg-slate-900/50 rounded-lg border border-slate-800/50"
 						>
 							<span
-								class="text-[10px] text-admin-text/50 font-semibold uppercase tracking-wider mb-0.5"
+								class="text-[10px] text-primary/50 font-semibold uppercase tracking-wider mb-0.5"
 								>Trust Factor</span
 							>
 							<span class="text-lg font-black text-amber-400 tracking-tight"

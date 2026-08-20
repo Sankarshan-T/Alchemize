@@ -101,7 +101,7 @@
 	>
 		<div class="flex flex-col items-center gap-4">
 			<div
-				class="w-12 h-12 border-4 border-gray-600 border-t-admin-primary rounded-full animate-spin"
+				class="w-12 h-12 border-4 border-gray-600 border-t-primary rounded-full animate-spin"
 			></div>
 			<p class="text-primary-foreground text-lg">Loading...</p>
 		</div>

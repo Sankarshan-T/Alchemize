@@ -72,7 +72,7 @@
 					type="text"
 					placeholder="Search by ID or item..."
 					bind:value={searchQuery}
-					class="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-admin-primary"
+					class="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-primary"
 				/>
 			</div>
 

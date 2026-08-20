@@ -10,13 +10,10 @@
 			<p class="text-muted-foreground text-xs">admin</p>
 		</div>
 	</div>
-	<Button class="bg-admin-primary border-2 border-muted hover:scale-104">
+	<Button class="bg-primary border-2 border-muted hover:scale-104">
 		<a href="/admin/super-admin/nps-results"> NPS results </a>
 	</Button>
-	<Button
-		class="bg-admin-primary border-2 border-muted hover:scale-104"
-		disabled
-	>
+	<Button class="bg-primary border-2 border-muted hover:scale-104" disabled>
 		User Data Regen
 	</Button>
 </aside>
