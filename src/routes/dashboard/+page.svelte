@@ -2,7 +2,7 @@
 	//@ts-ignore
 	import looseJson from "loose-json"
 	const { data } = $props()
-	import { CircleQuestionMark } from "@lucide/svelte"
+	import { CircleQuestionMark, Moon, Sun } from "@lucide/svelte"
 	import { Button } from "$lib/components/ui/button"
 	type HackatimeProject = {
 		name?: string
@@ -10,6 +10,7 @@
 		project?: string
 		total_seconds?: number
 	}
+	import { mode, toggleMode } from "mode-watcher"
 
 	interface Project {
 		id: string
@@ -75,11 +76,7 @@
 		}
 	}
 
-	const navItems = [
-		{ href: "/dashboard/projects", label: "Projects", icon: Blocks },
-		{ href: "/refer", label: "Refer!", icon: Users },
-		{ href: "/docs", label: "Docs", icon: Newspaper },
-	]
+	const isDark = $derived(mode.current === "dark")
 </script>
 
 <svelte:head>
@@ -89,6 +86,19 @@
 </svelte:head>
 
 <main class="h-full w-full flex gap-6 p-15">
+	<button
+		type="button"
+		class="absolute top-3 left-3 flex items-center justify-center gap-2 self-center rounded-md border-2 border-primary/40 bg-card px-2 py-1 text-foreground shadow-sm shadow-primary transition-all duration-150 hover:border-primary hover:text-primary"
+		onclick={toggleMode}
+		aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+		title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+	>
+		{#if isDark}
+			<Sun class="h-4 w-4" /> Light
+		{:else}
+			<Moon class="h-4 w-4" /> Dark
+		{/if}
+	</button>
 	<div class="flex flex-col gap-6 flex-1 min-h-0">
 		<div class="w-full flex items-center justify-start gap-4">
 			<div
