@@ -85,7 +85,7 @@
 	<meta property="og:title" content="Alchemize | Dashboard" />
 </svelte:head>
 
-<main class="h-full w-full flex gap-6 p-15">
+<main class=" h-full w-full flex gap-6 p-15">
 	<button
 		type="button"
 		class="absolute top-3 left-3 flex items-center justify-center gap-2 self-center rounded-md border-2 border-primary/40 bg-card px-2 py-1 text-foreground shadow-sm shadow-primary transition-all duration-150 hover:border-primary hover:text-primary"

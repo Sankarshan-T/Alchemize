@@ -59,7 +59,13 @@
 {/if}
 
 <div
-	class="root h-screen w-screen flex items-center justify-start text-primary-foreground"
+	class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
+></div>
+<div
+	class="fixed inset-0 z-0 bg-background/90 dark:bg-background/95 bg-contain bg-scale"
+></div>
+<div
+	class="relative z-10 root h-screen w-screen flex items-center justify-start text-primary-foreground"
 >
 	{#if !excludedRoutes.includes(page.url.pathname)}
 		<Navigation />
