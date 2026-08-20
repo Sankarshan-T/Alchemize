@@ -66,7 +66,7 @@
 	>
 		<Home class="h-5 w-5 group-hover:text-admin-primary" />
 	</button>
-	<img src="/Alchemize-Admin.png" alt="alchemize" class="h-35" />
+	<img src="/pmix_v2.png" alt="alchemize" class="h-35" />
 	<h1 class="text-5xl text-admin-primary font-alchemize font-bold">
 		Alchemize Admin
 	</h1>

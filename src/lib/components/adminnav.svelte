@@ -106,11 +106,7 @@
 					class="flex flex-col items-center text-center gap-4 order-first md:order-0"
 				>
 					<div class="flex items-center justify-center w-20 h-20 rounded-md">
-						<img
-							src="/Alchemize-Admin.png"
-							alt=""
-							class="w-16 h-16 object-contain"
-						/>
+						<img src="/pmix_v2.png" alt="" class="w-16 h-16 object-contain" />
 					</div>
 
 					<div>

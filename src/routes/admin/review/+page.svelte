@@ -212,13 +212,12 @@
 	class="w-screen h-screen text-admin-text font-sans overflow-hidden p-6 flex gap-6"
 >
 	<aside
-		class="w-1/4 h-full rounded-2xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col overflow-hidden shadow-xl"
+		class="w-1/4 h-full rounded-2xl bg-card/40 border border-border/80 flex flex-col overflow-hidden shadow-xl"
 	>
-		<div class="p-4 border-b border-zinc-800 bg-zinc-900/20">
+		<div class="p-4 border-b border-border bg-card/20">
 			<h3
-				class="font-bold text-zinc-400 text-xs tracking-wider uppercase flex items-center gap-2"
+				class="font-bold text-muted-foreground text-xs tracking-wider uppercase flex items-center gap-2"
 			>
-				<span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
 				Project Queue
 			</h3>
 		</div>
@@ -229,7 +228,7 @@
 						class="w-full text-left p-3.5 rounded-xl transition duration-200 group flex flex-col gap-2 border
                         {item.id === project.id
 							? 'bg-indigo-600/10 border-indigo-500/40 text-indigo-200 shadow-md'
-							: 'bg-zinc-900/20 hover:bg-zinc-800/40 border-transparent text-zinc-400 hover:text-zinc-200'}"
+							: 'bg-card/20 hover:bg-card/40 border-transparent text-muted-foreground hover:text-foreground'}"
 						onclick={() => openProject(item.id)}
 					>
 						<h4
@@ -238,10 +237,10 @@
 							{item.fields.Name || "Untitled Project"}
 						</h4>
 						<div
-							class="flex items-center justify-between w-full text-xs text-zinc-500"
+							class="flex items-center justify-between w-full text-xs text-muted-foreground"
 						>
 							<span
-								class="font-mono bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800/60"
+								class="font-mono bg-input px-2 py-0.5 rounded border border-border/60"
 							>
 								@{item.fields.slackId}
 							</span>
@@ -260,31 +259,31 @@
 			<div class="relative group">
 				<a href="review/t1guides">
 					<button
-						class="p-2.5 h-10 text-sm font-medium rounded-xl transition-all flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-primary-foreground"
+						class="p-2.5 h-10 text-sm font-medium rounded-xl transition-all flex items-center gap-2 bg-card border border-border hover:bg-muted text-foreground hover:text-primary-foreground"
 					>
 						<Newspaper class="size-4" />
 					</button>
 				</a>
 				<div
-					class="absolute top-full left-0 mt-2 hidden group-hover:block p-2 z-50 bg-zinc-900 border border-zinc-800 rounded-lg text-xs text-zinc-300 shadow-xl"
+					class="absolute top-full left-0 mt-2 hidden group-hover:block p-2 z-50 bg-card border border-border rounded-lg text-xs text-foreground shadow-xl"
 				>
 					Guides
 				</div>
 			</div>
 
 			<nav
-				class="w-full flex items-center justify-evenly gap-2 p-1 bg-zinc-900/60 border border-zinc-800/80 rounded-xl"
+				class="w-full flex items-center justify-evenly gap-2 p-1 bg-card/60 border border-border/80 rounded-xl"
 			>
 				<button
 					onclick={() => (mode = 1)}
 					class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-2
                     {mode === 1
 						? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-						: 'text-zinc-400 hover:text-zinc-200'}"
+						: 'text-muted-foreground hover:text-foreground'}"
 				>
 					Pending
 					<span
-						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-zinc-950 border border-zinc-800 text-amber-500"
+						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-input border border-border text-amber-500"
 						>{pendingCount}</span
 					>
 				</button>
@@ -294,11 +293,11 @@
 					class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-2
                     {mode === 3
 						? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-						: 'text-zinc-400 hover:text-zinc-200'}"
+						: 'text-muted-foreground hover:text-foreground'}"
 				>
 					Rejected
 					<span
-						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-zinc-950 border border-zinc-800 text-rose-500"
+						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-input border border-border text-rose-500"
 						>{rejectedCount}</span
 					>
 				</button>
@@ -308,27 +307,27 @@
 					class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-2
                     {mode === 2
 						? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-						: 'text-zinc-400 hover:text-zinc-200'}"
+						: 'text-muted-foreground hover:text-foreground'}"
 				>
 					Approved
 					<span
-						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-zinc-950 border border-zinc-800 text-emerald-500"
+						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-input border border-border text-emerald-500"
 						>{approvedCount}</span
 					>
 				</button>
 
-				<div class="h-4 w-px bg-zinc-800 mx-1"></div>
+				<div class="h-4 w-px bg-border mx-1"></div>
 
 				<button
 					onclick={() => (mode = 0)}
 					class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-2
                     {mode === 0
 						? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-						: 'text-zinc-400 hover:text-zinc-200'}"
+						: 'text-muted-foreground hover:text-foreground'}"
 				>
 					Total
 					<span
-						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-zinc-950 border border-zinc-800 text-indigo-400"
+						class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-input border border-border text-indigo-400"
 						>{totalCount}</span
 					>
 				</button>
@@ -336,11 +335,11 @@
 		</div>
 
 		<div
-			class="flex-1 bg-zinc-900/20 border border-zinc-800 rounded-2xl flex flex-col min-h-0 overflow-hidden backdrop-blur-sm"
+			class="flex-1 bg-card/20 border border-border rounded-2xl flex flex-col min-h-0 overflow-hidden backdrop-blur-sm"
 		>
 			{#if !project.name}
 				<div
-					class="flex-1 flex flex-col items-center justify-center text-zinc-600 gap-3"
+					class="flex-1 flex flex-col items-center justify-center text-muted-foreground/60 gap-3"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -352,24 +351,24 @@
 						stroke-width="1.5"
 						stroke-linecap="round"
 						stroke-linejoin="round"
-						class="text-zinc-700"
+						class="text-muted-foreground/70"
 					>
 						<path
 							d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2h3.93a2 2 0 0 1 1.66.9l.82 1.2a2 2 0 0 0 1.66.9H18a2 2 0 0 1 2 2v2"
 						/>
 					</svg>
-					<p class="text-base font-medium tracking-tight text-zinc-500">
+					<p class="text-base font-medium tracking-tight text-muted-foreground">
 						Select a project from the left queue to review
 					</p>
 				</div>
 			{:else}
 				<div class="flex-1 flex flex-col min-h-0 w-full animate-fadeIn">
 					<div
-						class="p-6 border-b border-zinc-800 bg-zinc-900/10 flex items-start justify-between gap-4 shrink-0"
+						class="p-6 border-b border-border bg-card/10 flex items-start justify-between gap-4 shrink-0"
 					>
 						<div class="flex flex-col gap-1.5">
 							<div class="flex items-center gap-3 flex-wrap">
-								<h1 class="text-xl font-bold tracking-tight text-zinc-100">
+								<h1 class="text-xl font-bold tracking-tight text-foreground">
 									{project.name}
 								</h1>
 								<span
@@ -381,13 +380,13 @@
 									onclick={() => (detailsOpen = true)}
 									variant="outline"
 									size="sm"
-									class="h-7 border-zinc-800 bg-zinc-900/50 text-zinc-300 hover:text-primary-foreground text-xs"
+									class="h-7 border-border bg-card/50 text-foreground hover:text-primary-foreground text-xs"
 								>
 									Full Details
 								</Button>
 							</div>
 							<p
-								class="text-xs text-zinc-500 flex gap-x-2 items-center divide-x divide-zinc-800"
+								class="text-xs text-muted-foreground flex gap-x-2 items-center divide-x divide-border"
 							>
 								<span class="pr-2"
 									><strong>Creator:</strong> @{project.submittedBy}</span
@@ -406,19 +405,19 @@
 							<a
 								href={project.demo}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-card border border-border text-foreground hover:bg-muted hover:text-primary-foreground rounded-lg transition"
 								>Demo</a
 							>
 							<a
 								href={project.code}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-card border border-border text-foreground hover:bg-muted hover:text-primary-foreground rounded-lg transition"
 								>Repository</a
 							>
 							<a
 								href={project.readme}
 								target="_blank"
-								class="px-3 py-1.5 text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:text-primary-foreground rounded-lg transition"
+								class="px-3 py-1.5 text-xs font-medium bg-card border border-border text-foreground hover:bg-muted hover:text-primary-foreground rounded-lg transition"
 								>Readme</a
 							>
 						</div>
@@ -428,12 +427,12 @@
 						class="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-0 overflow-hidden"
 					>
 						<div
-							class="h-full overflow-y-auto p-6 space-y-5 border-r border-zinc-800 custom-scrollbar"
+							class="h-full overflow-y-auto p-6 space-y-5 border-r border-border custom-scrollbar"
 						>
 							<div class="flex flex-col gap-2">
 								<label
 									for="userFeedback"
-									class="text-xs font-bold uppercase tracking-wider text-zinc-400"
+									class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
 									>User Feedback Message</label
 								>
 								<div
@@ -465,30 +464,30 @@
 								</div>
 								<Textarea
 									id="userFeedback"
-									class="min-h-[100px] bg-zinc-950 border-zinc-800 text-zinc-200 focus:ring-1 focus:ring-indigo-500 focus:border-transparent resize-none text-sm leading-relaxed"
+									class="min-h-[100px] bg-input border-border text-foreground focus:ring-1 focus:ring-indigo-500 focus:border-transparent resize-none text-sm leading-relaxed"
 									placeholder="Type the user feedback here...."
 									bind:value={userExternal}
 								/>
 							</div>
 
 							<div
-								class="flex flex-col gap-3 bg-zinc-900/40 border border-zinc-800/60 p-4 rounded-xl"
+								class="flex flex-col gap-3 bg-card/40 border border-border/60 p-4 rounded-xl"
 							>
 								<div class="flex items-center justify-between gap-4">
 									<div class="flex flex-col">
 										<!-- svelte-ignore a11y_label_has_associated_control -->
 										<label
 											id="override"
-											class="text-xs font-bold uppercase tracking-wider text-zinc-400"
+											class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
 											>Override Hours</label
 										>
-										<p class="text-[11px] text-zinc-500">
+										<p class="text-[11px] text-muted-foreground">
 											Deduct hours from project metrics
 										</p>
 									</div>
 									<Input
 										id="override"
-										class="w-24 h-9 bg-zinc-950 border-zinc-800 text-center text-zinc-100 focus:ring-1 focus:ring-indigo-500"
+										class="w-24 h-9 bg-input border-border text-center text-foreground focus:ring-1 focus:ring-indigo-500"
 										type="number"
 										bind:value={overrideHours}
 										min="0"
@@ -497,12 +496,12 @@
 								<div class="mt-1">
 									<label
 										for="justification"
-										class="text-[11px] font-semibold text-zinc-500 block mb-1"
+										class="text-[11px] font-semibold text-muted-foreground block mb-1"
 										>Generated Submission Justification</label
 									>
 									<Textarea
 										id="justification"
-										class="min-h-[100px] font-mono text-xs bg-zinc-950 border-zinc-800 text-zinc-400 resize-none leading-relaxed"
+										class="min-h-[100px] font-mono text-xs bg-input border-border text-muted-foreground resize-none leading-relaxed"
 										readonly
 										bind:value={autogenChangelog}
 									/>
@@ -511,31 +510,32 @@
 						</div>
 
 						<div
-							class="h-full overflow-y-auto p-6 space-y-5 bg-zinc-900/5 custom-scrollbar"
+							class="h-full overflow-y-auto p-6 space-y-5 bg-card/5 custom-scrollbar"
 						>
 							<div class="flex flex-col gap-2">
 								<label
 									for="internalNote"
-									class="text-xs font-bold uppercase tracking-wider text-zinc-400"
+									class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
 									>Internal Review Notes <span
-										class="text-zinc-600 font-normal lowercase">(optional)</span
+										class="text-muted-foreground/60 font-normal lowercase"
+										>(optional)</span
 									></label
 								>
 								<Textarea
 									id="internalNote"
-									class="min-h-[90px] bg-zinc-950 border-zinc-800 text-zinc-200 focus:ring-1 focus:ring-indigo-500 focus:border-transparent resize-none text-sm leading-relaxed"
+									class="min-h-[90px] bg-input border-border text-foreground focus:ring-1 focus:ring-indigo-500 focus:border-transparent resize-none text-sm leading-relaxed"
 									placeholder="Internal reviewers' notes."
 									bind:value={internalNote}
 								/>
 							</div>
 							<div class="flex flex-col gap-2">
 								<h3
-									class="text-xs font-bold uppercase tracking-wider text-zinc-400"
+									class="text-xs font-bold uppercase tracking-wider text-muted-foreground"
 								>
 									Certification Logs & History
 								</h3>
 								<div
-									class="border border-zinc-800 bg-zinc-950/40 rounded-xl p-4 overflow-y-auto wrap-break-word space-y-3 custom-scrollbar"
+									class="border border-border bg-input/40 rounded-xl p-4 overflow-y-auto wrap-break-word space-y-3 custom-scrollbar"
 								>
 									{#if project.log && project.log.length > 0}
 										{#each [...project.log].reverse() as entry}
@@ -548,12 +548,12 @@
 																msg.reviewerName?.includes('APPROVED')
 																? 'border-l-emerald-500'
 																: 'border-l-rose-500'
-															: 'border-l-rose-500'} border-zinc-800/80 bg-zinc-900/20 p-3 rounded-lg space-y-2 text-xs"
+															: 'border-l-rose-500'} border-border/80 bg-card/20 p-3 rounded-lg space-y-2 text-xs"
 												>
 													<div
-														class="flex items-center justify-between border-b border-zinc-900 pb-1.5 text-[11px] text-zinc-500"
+														class="flex items-center justify-between border-b border-border pb-1.5 text-[11px] text-muted-foreground"
 													>
-														<span class="font-bold text-zinc-400"
+														<span class="font-bold text-muted-foreground"
 															>Reviewer: <span class="text-indigo-400 font-mono"
 																>@{msg.reviewerName || "staff"}</span
 															></span
@@ -563,9 +563,9 @@
 														>
 													</div>
 													{#if msg.userExternal}
-														<p class="text-zinc-300 leading-relaxed">
+														<p class="text-foreground leading-relaxed">
 															<strong
-																class="text-[10px] uppercase tracking-wider text-zinc-500 block mb-0.5"
+																class="text-[10px] uppercase tracking-wider text-muted-foreground block mb-0.5"
 																>Feedback Note:</strong
 															>
 															{msg.userExternal}
@@ -573,10 +573,10 @@
 													{/if}
 													{#if msg.internalNote}
 														<p
-															class="text-zinc-500 italic bg-zinc-900/30 p-2 rounded border border-zinc-900/20"
+															class="text-muted-foreground italic bg-card/30 p-2 rounded border border-border/20"
 														>
 															<strong
-																class="text-[10px] uppercase tracking-wider text-zinc-600 block not-italic mb-0.5"
+																class="text-[10px] uppercase tracking-wider text-muted-foreground/60 block not-italic mb-0.5"
 																>Internal Note:</strong
 															>
 															{msg.internalNote}
@@ -586,7 +586,9 @@
 											{/each}
 										{/each}
 									{:else}
-										<p class="text-xs italic text-zinc-600 text-center py-4">
+										<p
+											class="text-xs italic text-muted-foreground/60 text-center py-4"
+										>
 											No cert history
 										</p>
 									{/if}
@@ -596,7 +598,7 @@
 					</div>
 
 					<div
-						class="shrink-0 flex items-center justify-end gap-3 p-4 border-t border-zinc-800 bg-zinc-950/60 backdrop-blur-sm"
+						class="shrink-0 flex items-center justify-end gap-3 p-4 border-t border-border bg-input/60 backdrop-blur-sm"
 					>
 						<button
 							class="h-10 py-2 px-5 font-bold uppercase tracking-wider text-xs rounded-xl flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-primary-foreground shadow-lg shadow-rose-950/20 transition duration-150 disabled:opacity-40"
@@ -611,7 +613,7 @@
 						>
 							{#if rejectLoader}
 								<div
-									class="border-2 border-zinc-400 border-t-white rounded-full animate-spin h-3.5 w-3.5"
+									class="border-2 border-border border-t-primary-foreground rounded-full animate-spin h-3.5 w-3.5"
 								></div>
 							{/if}
 							Reject Submission
@@ -630,7 +632,7 @@
 						>
 							{#if acceptLoader}
 								<div
-									class="border-2 border-zinc-400 border-t-white rounded-full animate-spin h-3.5 w-3.5"
+									class="border-2 border-border border-t-primary-foreground rounded-full animate-spin h-3.5 w-3.5"
 								></div>
 							{/if}
 							Approve Submission
@@ -653,10 +655,10 @@
 		background: transparent;
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background: #27272a;
+		background: var(--muted);
 		border-radius: 2px;
 	}
 	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-		background: #3f3f46;
+		background: var(--border);
 	}
 </style>
