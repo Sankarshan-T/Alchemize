@@ -18,8 +18,10 @@
 <div
 	class="login w-screen h-screen flex items-center justify-center flex-col gap-y-4"
 >
-	<img src="/Alchemize-Admin.png" alt="alchemize" class="h-40" />
-	<h1 class="text-5xl font-bold font-alchemize text-admin-text">
+	<img src="/pmix_v2.png" alt="alchemize" class="h-40" />
+	<h1
+		class="text-5xl font-bold font-decor uppercase select-none text-admin-text"
+	>
 		Alchemize Admin
 	</h1>
 	<div class="flex gap-x-5 items-center">
@@ -27,7 +29,8 @@
 			onclick={() => {
 				window.location.href = authUrl
 			}}
-			class="bg-admin-primary px-15 py-5 text-admin-text text-lg hover:scale-103"
+			size="xl"
+			variant="primary"
 		>
 			Login with Hack Club
 		</Button>
@@ -35,8 +38,8 @@
 			onclick={() => {
 				window.location.href = "/dashboard"
 			}}
-			class="bg-transparent border-2 hover:scale-103 hover:bg-transparent px-15 py-5 text-lg"
 			variant="outline"
+			size="xl"
 		>
 			or go back home
 		</Button>
