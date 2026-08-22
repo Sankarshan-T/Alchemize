@@ -252,7 +252,7 @@
 		<Button
 			size="sm"
 			variant="outline"
-			onclick={() => (newProjWindowOpened = true)}
+			// onclick={() => (newProjWindowOpened = true)}
 		>
 			<Plus class="size-4 mr-1 stroke-3" />
 			<span>New Mix</span>
@@ -264,7 +264,7 @@
 			{#each projects as project}
 				<button
 					class="w-full min-h-[28vh] bg-card border-2 border-border rounded-md rounded-tl-2xl rounded-br-2xl overflow-hidden flex items-center gap-5 p-2 py-2 hover:-translate-x-0.5 hover:-translate-y-0.5 transition text-card-foreground"
-					onclick={() => openUpdateProjWindow(project)}
+					// onclick={() => openUpdateProjWindow(project)}
 				>
 					<div class="w-[35%] h-full shrink-0 overflow-hidden">
 						{#if project.fields.screenshot}
@@ -327,7 +327,9 @@
 			<div class="flex flex-col items-center justify-center py-24 gap-6">
 				<p class="text-secondary-foreground">No mixes yet.</p>
 
-				<Button onclick={() => (newProjWindowOpened = true)}>
+				<Button 
+					onclick={() => (newProjWindowOpened = true)}
+				>
 					<Plus class="size-4 mr-2" />
 					Create your first mix
 				</Button>
@@ -336,7 +338,7 @@
 	</div>
 </main>
 
-<ProjectDialog
+<!-- <ProjectDialog
 	bind:open={newProjWindowOpened}
 	mode="create"
 	{availableHacks}
@@ -354,4 +356,4 @@
 	{showRotator}
 	{invalidater}
 	{onDelete}
-/>
+/> -->
