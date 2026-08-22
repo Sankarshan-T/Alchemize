@@ -9,20 +9,21 @@ import { decryptAES, encryptAES } from "$lib/utils.server"
 import { submitProjectToAirtable } from "$lib/airtable"
 import loosejson from "loose-json"
 import crypto from "crypto"
-	const wasEverApproved = (project: AirtableProject) => {
-		//Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
-		const logs = JSON.parse(project.fields.log || "[]") as Log[]
-		return logs.some(log => log.status === 1)
-	}
-    	const areAllPushedToHQ = (log: Log[]): boolean => {
-		return log.every(entry => entry.submmitedToHQ || entry.status !== 1)
-	}
-    const checkIfAllApprovedLogsArePushed = (log: Log[]): boolean => {
-        if (log.length === 0) {
-            return true
-        }
-        const approvedLogs = log.filter(entry => entry.status === 1)
-        return approvedLogs.every(entry => entry.submmitedToHQ)}
+const wasEverApproved = (project: AirtableProject) => {
+    //Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
+    const logs = JSON.parse(project.fields.log || "[]") as Log[]
+    return logs.some(log => log.status === 1)
+}
+const areAllPushedToHQ = (log: Log[]): boolean => {
+    return log.every(entry => entry.submmitedToHQ || entry.status !== 1)
+}
+const checkIfAllApprovedLogsArePushed = (log: Log[]): boolean => {
+    if (log.length === 0) {
+        return true
+    }
+    const approvedLogs = log.filter(entry => entry.status === 1)
+    return approvedLogs.every(entry => entry.submmitedToHQ)
+}
 const checkSubmittedToHQ = (log: Log[], justification: string, reviewerName: string): Log[] => {
     let newLog = log.map(entry => {
         if (entry.status === 1 && !entry.submmitedToHQ) {
@@ -165,7 +166,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         })
     ])
 
-    if (!airtableResponse.ok ) {
+    if (!airtableResponse.ok) {
         console.error("Failed to send project to Airtable:", {
             status: airtableResponse.status,
             statusText: airtableResponse.statusText,

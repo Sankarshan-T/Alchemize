@@ -26,11 +26,9 @@
 	const authUrl = `https://auth.hackclub.com/oauth/authorize?client_id=${PUBLIC_HACKCLUB_AUTH}&response_type=code&scope=${scopes}&redirect_uri=${encodeURIComponent(PUBLIC_HACKCLUB_REDIRECT)}`
 	const excludedRoutes = ["/dashboard"]
 	let unVerified = $state(false)
-
-
 </script>
 
-<svelte:head><link rel="icon" href="/Alchemist.webp" /></svelte:head>
+<svelte:head><link rel="icon" href="/pmix_v2.png" /></svelte:head>
 
 {#if $navigating || $loaderStore}
 	<div
@@ -53,12 +51,22 @@
 			<div
 				class="w-12 h-12 border-4 border-gray-600 border-t-red-600 rounded-full animate-spin"
 			></div>
-			<p class="text-white text-lg">The Dashboard is currently Locked Sorry</p>
+			<p class="text-primary-foreground text-lg">
+				The Dashboard is currently Locked Sorry
+			</p>
 		</div>
 	</div>
 {/if}
 
-<div class="root h-screen w-screen flex items-center justify-start text-white">
+<div
+	class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
+></div>
+<div
+	class="fixed inset-0 z-0 bg-background/90 dark:bg-background/95 bg-contain bg-scale"
+></div>
+<div
+	class="relative z-10 root h-screen w-screen flex items-center justify-start text-primary-foreground"
+>
 	{#if !excludedRoutes.includes(page.url.pathname)}
 		<Navigation />
 	{/if}

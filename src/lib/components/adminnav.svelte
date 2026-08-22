@@ -66,15 +66,15 @@
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class="fixed top-5 right-5 z-99 flex items-center justify-center bg-black/20 border-2 border-admin-primary/80 hover:border-admin-primary hover:bg-admin-primary/5 p-2 rounded-md transition-all duration-200 shadow-sm shadow-admin-primary group"
+			class="fixed top-5 right-5 z-99 flex items-center justify-center bg-black/20 border-2 border-primary/80 hover:border-primary hover:bg-primary/5 p-2 rounded-md transition-all duration-200 shadow-sm shadow-primary group"
 		>
 			<CompassIcon
-				class="w-5 h-5 text-zinc-400 group-hover:text-admin-primary transition-colors"
+				class="w-5 h-5 text-zinc-400 group-hover:text-primary transition-colors"
 			/>
 		</Dialog.Trigger>
 
 		<Dialog.Content
-			class="bg-black/60 backdrop-blur-2xl border-2 border-admin-primary rounded-md max-w-3xl min-w-[60vw] p-6 sm:p-8 overflow-hidden"
+			class="bg-black/60 backdrop-blur-2xl border-2 border-primary rounded-md max-w-3xl min-w-[60vw] p-6 sm:p-8 overflow-hidden"
 		>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center">
 				<!-- Left -->
@@ -83,11 +83,9 @@
 						<Dialog.Close class="w-full">
 							<a
 								href={item.href}
-								class="flex items-center gap-3 bg-black/90 border-2 border-admin-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-admin-primary hover:border-admin-primary transition-all group shadow-sm shadow-admin-primary"
+								class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-primary hover:border-primary transition-all group shadow-sm shadow-primary"
 							>
-								<div
-									class="p-1.5 bg-black/50 border border-admin-primary/20 rounded"
-								>
+								<div class="p-1.5 bg-black/50 border border-primary/20 rounded">
 									<item.icon class="w-4 h-4" />
 								</div>
 
@@ -106,16 +104,12 @@
 					class="flex flex-col items-center text-center gap-4 order-first md:order-0"
 				>
 					<div class="flex items-center justify-center w-20 h-20 rounded-md">
-						<img
-							src="/Alchemize-Admin.png"
-							alt=""
-							class="w-16 h-16 object-contain"
-						/>
+						<img src="/pmix_v2.png" alt="" class="w-16 h-16 object-contain" />
 					</div>
 
 					<div>
 						<Dialog.Title
-							class="font-alchemize font-extrabold uppercase tracking-widest text-admin-primary text-3xl"
+							class="font-alchemize font-extrabold uppercase tracking-widest text-primary text-3xl"
 						>
 							Admin
 						</Dialog.Title>
@@ -128,7 +122,7 @@
 					<Dialog.Close>
 						<a
 							href="/dashboard"
-							class="flex items-center gap-3 bg-black/90 border-2 border-admin-primary/40 p-2 rounded-md text-zinc-300 hover:text-admin-primary hover:border-admin-primary transition-all shadow-sm shadow-admin-primary"
+							class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 p-2 rounded-md text-zinc-300 hover:text-primary hover:border-primary transition-all shadow-sm shadow-primary"
 						>
 							<Home class="w-4 h-4" />
 						</a>
@@ -141,11 +135,9 @@
 						<Dialog.Close class="w-full">
 							<a
 								href={item.href}
-								class="flex items-center gap-3 bg-black/90 border-2 border-admin-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-admin-primary hover:border-admin-primary transition-all group shadow-sm shadow-admin-primary"
+								class="flex items-center gap-3 bg-black/90 border-2 border-primary/40 px-4 py-3 rounded-md text-zinc-300 hover:text-primary hover:border-primary transition-all group shadow-sm shadow-primary"
 							>
-								<div
-									class="p-1.5 bg-black/50 border border-admin-primary/20 rounded"
-								>
+								<div class="p-1.5 bg-black/50 border border-primary/20 rounded">
 									<item.icon class="w-4 h-4" />
 								</div>
 

@@ -86,7 +86,6 @@
 	}
 </script>
 
-
 <svelte:head>
 	<title>Alchemize | Manage Shop</title>
 	<meta name="description" content="Alchemize Manage Shop" />
@@ -94,24 +93,24 @@
 </svelte:head>
 
 <main
-	class="h-screen w-full text-foreground p-4 md:p-10 font-mono tracking-wide selection:bg-admin-primary selection:text-admin-foreground relative overflow-hidden flex flex-col"
+	class="h-screen w-full text-foreground p-4 md:p-10 font-mono tracking-wide selection:bg-primary selection:text-admin-foreground relative overflow-hidden flex flex-col"
 >
 	<div class="fixed inset-0 bg-black/20 z-0 pointer-events-none"></div>
 
 	<div class="relative z-10 w-full h-full flex flex-col gap-6 min-h-0">
 		<div
-			class="flex flex-col lg:flex-row gap-4 items-center justify-between border-b-2 border-admin-primary/40 pb-4 w-full shrink-0 pr-10"
+			class="flex flex-col lg:flex-row gap-4 items-center justify-between border-b-2 border-primary/40 pb-4 w-full shrink-0 pr-10"
 		>
 			<div class="flex items-center gap-3">
-				<ShoppingBag class="h-4 w-4 animate-pulse text-admin-primary" />
+				<ShoppingBag class="h-4 w-4 animate-pulse text-primary" />
 				<h1
-					class="text-2xl font-alchemize font-black uppercase tracking-wider text-admin-primary [text-shadow:0_2px_10px_rgba(var(--admin-primary),0.2)]"
+					class="text-2xl font-alchemize font-black uppercase tracking-wider text-primary [text-shadow:0_2px_10px_rgba(var(--primary),0.2)]"
 				>
 					Manage Shop
 				</h1>
 			</div>
 			<Button
-				class="bg-admin-primary text-admin-text rounded-sm font-bold hover:bg-admin-primary/70"
+				class="bg-primary text-primary rounded-sm font-bold hover:bg-primary/70"
 				onclick={() => (openCreateItem = true)}
 			>
 				<Plus />
@@ -121,18 +120,18 @@
 
 		<div class="relative w-full shrink-0">
 			<Search
-				class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-admin-primary/60"
+				class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary/60"
 			/>
 			<Input
 				type="text"
 				placeholder="SEARCH SHOP BY NAME OR DESCRIPTION..."
 				bind:value={searchQuery}
-				class="pl-10 uppercase text-xs tracking-widest h-10 border-2 border-admin-primary/40 bg-black/80 rounded-none text-white focus-visible:ring-1 focus-visible:ring-admin-primary focus-visible:border-admin-primary placeholder:text-zinc-600 font-mono"
+				class="pl-10 uppercase text-xs tracking-widest h-10 border-2 border-primary/40 bg-black/80 rounded-none text-primary-foreground focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary placeholder:text-zinc-600 font-mono"
 			/>
 		</div>
 
 		<div
-			class="hidden md:grid grid-cols-12 gap-4 px-4 py-1 border-b border-admin-primary/20 text-sm font-bold uppercase text-admin-text tracking-wider shrink-0"
+			class="hidden md:grid grid-cols-12 gap-4 px-4 py-1 border-b border-primary/20 text-sm font-bold uppercase text-primary tracking-wider shrink-0"
 		>
 			<div class="col-span-1">Item</div>
 			<div class="col-span-5">Details</div>
@@ -146,11 +145,11 @@
 			{#each filteredItems as item (item.itemID)}
 				<div class="relative group w-full shrink-0">
 					<div
-						class="absolute inset-0 bg-admin-primary/80 translate-x-1 translate-y-1 rounded-sm transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+						class="absolute inset-0 bg-primary/80 translate-x-1 translate-y-1 rounded-sm transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
 					></div>
 
 					<div
-						class="relative w-full grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-black/95 border-2 border-admin-primary/90 rounded-sm p-3 transition-transform hover:-translate-x-px hover:-translate-y-px"
+						class="relative w-full grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-black/95 border-2 border-primary/90 rounded-sm p-3 transition-transform hover:-translate-x-px hover:-translate-y-px"
 					>
 						<div class="col-span-1 flex justify-center md:justify-start">
 							<div
@@ -169,7 +168,7 @@
 
 						<div class="col-span-1 md:col-span-5 flex flex-col gap-1 min-w-0">
 							<h2
-								class="text-sm font-black uppercase text-white tracking-tight font-alchemize"
+								class="text-sm font-black uppercase text-primary-foreground tracking-tight font-alchemize"
 							>
 								{item.name}
 							</h2>
@@ -186,7 +185,7 @@
 							<span class="md:hidden text-zinc-500 uppercase font-bold"
 								>Cost:</span
 							>
-							<span class="text-admin-primary font-bold tracking-wider">
+							<span class="text-primary font-bold tracking-wider">
 								{renderCurrency(item.price)}
 							</span>
 						</div>
@@ -195,7 +194,7 @@
 							class="col-span-1 md:col-span-3 flex justify-end w-full pt-2 md:pt-0"
 						>
 							<Button
-								class="w-full md:w-32 py-3 h-8 border border-admin-primary bg-background text-admin-primary hover:text-black hover:bg-admin-primary  font-bold tracking-wider uppercase rounded-none transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--admin-primary),0.4)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-[10px]"
+								class="w-full md:w-32 py-3 h-8 border border-primary bg-background text-primary hover:text-black hover:bg-primary  font-bold tracking-wider uppercase rounded-none transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.4)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none text-[10px]"
 								onclick={() => {
 									selectedItem = item
 									openEditItem = true

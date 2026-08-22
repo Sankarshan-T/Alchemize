@@ -35,7 +35,7 @@
 <Dialog.Root bind:open>
 	<Dialog.Content class="min-w-[60vw]">
 		<Dialog.Header>
-			<Dialog.Title class="text-2xl font-bold text-admin-primary"
+			<Dialog.Title class="text-2xl font-bold text-primary"
 				>{project.name} ({project.hours}hrs)</Dialog.Title
 			>
 
@@ -46,7 +46,7 @@
 
 		<div class="space-y-4 py-2">
 			<div>
-				<h2 class="font-semibold text-admin-primary">Description</h2>
+				<h2 class="font-semibold text-primary">Description</h2>
 				<p
 					class="text-muted-foreground max-w-[54vw] overflow-hidden wrap-break-word"
 				>
@@ -58,12 +58,12 @@
 			<img
 				src={project.screenshot}
 				alt=""
-				class="w-[45%] object-contain h-auto rounded-xl border-admin-primary border-2"
+				class="w-[45%] object-contain h-auto rounded-xl border-primary border-2"
 			/>
 			<img
 				src={project.screenshot2}
 				alt=""
-				class="w-[45%] object-contain h-auto rounded-xl border-admin-primary border-2"
+				class="w-[45%] object-contain h-auto rounded-xl border-primary border-2"
 			/>
 		</div>
 	</Dialog.Content>

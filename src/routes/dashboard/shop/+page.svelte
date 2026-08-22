@@ -82,37 +82,25 @@
 
 	const currencyTheme = {
 		redstone: {
-			border: "border-red-950 group-hover:border-red-500/80",
-			shadow: "bg-red-500",
-			text: "text-red-400",
-			btn: "border-red-800 text-red-400 hover:bg-red-600 hover:text-white",
+			shadow: "shadow-red border-red-900",
 		},
+
 		glowstone: {
-			border: "border-yellow-950 group-hover:border-yellow-500/80",
-			shadow: "bg-yellow-500",
-			text: "text-yellow-400",
-			btn: "border-yellow-800 text-yellow-500 hover:bg-yellow-600 hover:text-black",
+			shadow: "shadow-gls border-yellow-900",
 		},
+
 		aqua_regia: {
-			border: "border-blue-950 group-hover:border-blue-500/80",
-			shadow: "bg-blue-900",
-			text: "text-blue-400",
-			btn: "border-blue-800 text-blue-400 hover:bg-blue-600 hover:text-white",
+			shadow: "shadow-aqr border-blue-900",
 		},
+
 		potion_mix: {
-			border: "border-rose-950 group-hover:border-rose-500/80",
-			shadow: "bg-rose-400",
-			text: "text-rose-400",
-			btn: "border-rose-800 text-rose-400 hover:bg-rose-600 hover:text-white",
+			shadow: "shadow-pmix border-rose-900",
 		},
+
 		none: {
-			border: "border-zinc-800 group-hover:border-primary/80",
-			shadow: "shadow-[4px_4px_0px_0px_rgba(var(--primary),0.15)]",
-			text: "text-primary",
-			btn: "border-zinc-700 text-primary hover:bg-primary hover:text-primary-foreground",
+			shadow: "shadow-neo border",
 		},
 	}
-
 	function isGrayedOut(userHas: UserCurrency, itemPrice: UserCurrency) {
 		return (
 			userHas.redstone < itemPrice.redstone ||
@@ -129,7 +117,7 @@
 		if (currency === "none" || amount <= 0) return 0
 		let hours = amount
 		if (currency === "potion_mix") hours = amount / 4.5
-		return Number(hours.toFixed(2))
+		return Math.ceil(hours)
 	}
 
 	const shopItems = $derived.by(() => {
@@ -220,88 +208,140 @@
 </svelte:head>
 
 <main
-	class="h-screen w-full bg-gradbg text-foreground p-4 md:p-6 font-mono tracking-wide relative overflow-hidden flex flex-col"
+	class="h-screen w-full px-10 py-6 tracking-wide relative overflow-hidden flex flex-col font-body"
 >
-	<div class="fixed inset-0 bg-black/20 z-0 pointer-events-none"></div>
-
 	<header
-		class="relative z-10 w-full flex flex-col md:flex-row gap-4 items-center justify-between border-b-2 border-zinc-800 pb-4 shrink-0"
+		class="relative z-10 w-full flex flex-col gap-4 border-b-2 pb-4 shrink-0"
 	>
-		<div class="flex items-center gap-3">
-			<ShoppingBag class="h-5 w-5 animate-pulse text-primary" />
-			<h1
-				class="text-2xl font-alchemize font-black uppercase tracking-wider text-primary"
-			>
-				The Shop <span
-					class="text-[0.6rem] text-zinc-500 tracking-widest block md:inline md:ml-2"
-					>Alchemize</span
+		<div
+			class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 py-3 px-8"
+		>
+			<div class="flex items-center gap-3 text-foreground">
+				<ShoppingBag class="size-5" />
+				<div>
+					<h1
+						class="text-xl sm:text-2xl font-display font-black uppercase tracking-wider leading-none"
+					>
+						The Shop
+					</h1>
+				</div>
+			</div>
+
+			{#if loggedIn}
+				<Button
+					size="sm"
+					variant="outline"
+					onclick={() => (ordersDialogOpen = true)}
 				>
-			</h1>
+					Orders
+				</Button>
+			{/if}
 		</div>
 
 		{#if loggedIn}
 			<div
-				class="flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-wider pr-15"
+				class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 w-full font-note font-bold"
 			>
 				<Button
 					onclick={() => toggleCurrency("redstone")}
 					class={cn(
-						"rounded px-2 py-1 transition-all",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-red-900/20 transition-all hover:border-red-700 hover:bg-red-800/20 dark:border-red-300/50 dark:hover:border-red-300 dark:hover:bg-red-300/15",
 						activeCurrencies.has("redstone")
-							? "border-red-500 bg-red-700/30 text-red-300"
-							: "border border-red-500/40 bg-red-800/10 text-red-500"
-					)}>Redstone: {currencies.redstone}</Button
+							? "border-red-700 bg-red-700/80 text-white hover:bg-red-700/50 dark:border-red-300 dark:bg-red-700/80"
+							: "border-red-700/50 bg-red-800/10 text-red-800 dark:bg-red-300/10 dark:text-red-300"
+					)}
 				>
+					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
+						Redstone
+					</span>
+					<span class="font-black text-xs sm:text-sm">
+						{currencies.redstone}
+					</span>
+				</Button>
+
 				<Button
 					onclick={() => toggleCurrency("glowstone")}
 					class={cn(
-						"rounded px-2 py-1 transition-all",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-amber-900/20 transition-all hover:border-amber-700 hover:bg-amber-800/20 dark:border-amber-300/50 dark:hover:border-amber-300 dark:hover:bg-amber-300/15",
 						activeCurrencies.has("glowstone")
-							? "border-yellow-400 bg-yellow-600/30 text-yellow-200"
-							: "border border-yellow-500/40 bg-yellow-950/20 text-yellow-500"
-					)}>Glowstone: {currencies.glowstone}</Button
+							? "border-amber-700 bg-amber-800/80 text-white hover:bg-amber-800/50 dark:border-amber-300 dark:bg-amber-800/80"
+							: "border-amber-700/50 bg-amber-800/10 text-amber-800 dark:bg-amber-300/10 dark:text-amber-300"
+					)}
 				>
+					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
+						Glowstone
+					</span>
+					<span class="font-black text-xs sm:text-sm">
+						{currencies.glowstone}
+					</span>
+				</Button>
+
 				<Button
 					onclick={() => toggleCurrency("aqua_regia")}
 					class={cn(
-						"rounded px-2 py-1 transition-all",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-blue-900/20 transition-all hover:border-blue-700 hover:bg-blue-800/20 dark:border-blue-300/50 dark:hover:border-blue-300 dark:hover:bg-blue-300/15",
 						activeCurrencies.has("aqua_regia")
-							? "border-blue-400 bg-blue-700/30 text-blue-200"
-							: "border border-blue-500/40 bg-blue-950/20 text-blue-400"
-					)}>Aqua Regia: {currencies.aqua_regia}</Button
+							? "border-blue-700 bg-blue-700/80 text-white hover:bg-blue-700/50 dark:border-blue-300 dark:bg-blue-700/80"
+							: "border-blue-700/50 bg-blue-800/10 text-blue-800 dark:bg-blue-300/10 dark:text-blue-300"
+					)}
 				>
+					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
+						Aqua Regia
+					</span>
+					<span class="font-black text-xs sm:text-sm">
+						{currencies.aqua_regia}
+					</span>
+				</Button>
+
 				<Button
 					onclick={() => toggleCurrency("potion_mix")}
 					class={cn(
-						"rounded px-2 py-1 transition-all",
+						"justify-between rounded-md border-2 px-3 py-2 shadow-sm shadow-rose-900/20 transition-all hover:border-rose-700 hover:bg-rose-800/20 dark:border-rose-300/50 dark:hover:border-rose-300 dark:hover:bg-rose-300/15",
 						activeCurrencies.has("potion_mix")
-							? "border-rose-400 bg-rose-700/30 text-rose-200"
-							: "border border-rose-500/40 bg-rose-950/20 text-rose-400"
-					)}>Potion Mix: {currencies.potion_mix}</Button
+							? "border-rose-700 bg-rose-700/80 text-white hover:bg-rose-700/50 dark:border-rose-300 dark:bg-rose-700/80"
+							: "border-rose-700/50 bg-rose-800/10 text-rose-800 dark:bg-rose-300/10 dark:text-rose-300"
+					)}
 				>
+					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
+						Potion Mix
+					</span>
+					<span class="font-black text-xs sm:text-sm">
+						{currencies.potion_mix}
+					</span>
+				</Button>
 			</div>
 		{/if}
 	</header>
 
 	{#if loggedIn}
 		<div
-			class="relative z-10 w-full flex flex-wrap gap-4 items-center justify-between bg-zinc-950/60 p-2 border-2 border-zinc-800 border-t-0 rounded rounded-t-none text-xs shrink-0"
+			class="relative z-10 w-full flex flex-col lg:flex-row gap-3 lg:gap-4 items-stretch lg:items-center justify-between py-3 border-b-2 border-border shrink-0"
 		>
-			<div class="flex items-center gap-x-3 divide-x-2">
-				<label class="flex items-center gap-2 ml-4 cursor-pointer pr-2">
+			<div class="flex flex-wrap items-center gap-3">
+				<label
+					class="flex items-center gap-2 cursor-pointer text-xs font-display font-bold uppercase tracking-wider text-foreground"
+				>
 					<input
 						type="checkbox"
 						bind:checked={affordableOnly}
 						class="accent-primary"
 					/>
-					<span class="text-zinc-300 font-bold uppercase"> Affordable </span>
+
+					<span>Affordable Only</span>
 				</label>
 
+				<div class="hidden sm:block h-5 w-px bg-border"></div>
+
 				<div class="flex items-center gap-2">
-					<span class="text-zinc-500 font-bold uppercase">Sort By:</span>
+					<span
+						class="text-xs font-display font-bold uppercase tracking-wider text-muted-foreground"
+					>
+						Sort:
+					</span>
+
 					<select
 						bind:value={activeSort}
-						class="bg-zinc-900 text-white border border-zinc-700 rounded px-2 py-1 outline-none focus:border-primary font-mono cursor-pointer"
+						class="bg-card text-foreground border-2 border-border rounded-md px-2 py-1.5 outline-none focus:border-primary font-body text-xs cursor-pointer"
 					>
 						<option value="none">Default</option>
 						<option value="affordable">Affordable First</option>
@@ -312,90 +352,88 @@
 					</select>
 				</div>
 			</div>
-			<div class="flex items-center justify-end gap-x-2">
-				<Input
-					class="border-primary rounded-md font-mono text-primary"
-					bind:value={searchQuery}
-					placeholder="Search items..."
-				/>
-				<Search class="text-primary size-6" />
-				<Button
-					class="border-primary border-2 rounded-lg bg-primary/70 p-2"
-					onclick={() => (ordersDialogOpen = true)}
-				>
-					Orders
-				</Button>
+
+			<div class="flex items-center gap-2 w-full lg:w-auto">
+				<div class="relative w-full lg:w-64">
+					<Input
+						class="w-full border-2 border-border bg-card rounded-md font-body text-foreground pr-9 focus:border-primary"
+						bind:value={searchQuery}
+						placeholder="Search items..."
+					/>
+
+					<Search
+						class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4 pointer-events-none"
+					/>
+				</div>
 			</div>
 		</div>
 	{/if}
 
 	<div
-		class="relative z-10 flex-1 overflow-y-auto pr-2 grid gap-4 mt-5 content-start justify-items-center"
-		style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));"
+		class="relative z-10 flex-1 min-h-0 overflow-y-auto pr-2 pt-4 pb-6 grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 content-start"
 	>
 		{#each finalItems as item}
 			{@const theme = currencyTheme[item.primaryCurrency]}
-			<div class="relative group h-full w-full max-w-xs flex flex-col">
+
+			<div
+				class={cn(
+					"relative z-10 w-full flex flex-col bg-card border-2 rounded rounded-tl-3xl rounded-br-3xl p-3 h-full gap-3 backdrop-blur-sm transition-all",
+					theme.shadow
+				)}
+			>
 				<div
-					class={cn(
-						"absolute z-0 inset-0 translate-x-0.5 translate-y-0.5 rounded transition-transform group-hover:translate-x-0 group-hover:translate-y-0 opacity-60",
-						theme.shadow
-					)}
-				></div>
-				<div
-					class={cn(
-						"relative z-10 w-full flex flex-col bg-zinc-950/90 border-2 rounded p-3 h-full gap-3 backdrop-blur-sm transition-all",
-						theme.border
-					)}
+					class="w-full aspect-square border bg-background rounded rounded-tl-3xl rounded-br-3xl overflow-hidden relative shrink-0 flex items-center justify-center p-3"
 				>
-					<div
-						class="w-full aspect-square bg-zinc-900/60 border border-zinc-800 rounded overflow-hidden relative shrink-0 flex items-center justify-center p-3"
-					>
-						<img
-							src={item.image}
-							alt={item.name}
-							class="max-w-full max-h-full object-contain transform scale-100 group-hover:scale-[1.05] transition-transform duration-300 relative z-10"
-						/>
-						<div
-							class="absolute inset-0 bg-linear-to-t from-zinc-950/80 via-transparent to-transparent z-0"
-						></div>
+					<img
+						src={item.image}
+						alt={item.name}
+						class="max-w-full max-h-full object-contain rounded rounded-tl-3xl rounded-br-3xl transform scale-100 group-hover:scale-[1.05] transition-transform duration-300 relative z-10"
+					/>
+				</div>
+
+				<div class="flex flex-col flex-1 justify-between gap-2">
+					<div class="flex flex-col gap-1">
+						<h2
+							class="text-sm font-display font-black uppercase text-foreground tracking-tight line-clamp-1"
+						>
+							{item.name}
+						</h2>
+
+						<p
+							class="text-muted-foreground text-[11px] leading-snug font-body line-clamp-3"
+						>
+							{item.description}
+						</p>
 					</div>
 
-					<div class="flex flex-col flex-1 justify-between gap-2">
-						<div class="flex flex-col gap-1">
-							<h2
-								class="text-sm font-black uppercase text-white tracking-tight font-alchemize line-clamp-1"
-							>
-								{item.name}
-							</h2>
-							<p
-								class="text-zinc-400 text-[11px] leading-snug font-mono line-clamp-3"
-							>
-								{item.description}
+					<div class="pt-2 border-t border-border w-full mt-auto space-y-2">
+						<div class="flex items-center justify-between gap-2">
+							<p class="text-muted-foreground text-[11px] font-body font-bold">
+								~{item.estimatedHours} hrs
+							</p>
+
+							<p class={cn("text-xs font-body text-card-foreground")}>
+								{renderCurrency(item.price)}
 							</p>
 						</div>
-						<div class="pt-2 border-t border-muted w-full mt-auto space-y-2">
-							<p class="text-zinc-400 text-[11px] font-mono font-bold">
-								~{item.estimatedHours}hrs
-							</p>
-							<Button
-								class={cn(
-									"w-full h-8 bg-zinc-900/50 hover:bg-zinc-900 text-[11px] font-bold rounded transition-all border",
-									theme.btn,
-									item.grayedOut &&
-										"pointer-events-none cursor-not-allowed border-zinc-700 bg-zinc-900 text-zinc-500 shadow-none"
-								)}
-								onclick={() => handleBuyClick(item)}
-							>
-								{#if !loggedIn}
-									<a href="/" class="hover:text-primary"> Login to Purchase </a>
-								{:else if item.grayedOut}
-									Locked • {renderCurrency(item.price)}
-								{:else}
-									Buy • {renderCurrency(item.price)}
-								{/if}
-							</Button>
-						</div>
+
+						<Button
+							variant="secondary"
+							class={cn(
+								"w-full",
+								item.grayedOut &&
+									"pointer-events-none cursor-not-allowed border bg-muted text-muted-foreground shadow-none"
+							)}
+							onclick={() => handleBuyClick(item)}
+						>
+							{#if !loggedIn}
+								<a href="/" class="hover:text-primary"> Login to Purchase </a>
+							{:else if item.grayedOut}
+								Locked...
+							{:else}
+								Buy ~ {renderCurrency(item.price)}
+							{/if}
+						</Button>
 					</div>
 				</div>
 			</div>
@@ -403,7 +441,7 @@
 	</div>
 </main>
 
-{#if loggedIn}
+<!-- {#if loggedIn}
 	<ShopDialog
 		allItems={shopItems}
 		bind:open={isDialogOpen}
@@ -413,46 +451,19 @@
 	/>
 
 	<OrdersDialog bind:open={ordersDialogOpen} orders={data.orders ?? []} />
-{/if}
+{/if} -->
 
 <style>
-	:global(div[data-fillout-id] button),
-	:global(div[data-fillout-id] .fillout-embed-popup-button) {
-		all: unset !important;
-		box-sizing: border-box !important;
-
-		display: inline-flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		cursor: pointer !important;
-
-		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-			"Liberation Mono", "Courier New", monospace !important;
-		font-size: 11px !important;
-		font-weight: 700 !important;
-		text-transform: uppercase !important;
-		letter-spacing: 0.05em !important;
-
-		padding: 0.275rem 0.55rem !important;
-		border-radius: 4px !important;
-		background-color: #7e0026 !important;
-		border: 2px solid rgba(239, 68, 68, 0.4) !important;
-		color: #f4f4f5 !important;
-
-		box-shadow: 2px 2px 0px 0px rgba(239, 68, 68, 0.2) !important;
-		transition: all 0.1s ease-in-out !important;
+	.shadow-red {
+		box-shadow: 4px 4px 0px var(--color-red-700);
 	}
-
-	:global(div[data-fillout-id] button:hover),
-	:global(div[data-fillout-id] .fillout-embed-popup-button:hover) {
-		background-color: #990033 !important;
-		border-color: rgba(239, 68, 68, 0.8) !important;
-		color: #ffffff !important;
+	.shadow-aqr {
+		box-shadow: 4px 4px 0px var(--color-blue-600);
 	}
-
-	:global(div[data-fillout-id] button:active),
-	:global(div[data-fillout-id] .fillout-embed-popup-button:active) {
-		transform: translate(1px, 1px) !important;
-		box-shadow: none !important;
+	.shadow-gls {
+		box-shadow: 4px 4px 0px var(--color-yellow-600);
+	}
+	.shadow-pmix {
+		box-shadow: 4px 4px 0px var(--color-rose-400);
 	}
 </style>

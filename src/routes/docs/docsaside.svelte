@@ -6,36 +6,39 @@
 
 	import docsIndex from "./docs-index.json"
 	import { ArrowLeft } from "@lucide/svelte"
+	import Button from "$lib/components/ui/button/button.svelte"
 
 	const { toggleGroup, openGroups } = $props()
 </script>
 
 <aside
-	class="relative no-scrollbar bg-black/50 z-10 h-full max-h-screen overflow-y-auto sidebar w-1/3 border-primary p-5 border-r-2 shadow-[0_2_4px_red_inset] scrollbar-none"
+	class="relative no-scrollbar bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border p-5 border-r-2 scrollbar-none"
 >
 	<div
-		class="sidebar-group flex items-center scrollbar-none w-full pb-5 border-b-primary border-b"
+		class="sidebar-group flex flex-col gap-2 items-center scrollbar-none w-full pb-5 border-b"
 	>
-		<div class="flex items-baseline gap-x-2">
-			<a href="/dashboard" class="hover:text-primary hover:font-bold">
-				<ArrowLeft />
-			</a>
+		<div class="flex gap-1 w-full items-baseline">
 			<span
-				class="font-alchemize text-primary font-extrabold sm:text-3xl text-3xl tracking-tight"
+				class="font-decor text-card-foreground font-extrabold text-2xl tracking-tight"
 				>ALCHEMIZE</span
 			>
 			<span
-				class="font-extrabold leading-none tracking-wider text-xs uppercase font-mono"
+				class="font-extrabold leading-none tracking-wider text-xs uppercase font-display"
 			>
 				Docs
 			</span>
 		</div>
+		<a href="/dashboard" class="w-full">
+			<Button variant="secondary" size="sm" class="w-full">Back to site</Button>
+		</a>
 	</div>
 	{#each Object.entries(docsIndex) as [groupName, groupItems]}
 		<div
-			class="sidebar-group flex flex-col px-2 w-full gap-2 pt-5 pb-5 border-b-primary border-b"
+			class="sidebar-group flex flex-col px-2 w-full gap-2 pt-5 pb-5 border-b"
 		>
-			<h1 class="text-xl w-full justify-between flex pr-4 mb-1 text-admin-text">
+			<h1
+				class="text-md font-semibold w-full justify-between flex mb-1 text-card-foreground"
+			>
 				{groupName}
 				<button
 					aria-label="Toggle submenu"
@@ -53,12 +56,12 @@
 			{#if openGroups[groupName]}
 				<div
 					transition:slide={{ duration: 150 }}
-					class="links flex gap-2 flex-col pl-3 text-neutral-300"
+					class="links flex gap-2 flex-col pl-3 text-secondary-foreground font-note"
 				>
 					{#each groupItems as item}
 						<a
 							href={item.path}
-							class="hover:text-primary hover:font-semibold cursor-pointer transition"
+							class="hover:text-card-foreground hover:font-semibold cursor-pointer transition"
 						>
 							{item.name}
 						</a>
@@ -71,14 +74,12 @@
 
 <style>
 	@layer utilities {
-		/* Hide scrollbar for Chrome, Safari and Opera */
 		.no-scrollbar::-webkit-scrollbar {
 			display: none;
 		}
-		/* Hide scrollbar for IE, Edge and Firefox */
 		.no-scrollbar {
-			-ms-overflow-style: none; /* IE and Edge */
-			scrollbar-width: none; /* Firefox */
+			-ms-overflow-style: none;
+			scrollbar-width: none;
 		}
 	}
 </style>

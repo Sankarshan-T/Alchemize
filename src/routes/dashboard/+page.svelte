@@ -2,7 +2,7 @@
 	//@ts-ignore
 	import looseJson from "loose-json"
 	const { data } = $props()
-	import { CircleQuestionMark } from "@lucide/svelte"
+	import { CircleQuestionMark, Moon, Sun } from "@lucide/svelte"
 	import { Button } from "$lib/components/ui/button"
 	type HackatimeProject = {
 		name?: string
@@ -10,6 +10,7 @@
 		project?: string
 		total_seconds?: number
 	}
+	import { mode, toggleMode } from "mode-watcher"
 
 	interface Project {
 		id: string
@@ -41,8 +42,9 @@
 		Users,
 		Clock,
 		Newspaper,
+		ArrowUpRight,
+		User as UserIcon,
 	} from "lucide-svelte"
-	import { Compass } from "@lucide/svelte"
 
 	let hacks: HackatimeProject[] = $derived(getHackatimeProjects(data?.hacks))
 
@@ -51,7 +53,6 @@
 		new Map(
 			hacks.map(hack => [
 				hack.name ?? hack.project_name ?? hack.project ?? "",
-
 				hack.total_seconds ?? 0,
 			])
 		)
@@ -59,8 +60,9 @@
 	let userCurrencies = $derived(
 		looseJson(data.user?.currency ?? "{}")
 	) as UserCurrency
+
 	const renderBadge = (text: string) => {
-		switch (text.toLowerCase()) {
+		switch (text?.toLowerCase()) {
 			case "endless":
 				return "<img src='/alch-aquaregia.png' alt='Aqua Regia' class='w-4 h-4 object-contain' /> Endless"
 			case "no-internet":
@@ -68,20 +70,13 @@
 			case "indie-gamedev":
 				return "<img src='/alch-redstone.png' alt='Redstone' class='w-4 h-4 object-contain' /> Indie Game Dev"
 			case "potion mix":
-				return "<img src='/Alchemize.png' alt='Potion Mix' class='w-4 h-4 object-contain' /> Potion Mix"
+				return "<img src='/pmix_v2.png' alt='Potion Mix' class='w-5 h-5 object-contain' /> Potion Mix"
 			default:
 				return null
 		}
 	}
 
-	const navItems = [
-		{ href: "/dashboard/projects", label: "Projects", icon: Blocks },
-		// { href: "/dashboard/explore", label: "Explore", icon: Compass },
-		{ href: "/dashboard/shop", label: "Shop", icon: ShoppingBasket },
-		{ href: "/dashboard/trade", label: "Trade", icon: ArrowRightLeft },
-		{ href: "/refer", label: "Refer!", icon: Users },
-		{ href: "/docs", label: "Docs", icon: Newspaper },
-	]
+	const isDark = $derived(mode.current === "dark")
 </script>
 
 <svelte:head>
@@ -90,427 +85,476 @@
 	<meta property="og:title" content="Alchemize | Dashboard" />
 </svelte:head>
 
-<div
-	class="h-screen w-full bg-gradbg text-foreground font-mono tracking-wide selection:bg-primary selection:text-primary-foreground relative flex flex-col overflow-hidden p-4 md:p-6 lg:p-8 gap-4 md:gap-6"
->
-	<main
-		class="flex-1 min-h-0 relative z-20 w-full mx-auto max-w-7xl flex flex-col gap-6"
+<main class=" h-full w-full flex gap-6 p-15">
+	<button
+		type="button"
+		class="absolute top-3 left-3 flex items-center justify-center gap-2 self-center rounded-md border-2 border-primary/40 bg-card px-2 py-1 text-foreground shadow-sm shadow-primary transition-all duration-150 hover:border-primary hover:text-primary"
+		onclick={toggleMode}
+		aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+		title={isDark ? "Switch to light mode" : "Switch to dark mode"}
 	>
-		<div
-			class="flex justify-between items-end border-b-2 pb-3 border-primary/30 shrink-0"
-		>
-			<div class="flex items-center gap-4">
-				<img
-					alt="Profile Picture"
-					src={data.pfp}
-					class="border-2 border-primary bg-black/90 w-12 h-12 rounded-md shadow-[2px_2px_0px_0px_rgba(var(--primary),0.3)]"
-				/>
-				<div>
-					<h1
-						class="font-alchemize text-primary text-xl font-black uppercase tracking-wider"
-					>
-						{data.name}
-					</h1>
-					<p class="text-zinc-400 text-xs font-sans tracking-normal">
-						{data.email}
-					</p>
+		{#if isDark}
+			<Sun class="h-4 w-4" /> Light
+		{:else}
+			<Moon class="h-4 w-4" /> Dark
+		{/if}
+	</button>
+	<div class="flex flex-col gap-6 flex-1 min-h-0">
+		<div class="w-full flex items-center justify-start gap-4">
+			<div
+				class="  w-64 shrink-0 bg-card border border-border/60 px-3 p-2 rounded-tl-2xl rounded-br-2xl rounded-md flex flex-col gap-4 font-note"
+			>
+				<div class="flex items-center gap-3">
+					<img
+						src={data.pfp}
+						alt={data.name}
+						class="size-12 rounded-tl-2xl rounded-br-2xl rounded-md border border-primary"
+					/>
+
+					<div class="min-w-0 flex-1">
+						<h2
+							class="font-display text-card-foreground font-black uppercase tracking-wider leading-none"
+						>
+							{data.name}
+						</h2>
+
+						<p class="text-xs text-muted-foreground truncate mt-1">
+							{data.email}
+						</p>
+					</div>
+				</div>
+
+				<div class="border-t border-border/50"></div>
+
+				<div class="flex items-center justify-between">
+					<div class="flex flex-col">
+						<span
+							class="text-[10px] uppercase tracking-widest font-medium text-card-foreground"
+						>
+							Account
+						</span>
+
+						<span class="font-bold text-xs text-muted-foreground">
+							{data.admin ? "Admin" : "Participant"}
+						</span>
+					</div>
+
+					{#if data.admin}
+						<a href="/admin">
+							<Button variant="secondary" size="xs">
+								<ShieldUser />
+								Admin
+							</Button>
+						</a>
+					{/if}
 				</div>
 			</div>
 			<div
-				class="font-alchemize font-black uppercase tracking-widest leading-none text-primary text-2xl flex items-center gap-x-1"
+				class="  w-full flex flex-col gap-3 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md"
 			>
-				Alchemize
+				<div class="flex items-center justify-between">
+					<h1
+						class="font-display font-black text-card-foreground text-md uppercase tracking-wider"
+					>
+						Your Inventory
+					</h1>
+					<a href="/dashboard/trade">
+						<Button variant="primary" size="sm">
+							<ArrowRightLeft class="w-3 h-3 stroke-2" />
+							Trade Station
+						</Button>
+					</a>
+				</div>
+				<div class="gap-3 grid grid-cols-2 sm:grid-cols-4">
+					<div
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+					>
+						<div class="p-1 shrink-0 rounded">
+							<img
+								src="/alch-redstone.png"
+								alt="Redstone"
+								class="w-5 h-5 object-contain"
+							/>
+						</div>
+						<div class="min-w-0">
+							<p
+								class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
+							>
+								Redstone
+							</p>
+							<p
+								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+							>
+								{userCurrencies.redstone.toFixed(2) ?? 0}
+							</p>
+						</div>
+					</div>
+
+					<div
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+					>
+						<div class="p-1 shrink-0 rounded">
+							<img
+								src="/alch-glowstone.png"
+								alt="Glowstone"
+								class="w-5 h-5 object-contain"
+							/>
+						</div>
+						<div class="min-w-0">
+							<p
+								class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
+							>
+								Glowstone
+							</p>
+							<p
+								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+							>
+								{userCurrencies.glowstone.toFixed(2) ?? 0}
+							</p>
+						</div>
+					</div>
+
+					<div
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+					>
+						<div class="p-1 shrink-0 rounded">
+							<img
+								src="/alch-aquaregia.png"
+								alt="Aqua Regia"
+								class="w-5 h-5 object-contain"
+							/>
+						</div>
+						<div class="min-w-0">
+							<p
+								class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
+							>
+								Aqua Regia
+							</p>
+							<p
+								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+							>
+								{userCurrencies.aqua_regia.toFixed(2) ?? 0}
+							</p>
+						</div>
+					</div>
+
+					<div
+						class="flex items-center gap-2 bg-secondary/80 border border-border/60 p-2 rounded-tl-2xl rounded-br-2xl rounded-md"
+					>
+						<div class="p-1 shrink-0 rounded">
+							<img
+								src="/pmix_v2.png"
+								alt="Potion Mix"
+								class="w-7 h-7 object-contain"
+							/>
+						</div>
+						<div class="min-w-0">
+							<p
+								class="text-secondary-foreground text-[9px] uppercase font-bold tracking-wider truncate"
+							>
+								Potion Mix
+							</p>
+							<p
+								class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+							>
+								{userCurrencies.potion_mix.toFixed(2) ?? 0}
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div
-			class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch w-full flex-1 min-h-0"
-		>
-			<div class="flex flex-col gap-6 w-full min-h-0">
-				<div class="gap-6 grid grid-cols-1 sm:grid-cols-2 w-full shrink-0">
-					<div class="relative group">
-						<div
-							class="absolute inset-0 bg-primary/20 translate-x-[4px] translate-y-[4px] rounded-md"
-						></div>
-						<div
-							class="relative flex flex-col gap-2 bg-black/90 border-2 border-primary/80 p-4 rounded-md"
-						>
-							<p
-								class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest flex items-center"
-							>
-								HCA Configs <a href="/docs/issues/hca-configs" target="_blank"
-									><CircleQuestionMark class="ml-2 size-3" /></a
-								>
-								{#if data.misconfigured.length > 0}<a href="/auth"
-										><Button
-											class="bg-primary px-1 h-6 ml-3 text-xs tracking-tight"
-											>Re-login</Button
-										></a
-									>
-								{/if}
-							</p>
-							<div class="flex items-center gap-2">
-								<span
-									class="h-2 w-2 rounded-full {data.misconfigured.length === 0
-										? 'bg-emerald-500'
-										: 'bg-red-500'}"
-								></span>
-								<span
-									class="font-alchemize font-bold uppercase text-sm tracking-wider {data
-										.misconfigured.length === 0
-										? 'text-emerald-400'
-										: 'text-red-400'}"
-								>
-									{data.misconfigured.length === 0
-										? "Complete"
-										: data.misconfigured.join(", ") + " Misconfigured"}
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<div class="relative group">
-						<div
-							class="absolute inset-0 bg-primary/20 translate-x-[4px] translate-y-[4px] rounded-md"
-						></div>
-						<div
-							class="relative flex flex-col gap-2 bg-black/90 border-2 border-primary/80 p-4 rounded-md"
-						>
-							<p
-								class="text-zinc-400 text-[10px] font-bold uppercase tracking-widest"
-							>
-								YSWS Eligibility
-							</p>
-							<div class="flex items-center gap-2">
-								<span
-									class="h-2 w-2 rounded-full {data.eligiblity
-										? 'bg-emerald-500'
-										: 'bg-red-500'}"
-								></span>
-								<span
-									class="font-alchemize font-bold uppercase text-sm tracking-wider {data.eligiblity
-										? 'text-emerald-400'
-										: 'text-red-400'}"
-								>
-									{data.eligiblity ? "Eligible" : "Not Eligible"}
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="relative w-full flex-1 min-h-0">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-0">
+			<div class="flex flex-col gap-4 flex-1 min-h-0">
+				<div
+					class="  flex flex-col bg-card border border-border/60 p-5 rounded-tl-2xl rounded-br-2xl rounded-md w-full flex-2 min-h-0"
+				>
 					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[6px] translate-y-[6px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col bg-black/90 border-2 border-primary p-5 rounded-md h-full min-h-0"
+						class="flex items-center gap-2 pb-3 shrink-0 border-b border-border/50 mb-3"
 					>
-						<div class="flex items-center gap-2 pb-3 shrink-0">
-							<Newspaper class="w-5 h-5 text-primary" />
-							<h2
-								class="font-alchemize font-black text-primary text-lg uppercase tracking-wider"
-							>
-								News & Updates
-							</h2>
-						</div>
-						<div
-							class="flex-1 overflow-y-auto pr-1 text-zinc-400 text-sm no-scrollbar"
-						>
-							<div class="flex flex-col gap-3 max-h-full overflow-y-auto pr-1">
-								<div
-									class="border-l-2 border-white bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-zinc-500 tracking-widest uppercase"
-										>July 10th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-300 mt-0.5">
-										NPS survey
-									</h3>
-									<p
-										class="text-zinc-500 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Go tell us what you think about our ysws from
-										<a href="/forms/nps" class="font-bold text-primary italic">
-											this
-										</a>
-										page. Only two of the orgs get to read your results
-									</p>
-								</div>
-								<div
-									class="border-l-2 border-white bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-zinc-500 tracking-widest uppercase"
-										>July 9th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-300 mt-0.5">
-										Fulfillment updates
-									</h3>
-									<p
-										class="text-zinc-500 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Fulfillment has started! Now go buy some stuff from the
-										shop!
-									</p>
-								</div>
-								<div
-									class="border-l-2 border-primary/40 bg-zinc-950/50 p-3 rounded-r-md"
-								>
-									<span
-										class="text-[9px] font-bold text-primary tracking-widest uppercase"
-										>June 24th 2026</span
-									>
-									<h3 class="text-xs font-bold text-zinc-200 mt-0.5">
-										Shop Suggestions!
-									</h3>
-									<p
-										class="text-zinc-400 text-[11px] font-sans mt-1 leading-relaxed"
-									>
-										Go suggest new items to be added to the shop every week from
-										the
-										<a
-											href="/dashboard/shop"
-											class="font-bold text-primary italic"
-										>
-											shop
-										</a> page!
-									</p>
-								</div>
-							</div>
-							<!-- No news or updates currently.... -->
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="flex flex-col gap-6 w-full min-h-0">
-				<div class="relative w-full flex-1 min-h-0">
-					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[6px] translate-y-[6px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col bg-black/90 border-2 border-primary p-5 rounded-md h-full min-h-0"
-					>
+						<Blocks class="w-5 h-5 text-card-foreground" />
 						<h2
-							class="font-alchemize font-black text-primary text-lg uppercase tracking-wider pb-3 shrink-0"
+							class="font-display font-black text-card-foreground text-lg uppercase tracking-wider"
 						>
-							Recent Mixes
+							Your Mixes
 						</h2>
+					</div>
 
-						<div
-							class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 no-scrollbar"
-						>
-							{#if projects}
-								{#each projects as project}
+					<div
+						class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 no-scrollbar"
+					>
+						{#if projects && projects.length > 0}
+							{#each projects as project}
+								<a href="/dashboard/projects">
 									<div
-										class="bg-background/40 p-4 rounded-md border border-primary hover:border-primary/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
+										class="bg-secondary/40 p-4 text-secondary-foreground rounded-tl-2xl rounded-br-2xl rounded-md border border-border/60 hover:border-border/70 transition-colors cursor-pointer flex flex-col justify-between gap-2 group/item shrink-0"
 									>
 										<div class="flex justify-between items-start gap-4">
 											<p
-												class="font-alchemize font-bold text-white text-sm tracking-wide group-hover/item:text-primary transition-colors"
+												class="font-alchemize font-bold text-secondary-foreground text-md tracking-wide group-hover/item:text-secondary-foreground/80 transition-colors"
 											>
 												{project.fields.Name || "Untitled Project"}
 											</p>
 											<span
-												class="text-[11px] font-bold text-zinc-400 flex items-center gap-1 shrink-0"
+												class="text-xs font-bold flex items-center gap-1 shrink-0"
 											>
 												<Clock class="size-3.5 text-primary" />
 												{formatHours(
 													hackSecondsByName.get(
 														project.fields.hackatime ?? ""
 													) ?? 0
-												)}h
+												)}hrs
 											</span>
 										</div>
 										<p
-											class="text-zinc-500 text-[11px] font-sans tracking-normal line-clamp-1 flex gap-2"
+											class=" text-xs font-body tracking-normal line-clamp-1 flex gap-2"
 										>
 											{@html renderBadge(project.fields.Theme)}
 										</p>
 									</div>
-								{/each}
-							{:else}
-								<div>No projects yet.....</div>
+								</a>
+							{/each}
+						{:else}
+							<div class="h-full w-full flex items-center justify-center">
+								<a href="/dashboard/projects">
+									<Button variant="primary">Create Your first Project!</Button>
+								</a>
+							</div>
+						{/if}
+					</div>
+
+					<a
+						href="/dashboard/projects"
+						class="self-end font-body text-card-foreground font-bold text-md uppercase tracking-widest hover:underline pt-3 flex items-center gap-1 shrink-0"
+					>
+						All Mixes
+					</a>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
+					<div
+						class="  flex flex-col gap-2 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
+					>
+						<div class="flex items-center justify-between">
+							<p
+								class="text-card-foreground text-xs font-bold uppercase tracking-widest flex items-center"
+							>
+								HCA Configs
+								<a
+									href="/docs/issues/hca-configs"
+									target="_blank"
+									rel="noreferrer"
+								>
+									<CircleQuestionMark class="ml-1.5 size-3" />
+								</a>
+							</p>
+							{#if data.misconfigured.length > 0}
+								<a href="/auth">
+									<Button variant="primary">Re-login</Button>
+								</a>
 							{/if}
 						</div>
-
-						<a
-							href="/dashboard/projects"
-							class="self-end text-primary font-bold text-xs uppercase tracking-widest hover:underline pt-2 flex items-center gap-1 shrink-0"
-						>
-							View all mixes →
-						</a>
+						<div class="flex items-center gap-2">
+							<span
+								class="h-2 w-2 rounded-full {data.misconfigured.length === 0
+									? 'bg-primary'
+									: 'bg-red-700'}"
+							></span>
+							<span
+								class="font-body font-bold uppercase text-xs tracking-wider {data
+									.misconfigured.length === 0
+									? 'text-primary'
+									: 'text-red-700'}"
+							>
+								{data.misconfigured.length === 0
+									? "Complete"
+									: data.misconfigured.join(", ") + " Misconfigured"}
+							</span>
+						</div>
 					</div>
-				</div>
 
-				<div class="relative w-full shrink-0">
 					<div
-						class="absolute inset-0 bg-primary/40 translate-x-[4px] translate-y-[4px] rounded-md"
-					></div>
-					<div
-						class="relative flex flex-col gap-3 bg-black/90 border-2 border-primary p-4 rounded-md"
+						class="  flex flex-col gap-2 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
-						<h2
-							class="font-alchemize font-black text-primary text-sm uppercase tracking-wider"
+						<p
+							class="text-card-foreground text-xs font-bold uppercase tracking-widest"
 						>
-							Inventory Currencies
-						</h2>
-						<div class="gap-3 grid grid-cols-2">
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
+							YSWS Eligibility
+						</p>
+						<div class="flex items-center gap-2">
+							<span
+								class="h-2 w-2 rounded-full {data.eligiblity
+									? 'bg-primary'
+									: 'bg-red-700'}"
+							></span>
+							<span
+								class="font-body font-bold uppercase text-xs tracking-wider {data.eligiblity
+									? 'text-primary'
+									: 'text-red-700'}"
 							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-redstone.png"
-										alt="Redstone"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Redstone
-									</p>
-									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
-									>
-										{userCurrencies.redstone ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-glowstone.png"
-										alt="Glowstone"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Glowstone
-									</p>
-									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
-									>
-										{userCurrencies.glowstone ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/alch-aquaregia.png"
-										alt="Aqua Regia"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Aqua Regia
-									</p>
-									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
-									>
-										{userCurrencies.aqua_regia ?? 0}
-									</p>
-								</div>
-							</div>
-							<div
-								class="flex items-center gap-2 bg-black/90 border border-primary/20 p-2 rounded-md"
-							>
-								<div class="bg-black/90 p-1 shrink-0 rounded">
-									<img
-										src="/Alchemize.png"
-										alt="Potion Mix"
-										class="w-5 h-5 object-contain"
-									/>
-								</div>
-								<div class="min-w-0">
-									<p
-										class="text-zinc-400 text-[9px] uppercase font-bold tracking-wider truncate"
-									>
-										Potion Mix
-									</p>
-									<p
-										class="font-alchemize font-black text-white text-base leading-none mt-0.5"
-									>
-										{userCurrencies.potion_mix ?? 0}
-									</p>
-								</div>
-							</div>
+								{data.eligiblity ? "Eligible" : "Not Eligible"}
+							</span>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	</main>
-
-	<div class="w-full relative z-30 flex justify-center shrink-0">
-		<div
-			class="w-full md:w-[95%] max-w-5xl bg-black/90 border-2 border-primary/60 backdrop-blur-md px-4 py-3 md:px-10 rounded-xl"
-		>
-			<div class="mx-auto flex items-center justify-between gap-2 sm:gap-4">
+			<div class="flex flex-col gap-4 flex-1 min-h-0">
 				<div
-					class="flex items-center gap-1 sm:gap-3 overflow-x-auto no-scrollbar w-full"
+					class="flex flex-col bg-card border border-border/70 p-5
+						   rounded-tl-2xl rounded-br-2xl rounded-md
+						   flex-2 min-h-0"
 				>
-					{#each navItems as item}
-						<a
-							href={item.href}
-							class="flex items-center gap-2 bg-black border-2 border-primary/30 px-3 py-2 rounded text-zinc-300 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all shadow-[2px_2px_0px_0px_rgba(var(--primary),0.1)] active:translate-x-0.5 active:translate-y-0.5 shrink-0"
-						>
-							<svelte:component this={item.icon} class="w-4 h-4 stroke-2" />
-							<span
-								class="font-alchemize font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-								>{item.label}</span
+					<div
+						class="flex items-center justify-between pb-3 shrink-0
+							   border-b border-border/50 mb-3"
+					>
+						<div class="flex items-center gap-2">
+							<Newspaper class="size-5 text-primary" />
+							<h2
+								class="font-display font-black text-card-foreground
+									   text-lg uppercase tracking-wider"
 							>
-						</a>
-					{/each}
+								News & Updates
+							</h2>
+						</div>
+					</div>
 
-					{#if !!data.admin}
-						<a
-							href="/admin"
-							class="flex items-center gap-2 bg-black border-2 border-red-500/30 px-3 py-2 rounded text-zinc-300 hover:text-red-400 hover:border-red-500 hover:bg-red-500/5 transition-all shadow-[2px_2px_0px_0px_rgba(239,68,68,0.1)] active:translate-x-0.5 active:translate-y-0.5 shrink-0"
+					<div class="flex-1 overflow-y-auto pr-1 no-scrollbar">
+						<div
+							class="group border-l-2 border-primary/60
+								   bg-secondary/40 p-4 rounded-r-md
+								   transition-colors hover:bg-secondary/70"
 						>
-							<ShieldUser class="w-4 h-4 stroke-2 text-red-500" />
-							<span
-								class="font-alchemize font-bold text-[11px] uppercase tracking-wider hidden sm:inline"
-								>Admin</span
+							<div class="flex items-center justify-between gap-3">
+								<span
+									class="text-[10px] font-bold text-muted-foreground
+										   tracking-widest uppercase"
+								>
+									August 23th 2026
+								</span>
+
+								<span
+									class="text-[9px] font-bold uppercase tracking-widest
+										   text-primary"
+								>
+									Season 2
+								</span>
+							</div>
+
+							<h3 class="text-sm font-bold text-secondary-foreground mt-1">
+								Alchemize Season 2
+							</h3>
+
+							<p
+								class="text-secondary-foreground/70 text-xs font-sans
+									   mt-1.5 leading-relaxed"
 							>
-						</a>
-					{/if}
+								Alchemize Season 2 has officially started! Go make new projects
+								now!
+							</p>
+						</div>
+					</div>
 				</div>
-				<div
-					class="font-alchemize font-black uppercase text-xs tracking-widest text-primary/60 hidden md:block select-none shrink-0 pl-4"
-				>
-					Quick Actions
+
+				<div class="grid grid-cols-2 grid-rows-2 gap-4 flex-1 min-h-0">
+					<a
+						href="/refer"
+						class="group flex items-center justify-between gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
+					>
+						<div class="flex items-center gap-3 min-w-0">
+							<div
+								class="size-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center"
+							>
+								<Users class="size-5 text-primary" />
+							</div>
+
+							<div class="min-w-0">
+								<h3 class="font-bold text-sm text-secondary-foreground">
+									Refer people
+								</h3>
+
+								<p class="text-xs text-muted-foreground truncate">
+									Invite friends to Alchemize
+								</p>
+							</div>
+						</div>
+
+						<ArrowUpRight
+							class="size-4 shrink-0 text-muted-foreground transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+						/>
+					</a>
+
+					<a
+						href="/dashboard/shop"
+						class="group row-span-2 flex items-center justify-evenly gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
+					>
+						<div class="flex flex-col items-center">
+							<h3
+								class="font-display font-black uppercase tracking-wider text-lg text-secondary-foreground"
+							>
+								Shop
+							</h3>
+
+							<p class="text-xs text-muted-foreground">
+								Browse the Alchemize shop
+							</p>
+							<div
+								class="flex items-center gap-1.5 mt-2 text-xs font-bold uppercase tracking-widest text-primary"
+							>
+								Explore
+								<ArrowUpRight
+									class="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+								/>
+							</div>
+						</div>
+
+						<div
+							class="size-15 px-2 py-1 rounded-2xl bg-primary/10 flex items-center justify-center"
+						>
+							<ShoppingBasket class="size-11 text-primary" />
+						</div>
+					</a>
+
+					<a
+						href="/docs"
+						class="group flex items-center justify-between gap-3 bg-secondary/70 border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md transition-all duration-200 hover:bg-secondary hover:border-border/90"
+					>
+						<div class="flex items-center gap-3 min-w-0">
+							<div
+								class="size-10 shrink-0 rounded-lg bg-primary/10
+									   flex items-center justify-center"
+							>
+								<Newspaper class="size-5 text-primary transition-transform" />
+							</div>
+
+							<div class="min-w-0">
+								<h3 class="font-bold text-sm text-secondary-foreground">
+									Documentation
+								</h3>
+
+								<p
+									class="text-[11px] text-muted-foreground mt-0.5
+										   truncate"
+								>
+									Learn how everything works
+								</p>
+							</div>
+						</div>
+
+						<ArrowUpRight
+							class="size-4 shrink-0 text-muted-foreground
+								   transition-all group-hover:text-primary
+								   group-hover:translate-x-0.5
+								   group-hover:-translate-y-0.5"
+						/>
+					</a>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</main>
 
 <style>
-	.bg-gradbg {
-		background: linear-gradient(
-			to bottom right,
-			var(--color-neutral-950),
-			#1a090c,
-			#2e030f
-		);
-	}
-
 	:global(.no-scrollbar::-webkit-scrollbar) {
 		display: none;
 	}

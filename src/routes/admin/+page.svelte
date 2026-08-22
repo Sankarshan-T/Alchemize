@@ -46,7 +46,7 @@
 	const visibleButtons = adminButtons.filter(b => b.show)
 
 	const buttonClass =
-		"bg-transparent py-4 text-lg hover:scale-103 hover:bg-admin-primary/10 hover:text-admin-text hover:border-admin-primary border-2 flex items-center justify-center gap-y-2 flex-col rounded-xl transition"
+		"bg-transparent py-4 text-lg hover:scale-103 hover:bg-primary/10 hover:text-primary hover:border-primary border-2 flex items-center justify-center gap-y-2 flex-col rounded-xl transition"
 </script>
 
 <svelte:head>
@@ -62,15 +62,15 @@
 		onclick={() => {
 			window.location.href = "/dashboard"
 		}}
-		class="bg-transparent p-2 text-sm hover:scale-103 hover:bg-admin-primary/10 hover:-translate-y-px border-2 hover:border-admin-primary flex items-center just-center flex-col rounded-xl transition absolute top-5 left-5 group"
+		class="bg-transparent p-2 text-sm hover:scale-103 hover:bg-primary/10 hover:-translate-y-px border-2 hover:border-primary flex items-center just-center flex-col rounded-xl transition absolute top-5 left-5 group"
 	>
-		<Home class="h-5 w-5 group-hover:text-admin-primary" />
+		<Home class="h-5 w-5 group-hover:text-primary" />
 	</button>
-	<img src="/Alchemize-Admin.png" alt="alchemize" class="h-35" />
-	<h1 class="text-5xl text-admin-primary font-alchemize font-bold">
+	<img src="/pmix_v2.png" alt="alchemize" class="h-35" />
+	<h1 class="text-5xl text-primary font-alchemize font-bold">
 		Alchemize Admin
 	</h1>
-	<h1 class="text-xl text-white font-alchemize font-medium">
+	<h1 class="text-xl text-primary-foreground font-alchemize font-medium">
 		Where would you like to go today, {data.name || "Admin"}?
 	</h1>
 	<nav

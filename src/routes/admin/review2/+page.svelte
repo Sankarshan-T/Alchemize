@@ -219,7 +219,8 @@
 	let range = $state("")
 	let loader = $state(false)
 	const secsToHours = (secs: number): number => Math.round(secs / 360) / 10
-	const hackatimeDays = () => Object.keys(currentHackatimeAnalysis?.dayMap ?? {})
+	const hackatimeDays = () =>
+		Object.keys(currentHackatimeAnalysis?.dayMap ?? {})
 	const reviewRange = () => {
 		const days = hackatimeDays()
 		return {
@@ -513,7 +514,7 @@
 </svelte:head>
 
 <main
-	class="w-screen h-screen text-admin-text font-sans overflow-hidden p-6 flex gap-6"
+	class="w-screen h-screen text-primary font-sans overflow-hidden p-6 flex gap-6"
 >
 	<div class="fixed inset-0 bg-black/20 -z-10"></div>
 	<div
@@ -652,9 +653,9 @@
 												)
 											)}
 										>
-											Trust: {currentHackatimeAnalysis?.trustFactor?.trustLevel ??
-												"unknown"}{currentHackatimeAnalysis?.trustFactor
-												?.trustValue != null
+											Trust: {currentHackatimeAnalysis?.trustFactor
+												?.trustLevel ?? "unknown"}{currentHackatimeAnalysis
+												?.trustFactor?.trustValue != null
 												? ` (${currentHackatimeAnalysis.trustFactor.trustValue})`
 												: ""}
 										</span>
@@ -683,7 +684,7 @@
 								href={currentProject.demo}
 								target="_blank"
 								rel="noreferrer noopener"
-								class="text-[11px] font-medium px-2.5 py-1 bg-admin-primary/20 hover:bg-admin-primary/30 text-admin-text rounded-md transition"
+								class="text-[11px] font-medium px-2.5 py-1 bg-primary/20 hover:bg-primary/30 text-primary rounded-md transition"
 								>Demo</a
 							>
 							<a
@@ -882,7 +883,7 @@
 									<div class="ai h-6 w-9/10">
 										<div class="bar h-full w-full flex">
 											<div
-												class="h-full bg-admin-primary flex items-center justify-center text-xs overflow-hidden text-zinc-200"
+												class="h-full bg-primary flex items-center justify-center text-xs overflow-hidden text-zinc-200"
 												style={`width: ${(currentHackatimeAnalysis.codingSec / totalTime) * 100}%`}
 											>
 												Normal Coding Time: {Math.round(
@@ -1023,7 +1024,7 @@
 								Return
 							</Button>
 							<Button
-								class="bg-emerald-600 hover:bg-emerald-500 text-white w-full sm:w-auto px-5 py-2 text-xs font-medium transition rounded-lg flex items-center justify-center gap-x-2"
+								class="bg-emerald-600 hover:bg-emerald-500 text-primary-foreground w-full sm:w-auto px-5 py-2 text-xs font-medium transition rounded-lg flex items-center justify-center gap-x-2"
 								onclick={() => (confirmPushOpen = true)}
 								disabled={projectDescriptionLength < 250 || loader}
 							>
@@ -1112,7 +1113,7 @@
 					</Button>
 				{/if}
 				<Button
-					class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-medium transition rounded-lg"
+					class="bg-emerald-600 hover:bg-emerald-500 text-primary-foreground px-4 py-2 text-xs font-medium transition rounded-lg"
 					onclick={() => copyToClipboard(template, "Justification")}
 				>
 					Copy to clipboard
@@ -1145,7 +1146,7 @@
 						confirmRejectOpen = false
 						await rejectT2()
 					}}
-					class="bg-rose-600 hover:bg-rose-500 text-white text-xs"
+					class="bg-rose-600 hover:bg-rose-500 text-primary-foreground text-xs"
 				>
 					Yes, Return
 				</Button>
@@ -1178,7 +1179,7 @@
 						confirmPushOpen = false
 						await sendToDatabase()
 					}}
-					class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs"
+					class="bg-emerald-600 hover:bg-emerald-500 text-primary-foreground text-xs"
 				>
 					Yes, Push
 				</Button>

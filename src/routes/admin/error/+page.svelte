@@ -14,13 +14,11 @@
 </svelte:head>
 
 <div class="w-full h-screen flex flex-col items-center justify-center gap-y-4">
-	<img src="/Alchemize-Admin.png" alt="alchemize" class="h-40" />
+	<img src="/pmix_v2.png" alt="alchemize" class="h-40" />
 	<h1 class="text-6xl font-bold">Error {status}</h1>
 	<p class="text-2xl font-light font-mono">{message}</p>
 	<a href="/admin/login">
-		<Button
-			class="bg-admin-primary px-15 py-5 text-admin-text text-lg hover:scale-103"
-		>
+		<Button class="bg-primary px-15 py-5 text-primary text-lg hover:scale-103">
 			Are you sure????
 		</Button>
 	</a>

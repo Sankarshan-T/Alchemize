@@ -5,7 +5,7 @@
 <div
 	class="h-screen w-full bg-gradbg flex flex-col gap-y-5 items-center justify-center p-5"
 >
-	<p class="max-w-3xl text-center text-xl text-admin-text">
+	<p class="max-w-3xl text-center text-xl text-primary">
 		Heya! While we conduct some mandatory maintenance, the dashboard is
 		temporarily unavailable. Feel free to read our documentation while you wait
 	</p>

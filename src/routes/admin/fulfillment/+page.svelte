@@ -72,7 +72,7 @@
 					type="text"
 					placeholder="Search by ID or item..."
 					bind:value={searchQuery}
-					class="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-admin-primary"
+					class="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-1 focus-visible:ring-primary"
 				/>
 			</div>
 
@@ -134,7 +134,7 @@
 									"text-xs transition-all duration-200 px-4 h-9 font-medium",
 									order.fields.fulfiller
 										? "border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-										: "bg-emerald-600 text-white hover:bg-emerald-600/50 border-transparent shadow-md shadow-emerald-950/20"
+										: "bg-emerald-600 text-primary-foreground hover:bg-emerald-600/50 border-transparent shadow-md shadow-emerald-950/20"
 								)}
 							>
 								{order.fields.fulfiller ? "View Details" : "Process order"}

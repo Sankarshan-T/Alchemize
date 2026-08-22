@@ -48,14 +48,16 @@
 				<h1
 					class="text-2xl font-alchemize font-black uppercase tracking-wider line-clamp-1 text-primary"
 				>
-					Explore <span class="text-[0.5rem] text-white">Alchemize</span>
+					Explore <span class="text-[0.5rem] text-primary-foreground"
+						>Alchemize</span
+					>
 				</h1>
 			</div>
 
 			<Button
 				size="sm"
 				variant="outline"
-				class="border-2 border-primary bg-background text-white hover:bg-primary hover:text-primary-foreground font-bold tracking-wider uppercase rounded-xl transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.3)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none mr-10"
+				class="border-2 border-primary bg-background text-primary-foreground hover:bg-primary hover:text-primary-foreground font-bold tracking-wider uppercase rounded-xl transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.3)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none mr-10"
 			>
 				<Filter class="size-4 mr-1 stroke-3" />
 				<span>Your mixes</span>
@@ -70,7 +72,7 @@
 				type="text"
 				placeholder="Search mixes..."
 				bind:value={searchQuery}
-				class="pl-10 border-2 border-primary/30 bg-black/40 text-white rounded focus-visible:ring-primary"
+				class="pl-10 border-2 border-primary/30 bg-black/40 text-primary-foreground rounded focus-visible:ring-primary"
 			/>
 		</div>
 
@@ -90,7 +92,7 @@
 							class="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-45 group-hover:opacity-65 transition-opacity duration-200"
 						>
 							<img
-								src="/Alchemize.png"
+								src="/pmix_v2.png"
 								alt=""
 								class="w-full h-full object-cover scale-100 group-hover:scale-[1.03] transition-transform duration-300"
 							/>
@@ -107,7 +109,7 @@
 							>
 								<div class="w-full flex items-center justify-between gap-4">
 									<h2
-										class="text-2xl font-black tracking-tight text-white line-clamp-1 [text-shadow:0_2px_4px_rgba(0,0,0,0.8)] font-alchemize"
+										class="text-2xl font-black tracking-tight text-primary-foreground line-clamp-1 [text-shadow:0_2px_4px_rgba(0,0,0,0.8)] font-alchemize"
 									>
 										{project.name}
 									</h2>
@@ -130,7 +132,7 @@
 							<div class="flex items-center justify-end gap-x-2 p-0">
 								<a href="/" target="_blank">
 									<Button
-										class="border-2 border-primary bg-background text-white hover:bg-primary hover:text-primary-foreground text-[10px] font-bold tracking-wider uppercase rounded-xl transition-all duration-100 active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-none py-1"
+										class="border-2 border-primary bg-background text-primary-foreground hover:bg-primary hover:text-primary-foreground text-[10px] font-bold tracking-wider uppercase rounded-xl transition-all duration-100 active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-none py-1"
 									>
 										<div class="flex items-center justify-end w-full gap-x-2">
 											<ArrowUpRight class="size-3.5 opacity-80" />
@@ -140,7 +142,7 @@
 								</a>
 								<a href="/" target="_blank">
 									<Button
-										class="border-2 border-primary bg-background text-white hover:bg-primary hover:text-primary-foreground text-[10px] font-bold tracking-wider uppercase rounded-xl transition-all duration-100 active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-none py-1"
+										class="border-2 border-primary bg-background text-primary-foreground hover:bg-primary hover:text-primary-foreground text-[10px] font-bold tracking-wider uppercase rounded-xl transition-all duration-100 active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-none py-1"
 									>
 										<div class="flex items-center justify-end w-full gap-x-2">
 											<ArrowUpRight class="size-3.5 opacity-80" />

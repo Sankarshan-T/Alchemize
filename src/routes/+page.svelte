@@ -6,8 +6,6 @@
 		FlaskConical,
 		Rocket,
 		ShoppingCart,
-		X,
-		Newspaper,
 		LoaderCircleIcon,
 	} from "lucide-svelte"
 	import { onMount } from "svelte"
@@ -17,9 +15,8 @@
 		PUBLIC_HACKCLUB_REDIRECT,
 		PUBLIC_TURNED_OFF,
 	} from "$env/static/public"
-	import { scopes } from "$lib/utils"
 	import Accordion from "$lib/components/accordion.svelte"
-	import { ShoppingBag, User } from "@lucide/svelte"
+	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
@@ -37,7 +34,7 @@
 		PUBLIC_TURNED_OFF !== "false"
 			? `./turned-off`
 			: hasaccessToken
-				? `./dashboard`
+				? `./dashboard/projects`
 				: `/auth`
 	)
 
@@ -80,6 +77,10 @@
 	}
 
 	onMount(() => {
+		const html = document.documentElement
+		const wasDark = html.classList.contains("dark")
+		html.classList.remove("dark")
+
 		if (data.error) {
 			alert(data.error)
 		}
@@ -102,35 +103,18 @@
 				? `./turned-off`
 				: hasaccessToken
 					? `./refer`
-					: `https://auth.hackclub.com/oauth/authorize?client_id=${clientId}&response_type=code&scope=${scopes}&redirect_uri=${uri}`
+					: `/auth`
 		fetch("/rsvp")
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
+
+		return () => {
+			if (wasDark) html.classList.add("dark")
+		}
 	})
 </script>
 
-<div
-	class="fixed -z-20 bg-[url('/alchbg.png')] bg-cover bg-center w-screen h-screen blur-sm"
-></div>
-<div
-	class="relative min-h-screen w-full bg-[linear-gradient(to_bottom,#00000030_20%,#000c_70%)] text-zinc-100 font-mono tracking-wide selection:bg-primary selection:text-primary-foreground overflow-x-hidden"
->
-	<div class="fixed inset-0 bg-black/25 z-0 pointer-events-none"></div>
-
-	<div
-		class="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none opacity-80"
-	></div>
-
-	<div
-		class="fixed top-0 left-0 w-full md:left-auto md:right-0 md:w-[260px] md:h-[260px] md:overflow-hidden z-50 pointer-events-none"
-	>
-		<div
-			class="w-full h-8 md:absolute md:top-[88px] md:-right-[70px] md:w-[360px] md:h-11 bg-primary/70 shadow-black shadow-md backdrop-blur-sm text-primary-foreground text-[10px] md:text-sm font-mono font-black uppercase tracking-[0.2em] md:rotate-45 border-b-2 md:border-y-2 border-black pointer-events-auto select-none flex items-center justify-center text-center"
-		>
-			LAUNCHED on 21st June 2026
-		</div>
-	</div>
-
+<div class="home-page relative min-h-screen w-full overflow-x-hidden">
 	<div
 		class="absolute top-3 left-0 z-50 transition-transform duration-100 hover:scale-[1.02]"
 	>
@@ -142,556 +126,354 @@
 			/>
 		</a>
 	</div>
-	<main class="z-10 relative w-full px-4 sm:px-6 md:px-10">
+
+	<div
+		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
+	></div>
+	<div class="fixed inset-0 z-0 bg-background/90 bg-contain bg-scale"></div>
+	<img
+		src="/pmix_v2.png"
+		alt=""
+		class="absolute h-40 -rotate-25 object-contain top-[50vh] left-[10vw] opacity-80 animate-pulse"
+	/>
+	<img
+		src="/pmix_v2.png"
+		alt=""
+		class="absolute h-40 rotate-25 object-contain top-[50vh] right-[10vw] opacity-80 animate-pulse"
+	/>
+	<main class="relative w-full px-4 sm:px-6 md:px-10 home">
 		<section
-			class="flex flex-col justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
+			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
 		>
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col items-center gap-5">
 				<div
-					class="flex items-center gap-2 text-xs font-bold text-primary tracking-[0.3em] uppercase"
+					class="flex items-center gap-2 text-2xl font-decor text-foreground tracking-[0.3em] uppercase"
 				>
-					<LoaderCircleIcon class="text-primary animate-spin h-3 w-3" />
-					<span>Season 1</span>
+					<span>Season 2</span>
 				</div>
 				<h1
-					class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-alchemize tracking-tighter uppercase text-primary [text-shadow:4px_4px_0px_rgba(var(--primary),0.15)] selection:bg-white selection:text-black pointer-events-none select-none break-all sm:break-normal"
+					class="text-7xl sm:text-6xl md:text-9xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
 				>
 					ALCHEMIZE
 				</h1>
-			</div>
-
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full lg:w-[60%]">
-				<div class="max-w-full border-l-4 border-primary p-4 md:p-6 rounded-md">
-					<p
-						class="text-zinc-200 text-base md:text-xl leading-relaxed uppercase tracking-wide"
-					>
-						3 Themes | 3 Seasons <br />
-						<strong
-							class="text-white font-black text-lg md:text-2xl block mt-1 tracking-tight"
-						>
-							And a whole lot of mixing
-						</strong>
-					</p>
-					<div
-						class="inline-block mt-4 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest rounded-md"
-					>
-						Ages 13-18 Only
-					</div>
-				</div>
-				<!-- <div
-					class="flex flex-col gap-1 max-w-full bg-black/50 border border-zinc-800 p-4 rounded-md font-mono"
+				<h3
+					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none flex flex-col items-center break-all sm:break-normal"
 				>
-					{#if timeLeft > 0}
-						<div
-							class="text-[10px] text-zinc-500 tracking-wider font-bold uppercase mb-1"
-						>
-							// TIME_REMAINING_UNTIL_LAUNCH
-						</div>
-
-						<div
-							class="flex items-center gap-2 sm:gap-4 text-zinc-300 overflow-x-auto"
-						>
-							<div class="flex flex-col items-center">
-								<span
-									class="text-xl sm:text-2xl font-black text-primary font-mono"
-									>{time.days}</span
-								>
-								<span class="text-[9px] uppercase tracking-widest text-zinc-500"
-									>Days</span
-								>
-							</div>
-							<span class="text-lg sm:text-xl text-zinc-700 font-black mb-4"
-								>:</span
-							>
-							<div class="flex flex-col items-center">
-								<span
-									class="text-xl sm:text-2xl font-black text-zinc-100 font-mono"
-									>{time.hours}</span
-								>
-								<span class="text-[9px] uppercase tracking-widest text-zinc-500"
-									>Hrs</span
-								>
-							</div>
-							<span class="text-lg sm:text-xl text-zinc-700 font-black mb-4"
-								>:</span
-							>
-							<div class="flex flex-col items-center">
-								<span
-									class="text-xl sm:text-2xl font-black text-zinc-100 font-mono"
-									>{time.minutes}</span
-								>
-								<span class="text-[9px] uppercase tracking-widest text-zinc-500"
-									>Min</span
-								>
-							</div>
-							<span class="text-lg sm:text-xl text-zinc-700 font-black mb-4"
-								>:</span
-							>
-							<div class="flex flex-col items-center">
-								<span
-									class="text-xl sm:text-2xl font-black text-zinc-100 font-mono animate-pulse"
-									>{time.seconds}</span
-								>
-								<span class="text-[9px] uppercase tracking-widest text-zinc-500"
-									>Sec</span
-								>
-							</div>
-						</div>
-
-						<div
-							class="mt-2 pt-2 border-t border-zinc-900/50 flex flex-col gap-0.5 text-[10px] uppercase font-bold tracking-wider text-zinc-400"
-						>
-							<div>
-								<span class="text-zinc-600">LAUNCH_DATE:</span> JUNE 21, 2026
-							</div>
-							<div>
-								<span class="text-zinc-600">TARGET_TIME:</span> 01:00 UTC
-							</div>
-						</div>
-					{:else}
-						<div
-							class="text-2xl font-black text-primary uppercase tracking-wider flex flex-col items-center justify-center text-center gap-y-2"
-						>
-							ALCHEMIZE HAS STARTED!
-							<img src="/Alchemize.png" alt="" class="h-20" />
-						</div>
-					{/if}
-				</div> -->
-			</div>
-
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-[60%]">
-				<a
-					href={authUrl}
-					class="group relative w-full"
-					onclick={() => (showRotator = true)}
-				>
-					<div
-						class="absolute inset-0 bg-primary translate-x-0.5 translate-y-0.5 rounded-md transition-transform group-hover:translate-x-0 group-hover:translate-y-0"
-					></div>
-					<div
-						class="relative flex items-center justify-between border-2 border-primary bg-black text-primary text-xl font-black uppercase tracking-widest text-center px-4 md:px-6 py-3 rounded-md transition-transform"
+					Make themed projects, get themed prizes!<br />
+					<span class="text-sm shadow-none font-note font-light tracking-wider">
+						With more mixing this time</span
 					>
-						<span>GET STARTED</span>
-						{#if showRotator}
-							<div
-								class="w-5 h-5 border-2 border-primary/20 border-t-primary rounded-full animate-spin"
-							></div>
-						{:else}
-							<div class="flex gap-0.5 font-sans tracking-normal opacity-80">
-								<ChevronsRight class="h-4 w-4" />
-							</div>
-						{/if}
-					</div>
-				</a>
-
-				<div class="grid grid-cols-2 gap-x-2 w-full">
-					<div class="group relative flex items-stretch">
-						<a
-							href="/docs"
-							class="flex items-center justify-center gap-2 md:gap-3 w-full border-2 border-zinc-800 bg-black/60 hover:bg-zinc-900/60 text-zinc-300 hover:text-white font-bold uppercase tracking-wider px-3 md:px-6 py-3 rounded-md transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.2)] text-lg md:text-lg"
+				</h3>
+				<span
+					class="mt-2 font-display text-foreground font-semibold tracking-wider"
+				>
+					Starts on 23th August 1:00 AM UTC
+				</span>
+				<div class="p-3 w-full flex items-center justify-center gap-3">
+					<a href={authUrl}>
+						<Button
+							variant="primary"
+							class="p-6 w-full text-xl justify-between flex"
 						>
-							<Newspaper class="h-4 w-4 md:h-5 md:w-5 text-primary shrink-0" />
-							<span>Docs</span>
-						</a>
-
-						<div
-							class="absolute top-full left-0 mt-2 hidden group-hover:block w-full z-50 bg-zinc-900 border-2 border-zinc-700 p-2 rounded-md text-xs text-zinc-300"
-						>
-							Read the docs here!
-						</div>
-					</div>
-					<div class="group relative flex items-stretch">
-						<a
-							href="/shop"
-							class="flex items-center justify-center gap-2 md:gap-3 w-full border-2 border-zinc-800 bg-black/60 hover:bg-zinc-900/60 text-zinc-300 hover:text-white font-bold uppercase tracking-wider px-3 md:px-6 py-3 rounded-md transition-all duration-100 shadow-[2px_2px_0px_0px_rgba(var(--primary),0.2)] text-lg md:text-lg"
-						>
-							<ShoppingBag
-								class="h-4 w-4 md:h-5 md:w-5 text-primary shrink-0"
-							/>
-							<span>Shop</span>
-						</a>
-
-						<div
-							class="absolute top-full left-0 mt-2 hidden group-hover:block w-full z-50 bg-zinc-900 border-2 border-zinc-700 p-2 rounded-md text-xs text-zinc-300"
-						>
-							Take a look at the shop!
-						</div>
-					</div>
+							<p>Get Started</p>
+							{#if showRotator}
+								<LoaderCircleIcon class="animate-spin" />
+							{:else}
+								<ChevronsRight />
+							{/if}
+						</Button>
+					</a>
+					<a href="/shop">
+						<Button variant="secondary" class="py-6">
+							<ShoppingCart class="size-8" />
+							See the shop!
+						</Button>
+					</a>
 				</div>
 			</div>
 
 			<a
 				href="#features"
-				class="self-start animate-bounce mt-4 border border-zinc-800 p-2 hover:border-primary bg-black/40 transition-colors rounded-md"
+				class="animate-bounce border border-border p-2 hover:border-primary bg-secondary transition-colors rounded-full"
 			>
-				<ArrowDown class="w-5 h-5 text-primary" />
+				<ArrowDown class="w-5 h-5 text-foreground" />
 			</a>
 		</section>
 
 		<section
 			id="features"
-			class="flex flex-col gap-12 py-24 border-t-2 border-zinc-900 relative"
+			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
 		>
-			<div class="flex flex-col gap-1">
-				<div class="text-xs uppercase text-primary font-bold tracking-[0.25em]">
-					Procedure
-				</div>
-				<h2
-					class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
+			<h2
+				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
+			>
+				HOW IT WORKS
+			</h2>
+
+			<div
+				class="grid grid-cols-1 md:grid-cols-4 gap-6 xl:gap-8 2xl:gap-10 w-full"
+			>
+				<div
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
 				>
-					HOW IT WORKS
-				</h2>
-			</div>
-
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/70 translate-x-0.5 translate-y-0.5 rounded-md"
-					></div>
-					<div
-						class="relative h-full flex flex-row gap-4 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
-					>
-						<div class="shrink-0 flex items-start pt-1">
-							<div
-								class="p-2 border border-primary bg-zinc-950/60 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors rounded-md"
-							>
-								<Blocks class="h-6 w-6" />
-							</div>
+					<div class="shrink-0 flex items-center gap-4 pt-1">
+						<div
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
+						>
+							<Blocks class="h-7 w-7" />
 						</div>
-						<div class="flex flex-col gap-1">
-							<h3
-								class="text-lg font-black uppercase tracking-tight text-white"
-							>
-								01 - Create
-							</h3>
-							<p class="text-zinc-400 text-xs leading-relaxed">
-								Pick a theme (Endless, No Internet, or Indie Gamedev) and track
-								hours via Hackatime.
-							</p>
-						</div>
+						<h3
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
+						>
+							1 - Create
+						</h3>
 					</div>
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
+						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
+						hours via Hackatime.
+					</p>
+				</div>
+				<div
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
+				>
+					<div class="shrink-0 flex items-center gap-4 pt-1">
+						<div
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
+						>
+							<Rocket class="h-7 w-7" />
+						</div>
+						<h3
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
+						>
+							2 - Ship
+						</h3>
+					</div>
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
+						Submit your project for review by the Alchinspectors to earn theme
+						stones.
+					</p>
 				</div>
 
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/70 translate-x-0.5 translate-y-0.5 rounded-md"
-					></div>
-					<div
-						class="relative h-full flex flex-row gap-4 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
-					>
-						<div class="shrink-0 flex items-start pt-1">
-							<div
-								class="p-2 border border-primary bg-zinc-950/60 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors rounded-md"
-							>
-								<Rocket class="h-6 w-6" />
-							</div>
+				<div
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
+				>
+					<div class="shrink-0 flex items-center gap-4 pt-1">
+						<div
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
+						>
+							<FlaskConical class="h-7 w-7" />
 						</div>
-						<div class="flex flex-col gap-1">
-							<h3
-								class="text-lg font-black uppercase tracking-tight text-white"
-							>
-								02 - Ship It
-							</h3>
-							<p class="text-zinc-400 text-xs leading-relaxed">
-								Submit your project for review by the Alchinspectors to earn
-								theme currency.
-							</p>
-						</div>
+						<h3
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
+						>
+							3 - Trade
+						</h3>
 					</div>
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
+					>
+						Trade your awesome theme based stones (redstone, glowstone and
+						aqua-regia) to get potion mix!
+					</p>
 				</div>
-
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/70 translate-x-0.5 translate-y-0.5 rounded-md"
-					></div>
-					<div
-						class="relative h-full flex flex-row gap-4 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
-					>
-						<div class="shrink-0 flex items-start pt-1">
-							<div
-								class="p-2 border border-primary bg-zinc-950/60 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors rounded-md"
-							>
-								<FlaskConical class="h-6 w-6" />
-							</div>
+				<div
+					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
+				>
+					<div class="shrink-0 flex items-center gap-4 pt-1">
+						<div
+							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
+						>
+							<ShoppingCart class="h-7 w-7" />
 						</div>
-						<div class="flex flex-col gap-1">
-							<h3
-								class="text-lg font-black uppercase tracking-tight text-white"
-							>
-								03 - Mix Potions
-							</h3>
-							<p class="text-zinc-400 text-xs leading-relaxed">
-								Convert currencies into Potion Mix. Mixing multiple types grants
-								bonuses.
-							</p>
-						</div>
+						<h3
+							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
+						>
+							4 - Spend!
+						</h3>
 					</div>
-				</div>
-
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/70 translate-x-0.5 translate-y-0.5 rounded-md"
-					></div>
-					<div
-						class="relative h-full flex flex-row gap-4 bg-black border-2 border-primary group-hover:border-primary/80 p-5 rounded-md transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+					<p
+						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
 					>
-						<div class="shrink-0 flex items-start pt-1">
-							<div
-								class="p-2 border border-primary bg-zinc-950/60 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors rounded-md"
-							>
-								<ShoppingCart class="h-6 w-6" />
-							</div>
-						</div>
-						<div class="flex flex-col gap-1">
-							<h3
-								class="text-lg font-black uppercase tracking-tight text-white"
-							>
-								04 - Dynamic Shop
-							</h3>
-							<p class="text-zinc-400 text-xs leading-relaxed">
-								Spend your Potion Mix on rewards. New items are added every
-								season!
-							</p>
-						</div>
-					</div>
+						Spend your precious stones and potion mix on rewards. New items are
+						added frequently!
+					</p>
 				</div>
 			</div>
 		</section>
 
 		<section
 			id="themes"
-			class="flex flex-col gap-12 py-24 border-t-2 border-zinc-900 relative"
+			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
 		>
-			<div class="flex flex-col gap-1">
-				<div class="text-xs uppercase text-primary font-bold tracking-[0.25em]">
-					Themes
-				</div>
-				<h2
-					class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
+			<h2
+				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
+			>
+				Themes for Season 2
+			</h2>
+
+			<div class="grid grid-cols-2 gap-4 xl:gap-8 2xl:gap-10 w-full">
+				<div
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
 				>
-					The Three Themes of Season 1
-				</h2>
-			</div>
-
-			<div class="flex flex-col gap-4 w-full">
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+					<h3
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_01
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								Endless
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Create a project with an infinite Canvas. It can be a game where
-								levels generate endlessly(like pacman), It can be a paint app
-								with infinite canvas, It can also be a scientific simulation
-								which keeps on running indefinitely. It can be anything as long
-								as it has an element of infinity to it(and it never ends).
-							</p>
-						</div>
-					</div>
+						1. Bots
+					</h3>
+					<p
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
+					>
+						Make a bot! Can be anything from a discord bot or a chatbot to a
+						crazy robot or an autonomous drone.
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
+					>
+						Rewards: Redstone
+						<img src="/alch-redstone.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
-
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				<div
+					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
+				>
+					<h3
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_02
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								No Internet
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Make something that works without an internet connection, No
-								APIs, No CDNs, No fetching data from the internet, (and
-								obviously no websites), it can be a game that doesn't require an
-								internet connection, an app that uses Bluetooth to chat with
-								friends, a robot that does something cool, anything as long as
-								it works without internet.
-							</p>
-						</div>
-					</div>
+						2. Co-Op
+					</h3>
+					<p
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
+					>
+						Create a project with that involves <strong>team play</strong>...
+						could be literally anything multiplayer! Like maybe a multiplayer
+						tic-tac-toe game or a simple collaborative canvas or even a pair of
+						walkie talkies.
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
+					>
+						Rewards: Glowstone
+						<img src="/alch-glowstone.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
-
-				<div class="relative group">
-					<div
-						class="absolute inset-0 bg-primary/80 translate-x-1.5 translate-y-1.5 rounded-md transition-transform group-hover:translate-x-1 group-hover:translate-y-1"
-					></div>
-					<div
-						class="relative w-full flex flex-col md:flex-row bg-black/95 border-2 border-primary rounded-md p-5 gap-4 transition-transform hover:-translate-x-px hover:-translate-y-px"
+				<div
+					class="col-span-2 w-1/2 justify-self-center flex flex-col bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
+				>
+					<h3
+						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						<div
-							class="w-full md:w-48 shrink-0 flex flex-col justify-between border-b md:border-b-0 md:border-r border-zinc-900 pb-3 md:pb-0 md:pr-4"
-						>
-							<div
-								class="text-primary font-mono text-xs font-black uppercase tracking-widest mb-1"
-							>
-								THEME_03
-							</div>
-							<h3
-								class="text-xl font-black uppercase tracking-tight text-white font-alchemize"
-							>
-								Indie Gamedev
-							</h3>
-						</div>
-						<div class="flex-1">
-							<p class="text-zinc-300 text-xs leading-relaxed font-mono">
-								Make a game inspired by the indie game genre. It can be a
-								platformer with a unique art style, a narrative-driven
-								experience, a puzzle game with innovative mechanics, or anything
-								else that captures the spirit of indie games. Create your own
-								artstyles here that gives vibes of indie pixel art, hand drawn
-								aesthetics, The game should reflect the creativity and
-								innovation that indie games are known for.
-							</p>
-						</div>
-					</div>
+						3. ElectroArt
+					</h3>
+					<p
+						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
+					>
+						Make something by which your code returns art. Like a dynamic
+						website creating various patterns, or a strip of leds blinking in a
+						specific order and colors. It could be something cooler!
+					</p>
+					<p
+						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
+					>
+						Rewards: Aquaregia
+						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
+					</p>
 				</div>
 			</div>
 		</section>
 
 		<section
 			id="faq"
-			class="flex flex-col gap-12 py-24 border-t-2 border-zinc-900 relative"
+			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
 		>
-			<div class="flex flex-col gap-1 items-center text-center">
-				<div class="text-xs uppercase text-primary font-bold tracking-[0.25em]">
-					Information
-				</div>
-				<h2
-					class="text-3xl font-black font-alchemize tracking-tight uppercase text-white"
-				>
-					FAQ
-				</h2>
-			</div>
+			<h2
+				class="text-3xl xl:text-4xl 2xl:text-5xl font-black tracking-tight uppercase text-foreground"
+			>
+				FAQ
+			</h2>
 
-			<div class="flex flex-col gap-3 w-full max-w-4xl mx-auto">
+			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
 				<Accordion
 					Title="What is a 'ship'?"
-					Content="A 'ship' is the project you submit to this event. You can ship any general project or a project related to one of the themes"
+					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run adn is recreatable."
 				/>
 				<Accordion
-					Title="Who is Eligible?"
-					Content="Anyone ages 13-18 who isn't banned from Hack Club can participate."
+					Title="Who can participate here?"
+					Content="Anyone ages 13-18 (inclusive) can participate."
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
+					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-foreground p-1 hover:bg-primary/60 transition font-semibold rounded hover:text-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"
-					Content="If you have any questions or need help with anything, just join the <a class='text-rose-400 p-1 hover:bg-rose-900/50 transition rounded hover:text-white' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
+					Content="If you have any questions or need help with anything, just join the <a class='text-foreground p-1 hover:bg-primary/60 font-semibold transition rounded hover:text-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
 				/>
 			</div>
 		</section>
 	</main>
 
 	<footer
-		class="w-full border-t-2 border-zinc-950 bg-black/90 relative z-20 mt-24 py-16"
+		class="w-full border-t-2 border-border bg-secondary/50 relative z-20 mt-24 py-16"
 	>
 		<div
 			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
 		>
-			<div class="flex flex-col gap-4 max-w-xs">
+			<div class="flex flex-col gap-2 max-w-xs">
 				<h3
-					class="text-xl font-black font-alchemize text-primary tracking-wide uppercase"
+					class="text-xl font-black font-decor text-foreground tracking-wide uppercase"
 				>
 					Hack Club
 				</h3>
-				<p class="text-zinc-500 text-xs leading-relaxed">
-					Hack Club is the world’s largest nonprofit movement of teenagers
-					making cool projects.
+				<p class="text-muted-foreground font-display text-xs leading-relaxed">
+					Hack Club is a 501(c)(3) nonprofit and network of 100k+ technical high
+					schoolers. We believe you learn best by building, so we're creating
+					community and providing grants so you can make awesome projects.
 				</p>
-				<div class="text-zinc-600 text-[10px] mt-2 tracking-tight">
-					© Hack Club • All Rights Reserved
-				</div>
 			</div>
 
 			<div
-				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider"
+				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider font-decor"
 			>
 				<div class="flex flex-col gap-3">
-					<div class="text-zinc-500 text-[10px] font-mono tracking-widest">
-						DIRECTORY
-					</div>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
+						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/philosophy/">Philosophy</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/team/">Team Cluster</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/team/">The Team</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/brand/">Asset Brand</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/brand/">Branding</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/philanthropy/">Liquidity Fund</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/philanthropy/">Philanthropy</a
 					>
 				</div>
 				<div class="flex flex-col gap-3">
-					<div class="text-zinc-500 text-[10px] font-mono tracking-widest">
-						RESOURCES
-					</div>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/jams/">System Jams</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/jams/">Jams</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://toolbox.hackclub.com/">Toolbox Matrix</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://toolbox.hackclub.com/">Toolbox</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/conduct/">Legal Conduct</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/conduct/">Code of Conduct</a
 					>
 					<a
-						class="text-zinc-400 hover:text-primary transition-colors"
-						href="https://hackclub.com/privacy/">Data Privacy</a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://hackclub.com/privacy/">Privacy</a
 					>
 				</div>
-			</div>
-
-			<div
-				class="border border-zinc-800 p-4 bg-zinc-950/60 max-w-xs lg:text-right flex flex-col gap-1 lg:items-end w-full sm:w-auto"
-			>
-				<div class="text-[10px] tracking-widest text-zinc-500 font-mono">
-					// Credits
-				</div>
-				<div class="text-xs font-bold text-zinc-300">
-					Made by TheUtkarsh8939
-				</div>
-				<div class="text-xs font-bold text-zinc-300">& Coolcream</div>
 			</div>
 		</div>
 	</footer>
