@@ -167,7 +167,7 @@
 				<span
 					class="mt-2 font-display text-foreground font-semibold tracking-wider"
 				>
-					Starts on 23th August 1:00 AM UTC
+					Starts soon...
 				</span>
 				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>
