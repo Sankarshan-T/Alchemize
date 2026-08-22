@@ -252,7 +252,7 @@
 		<Button
 			size="sm"
 			variant="outline"
-			// onclick={() => (newProjWindowOpened = true)}
+			onclick={() => (newProjWindowOpened = true)}
 		>
 			<Plus class="size-4 mr-1 stroke-3" />
 			<span>New Mix</span>
