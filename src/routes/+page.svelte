@@ -164,7 +164,7 @@
 						With more mixing this time</span
 					>
 				</h3>
-				<span
+				<!-- <span
 					class="mt-2 font-display text-foreground font-semibold tracking-wider"
 				>
 					Starts soon...
@@ -253,8 +253,7 @@
 					<p
 						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
 					>
-						Submit your project for review by the Alchinspectors to earn theme
-						stones.
+						Submit your project for review to earn the stones.
 					</p>
 				</div>
 
@@ -327,8 +326,7 @@
 					<p
 						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
 					>
-						Make a bot! Can be anything from a discord bot or a chatbot to a
-						crazy robot or an autonomous drone.
+						Make a bot that does something useful or fun! It could be a Discord bot or a slack bot or a bot for your own website. It could be a bot that does something fun or a bot that does something useful. The choice is yours!
 					</p>
 					<p
 						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
@@ -350,8 +348,7 @@
 					>
 						Create a project with that involves <strong>team play</strong>...
 						could be literally anything multiplayer! Like maybe a multiplayer
-						tic-tac-toe game or a simple collaborative canvas or even a pair of
-						walkie talkies.
+						game or a simple collaborative canvas.
 					</p>
 					<p
 						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
@@ -366,19 +363,19 @@
 					<h3
 						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
 					>
-						3. ElectroArt
+						3. Electro Art
 					</h3>
 					<p
 						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
 					>
 						Make something by which your code returns art. Like a dynamic
-						website creating various patterns, or a strip of leds blinking in a
-						specific order and colors. It could be something cooler!
+						website creating various patterns or a generative art piece or a music visualizer. Anything that is
+						artistic and uses code to create it.
 					</p>
 					<p
 						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
 					>
-						Rewards: Aquaregia
+						Rewards: Aqua regia
 						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
 					</p>
 				</div>
@@ -398,7 +395,7 @@
 			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
 				<Accordion
 					Title="What is a 'ship'?"
-					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run adn is recreatable."
+					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run and is recreatable."
 				/>
 				<Accordion
 					Title="Who can participate here?"
@@ -406,7 +403,7 @@
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-foreground p-1 hover:bg-primary/60 transition font-semibold rounded hover:text-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
+					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'> Hackatime</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"
@@ -451,9 +448,20 @@
 						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/brand/">Branding</a
 					>
+				</div>
+				<div class="flex flex-col gap-3">
 					<a
 						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/philanthropy/">Philanthropy</a
+						href="https://hackatime.hackclub.com/">Hackatime</a
+					>
+					<a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://app.slack.com/client/E09V59WQY1E/C0ASY6R552R"
+						>join our slack</a
+					>
+					<a
+						class="text-muted-foreground hover:text-foreground transition-colors"
+						href="https://github.com/hackclub">github</a
 					>
 				</div>
 				<div class="flex flex-col gap-3">
