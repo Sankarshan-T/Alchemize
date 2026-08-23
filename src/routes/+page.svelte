@@ -348,7 +348,7 @@
 					>
 						Create a project with that involves <strong>team play</strong>...
 						could be literally anything multiplayer! Like maybe a multiplayer
-						tic-tac-toe game or a simple collaborative canvas.
+						game or a simple collaborative canvas.
 					</p>
 					<p
 						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
@@ -395,7 +395,7 @@
 			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
 				<Accordion
 					Title="What is a 'ship'?"
-					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run adn is recreatable."
+					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run and is recreatable."
 				/>
 				<Accordion
 					Title="Who can participate here?"
@@ -403,7 +403,7 @@
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'>Hackatime</a> and hardware time is tracked through <a class='text-foreground p-1 hover:bg-primary/60 transition font-semibold rounded hover:text-foreground' target='_blank' href='lapse.hackclub.com'>Lapse</a>"
+					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'> Hackatime</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"
