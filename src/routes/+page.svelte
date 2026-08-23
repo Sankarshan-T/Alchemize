@@ -164,11 +164,11 @@
 						With more mixing this time</span
 					>
 				</h3>
-				<span
+				<!-- <span
 					class="mt-2 font-display text-foreground font-semibold tracking-wider"
 				>
 					Starts on 23th August 1:00 AM UTC
-				</span>
+				</span> -->
 				<div class="p-3 w-full flex items-center justify-center gap-3">
 					<a href={authUrl}>
 						<Button
@@ -447,10 +447,6 @@
 					<a
 						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/brand/">Branding</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/philanthropy/">Philanthropy</a
 					>
 				</div>
 				<div class="flex flex-col gap-3">
