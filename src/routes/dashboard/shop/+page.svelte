@@ -441,7 +441,7 @@
 	</div>
 </main>
 
-<!-- {#if loggedIn}
+{#if loggedIn}
 	<ShopDialog
 		allItems={shopItems}
 		bind:open={isDialogOpen}
@@ -451,7 +451,7 @@
 	/>
 
 	<OrdersDialog bind:open={ordersDialogOpen} orders={data.orders ?? []} />
-{/if} -->
+{/if}
 
 <style>
 	.shadow-red {
