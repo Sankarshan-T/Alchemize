@@ -430,7 +430,7 @@
 									class="text-[10px] font-bold text-muted-foreground
 										   tracking-widest uppercase"
 								>
-									August 23th 2026
+									unknown
 								</span>
 
 								<span
@@ -449,8 +449,7 @@
 								class="text-secondary-foreground/70 text-xs font-sans
 									   mt-1.5 leading-relaxed"
 							>
-								Alchemize Season 2 has officially started! Go make new projects
-								now!
+								Alchemize Season 2 is starting soon!!!! Stay tuned!!!
 							</p>
 						</div>
 					</div>
