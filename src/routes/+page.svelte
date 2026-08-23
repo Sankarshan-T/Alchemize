@@ -448,10 +448,6 @@
 						class="text-muted-foreground hover:text-foreground transition-colors"
 						href="https://hackclub.com/brand/">Branding</a
 					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/philanthropy/">Philanthropy</a
-					>
 				</div>
 				<div class="flex flex-col gap-3">
 					<a
