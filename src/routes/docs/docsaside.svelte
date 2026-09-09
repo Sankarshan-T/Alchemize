@@ -12,7 +12,7 @@
 </script>
 
 <aside
-	class="relative no-scrollbar bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border p-5 border-r-2 scrollbar-none"
+	class="relative scrollbar-none bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border p-5 border-r-2 scrollbar-none"
 >
 	<div
 		class="sidebar-group flex flex-col gap-2 items-center scrollbar-none w-full pb-5 border-b"
@@ -74,10 +74,10 @@
 
 <style>
 	@layer utilities {
-		.no-scrollbar::-webkit-scrollbar {
+		.scrollbar-none::-webkit-scrollbar {
 			display: none;
 		}
-		.no-scrollbar {
+		.scrollbar-none {
 			-ms-overflow-style: none;
 			scrollbar-width: none;
 		}

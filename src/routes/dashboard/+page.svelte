@@ -282,7 +282,7 @@
 					</div>
 
 					<div
-						class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 no-scrollbar"
+						class="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 scrollbar-none"
 					>
 						{#if projects && projects.length > 0}
 							{#each projects as project}
@@ -419,7 +419,7 @@
 						</div>
 					</div>
 
-					<div class="flex-1 overflow-y-auto pr-1 no-scrollbar">
+					<div class="flex-1 overflow-y-auto pr-1 scrollbar-none">
 						<div
 							class="group border-l-2 border-primary/60
 								   bg-secondary/40 p-4 rounded-r-md
@@ -554,10 +554,10 @@
 </main>
 
 <style>
-	:global(.no-scrollbar::-webkit-scrollbar) {
+	:global(.scrollbar-none::-webkit-scrollbar) {
 		display: none;
 	}
-	:global(.no-scrollbar) {
+	:global(.scrollbar-none) {
 		-ms-overflow-style: none;
 		scrollbar-width: none;
 	}
