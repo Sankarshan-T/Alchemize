@@ -119,8 +119,8 @@
 	let disabled = $derived(isDisabled(currency, item.price, qty))
 
 	let grantUnitValue = $derived.by(() => {
-		if (!item.name) return 0
-		const match = item.name.match(/\$(\d+(?:\.\d+)?)/)
+		const grantText = `${item.name} ${item.description}`
+		const match = grantText.match(/\$(\d+(?:\.\d+)?)/)
 		return match ? parseFloat(match[1]) : 0
 	})
 
@@ -132,7 +132,7 @@
 	}
 
 	function handleGrantInput(val: number) {
-		grantAmount = Math.max(0, val)
+		grantAmount = Math.max(unitValue, val)
 		if (unitValue > 0) {
 			qty = Math.max(1, Math.floor(grantAmount / unitValue))
 		}
@@ -294,10 +294,10 @@
 						</Button>
 
 						<Button
-							// onclick={() => {
-							// 	onConfirm(qty)
-							// 	open = false
-							// }}
+							onclick={() => {
+								onConfirm(qty)
+								open = false
+							}}
 							{disabled}
 							variant="primary"
 						>
