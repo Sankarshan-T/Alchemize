@@ -139,24 +139,27 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	}
 	if (referCookie && newUser) {
 		const decodedRefer = XORdecrypt(referCookie)
-		//Verify format of decoded refer
-		if (
-			decodedRefer.split(" ").length !== 2 ||
-			!decodedRefer.split(" ")[1].startsWith("U")
-		) {
-			throw error(400, "Invalid referral code")
+		const [referrerId, referrerSlackId] = decodedRefer.split(" ")
+		// A bad referral code is ignored: the account already exists at this point,
+		// so failing here would only lock the new user out of their first login
+		if (decodedRefer.split(" ").length === 2 && referrerId && referrerSlackId?.startsWith("U")) {
+			const referRespone = await createReferRecord(
+				email,
+				decodedRefer,
+				yswsEligible,
+				verification,
+				firstName
+			)
+			if (!referRespone.ok) {
+				console.error("Database error:", await referRespone.text())
+				return error(referRespone.status, "Database error")
+			}
+		} else {
+			console.warn("Ignoring malformed referral cookie for a new user")
 		}
-		const referRespone = await createReferRecord(
-			email,
-			decodedRefer,
-			yswsEligible,
-			verification,
-			firstName
-		)
-		if (!referRespone.ok) {
-			console.error("Database error:", await referRespone.text())
-			return error(referRespone.status, "Database error")
-		}
+	}
+	if (referCookie) {
+		cookies.delete("refer", { path: "/" })
 	}
 	const userToken: UserAuthToken = {
 		id: hackClubId,

@@ -5,6 +5,7 @@ import type { RequestHandler } from "./$types"
 import jwt from "jsonwebtoken"
 import crypto from "crypto"
 import { doesAdminExist } from "$lib/db"
+import { SLACK_USER_ID_PATTERN, parseRoles } from "$lib/roles"
 
 interface AirtableUser {
     slackId: string;
@@ -69,7 +70,13 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         console.error("Admin ID token verification failed:", err)
         throw redirect(303, `/admin/error?message=${encodeURIComponent("Invalid identity token")}&status=401`)
     }
-    const airtableRes = await doesAdminExist(decodedToken?.slack_id || "")
+    // Admins are matched by Slack ID, so an identity without one must never reach the lookup:
+    // falling back to "" would match any admin row whose slackId was left empty
+    const slackId = decodedToken?.slack_id
+    if (typeof slackId !== "string" || !SLACK_USER_ID_PATTERN.test(slackId)) {
+        throw redirect(303, `/admin/error?message=${encodeURIComponent("Your Hack Club account has no linked Slack account")}&status=403`)
+    }
+    const airtableRes = await doesAdminExist(slackId)
     if (!airtableRes.ok) {
         console.error("Failed to fetch user data from Airtable", await airtableRes.text())
         throw error(500, "Failed to fetch user data from Airtable")
@@ -80,16 +87,17 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         throw error(403, "Forbidden")
     }
     const fields = userRecord.fields as AirtableUser;
+    const roles = parseRoles(fields.roles)
     const payload: TokenPayload = {
         slackId: fields.slackId,
         email: fields.email,
         name: fields.name,
         roles: fields.roles,
-        isReviewer: fields.roles.split(",").includes("reviewer"),
-        isSuperAdmin: fields.roles.split(",").includes("super_admin"),
-        isFulfiller: fields.roles.split(",").includes("fulfiller"),
-        isT2Reviewer: fields.roles.split(",").includes("t2_reviewer"),
-        isShopManager: fields.roles.split(",").includes("shop_manager"),
+        isReviewer: roles.has("reviewer"),
+        isSuperAdmin: roles.has("super_admin"),
+        isFulfiller: roles.has("fulfiller"),
+        isT2Reviewer: roles.has("t2_reviewer"),
+        isShopManager: roles.has("shop_manager"),
     }
     const jwtToken = jwt.sign(payload, ADMIN_JWT_SECRET, { expiresIn: "6h" })
     cookies.set("admin_access_token", tokenBody.access_token, {

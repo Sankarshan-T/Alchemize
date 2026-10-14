@@ -3,8 +3,8 @@
 	import Switch from "$lib/components/ui/switch/switch.svelte"
 	import Input from "$lib/components/ui/input/input.svelte"
 	import { ArrowLeft } from "lucide-svelte"
+	import { SLACK_USER_ID_PATTERN } from "$lib/roles"
 	let { data } = $props()
-	console.log(data)
 	let isReviewer = $state(data.isReviewer ?? false)
 	let isT2Reviewer = $state(data.isT2Reviewer ?? false)
 	let isFulfiller = $state(data.isFulfiller ?? false)
@@ -15,6 +15,11 @@
 	let nda = $state(data.nda ?? false)
 	let loading = $state(false)
 	const handleSaveChanges = () => {
+		// Admin login matches on Slack ID, so it is required (the server enforces this too)
+		if (!SLACK_USER_ID_PATTERN.test(slackId.trim())) {
+			alert("Enter this person's Slack user ID (it starts with U, e.g. U01ABCDEF).")
+			return
+		}
 		loading = true
 		const updatedUser = {
 			email: data.email,
@@ -35,11 +40,12 @@
 			credentials: "include",
 		})
 		response
-			.then(res => {
+			.then(async res => {
 				if (res.ok) {
 					alert("User updated successfully!")
 				} else {
-					alert("Failed to update user.")
+					const body = await res.json().catch(() => null)
+					alert(`Failed to update user${body?.error ? `: ${body.error}` : "."}`)
 				}
 			})
 			.catch(() => {
