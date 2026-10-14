@@ -3,7 +3,10 @@ import { BOT_AUTH } from "$env/static/private"
 import { START_DATE } from "$env/static/private"
 import { hackatimeAuthUrl } from "$lib/utils"
 import type { Log } from "$lib/types"
-import { findHackatimeConflicts, getHackatimeTokenByEmail, getProjectById, patchProjectForShip } from "$lib/db"
+import { env } from "$env/dynamic/private"
+import { findHackatimeConflicts, getHackatimeTokenByEmail, getProjectById, patchProjectForShip, patchUserHackatime } from "$lib/db"
+import { fetchHackatimeProjects } from "$lib/server/hackatime"
+import { getShippingWindowState } from "$lib/server/shippingWindow"
 import { requireUserApi } from "$lib/server/auth"
 import { applyShip, calculateShipDelta } from "$lib/server/projectLog"
 import { isHttpUrl } from "$lib/urls"
@@ -24,31 +27,6 @@ function parseLog(logJson: string): Log[] {
 		return [] as Log[]
 	}
 }
-async function getHackatimeProject(
-	accessToken: string,
-	hackatimeProjectName: string
-) {
-	const hackatimes = await fetch(
-		`https://hackatime.hackclub.com/api/v1/authenticated/projects?include_archived=false&start=${START_DATE}`,
-		{
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-				"Content-Type": "application/json",
-			},
-		}
-	)
-	if (!hackatimes.ok) {
-		console.error("Failed to fetch Hackatime projects:", hackatimes.status)
-		return null
-	}
-	const hackatimeData = await hackatimes.json()
-	if (!Array.isArray(hackatimeData.projects)) {
-		return null
-	}
-	return hackatimeData.projects.find(
-		(hack: any) => hack.name === hackatimeProjectName
-	) ?? null
-}
 const isUserIdv = async (email: string): Promise<boolean> => {
 	// Encoded: an email like "jane+alchemize@gmail.com" otherwise arrives as "jane alchemize@gmail.com"
 	const fetchRes = await fetch(`https://auth.hackclub.com/api/external/check?email=${encodeURIComponent(email)}`)
@@ -56,12 +34,10 @@ const isUserIdv = async (email: string): Promise<boolean> => {
 	return data.result === "verified_eligible"
 }
 export const POST: RequestHandler = async ({ request, locals }) => {
-	//DISABLES SHIPPING AFTER 630AM IST DAY AFTER TMRW
-	if (Date.now() > 1785632400000) {
-		return new Response(
-			"Shipping is disabled after 6:30 AM IST on August 2nd, 2026 for S1. Please contact #alchemize-help for assistance.",
-			{ status: 403 }
-		)
+	// Season window from SHIPPING_OPENS_AT / SHIPPING_CLOSES_AT (closed unless configured)
+	const shippingWindow = getShippingWindowState({ SHIPPING_OPENS_AT: env.SHIPPING_OPENS_AT, SHIPPING_CLOSES_AT: env.SHIPPING_CLOSES_AT })
+	if (!shippingWindow.open) {
+		return new Response(shippingWindow.message, { status: 403 })
 	}
 	const userData = requireUserApi(locals)
 
@@ -127,10 +103,16 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	if (projectData.fields.address === "null" || !projectData.fields.address) {
 		return new Response("Your Address is missing, please add it on auth.hackclub.com", { status: 400 })
 	}
-	const hackatimeProject = await getHackatimeProject(
-		htToken,
-		projectData.fields.hackatime
-	)
+	const hackatime = await fetchHackatimeProjects(htToken, START_DATE)
+	if (!hackatime.ok) {
+		if (hackatime.reason === "unauthorized") {
+			// Revoked or expired token: forget it, the dashboard will ask the user to connect Hackatime again
+			await patchUserHackatime(userData.email, "")
+			return new Response("Your Hackatime connection has expired, please reload the dashboard and connect Hackatime again", { status: 400 })
+		}
+		return new Response("Hackatime is not responding right now, please try again in a few minutes", { status: 503 })
+	}
+	const hackatimeProject = hackatime.projects.find(project => project.name === projectData.fields.hackatime)
 	if (!hackatimeProject) {
 		return new Response(`Couldn't find the Hackatime project "${projectData.fields.hackatime}" on your Hackatime account`, { status: 400 })
 	}

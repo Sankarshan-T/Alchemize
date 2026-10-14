@@ -55,7 +55,8 @@ export const encryptAES = (text: string) => {
 	}
 }
 export const decryptAES = (encryptedDataWithTag: string, ivHex: string) => {
-	if (!encryptedDataWithTag) return '';
+	// "null" is the unencrypted marker for a value missing on Hack Club Auth
+	if (!encryptedDataWithTag || encryptedDataWithTag === "null") return '';
 	const algorithm = 'aes-256-gcm';
 	const key = Buffer.from(PII_ENCRYPTION_KEY, 'hex');
 

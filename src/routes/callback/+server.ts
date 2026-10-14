@@ -81,7 +81,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		throw error(401, "Your Hack Club login couldn't be verified, please try again")
 	}
 	const email = decodedToken.email
-	const name = decodedToken.name
+	// Optional on Hack Club Auth: a missing name or birthday must not make the login throw
+	const name: string = typeof decodedToken.name === "string" ? decodedToken.name.trim() : ""
 	const slackId = decodedToken.slack_id
 	const hackClubId = decodedToken.sub
 	const firstName = decodedToken.nickname
@@ -96,9 +97,14 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		encryptedAddress = encryptAES(JSON.stringify(meResponse.address)).finalString
 
 	}
-	const encryptedBirthdate = encryptAES(meResponse.birthday).finalString
-	const encryptedFirstName = encryptAES(name.split(" ")[0]).finalString
-	const encryptedLastName = encryptAES(name.split(" ").at(-1)).finalString
+	// "null" (unencrypted) marks a missing value, as for the address: the dashboard lists it as missing and the
+	// T2 award refuses to submit it to Unified
+	const encryptedBirthdate = typeof meResponse.birthday === "string" && meResponse.birthday !== ""
+		? encryptAES(meResponse.birthday).finalString
+		: "null"
+	const nameParts = name.split(" ").filter(Boolean)
+	const encryptedFirstName = nameParts.length > 0 ? encryptAES(nameParts[0]).finalString : "null"
+	const encryptedLastName = nameParts.length > 0 ? encryptAES(nameParts.at(-1)!).finalString : "null"
 	// Find the account by Hack Club Auth id (falling back to email), creating it on first login.
 	// account.email is the account key used everywhere else; it follows email changes on Hack Club Auth.
 	let account: LoginAccount
@@ -141,7 +147,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		email: account.email,
 		verification_status: verification,
 		first_name: firstName,
-		last_name: name.split(" ").slice(1).join(" "),
+		last_name: nameParts.slice(1).join(" "),
 		slack_id: slackId,
 		ysws_eligible: yswsEligible,
 		version: 3,

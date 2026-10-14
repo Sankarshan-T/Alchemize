@@ -1,6 +1,8 @@
 import type { RequestHandler } from "@sveltejs/kit"
 import {error} from "@sveltejs/kit"
 import { requireAdminApi } from "$lib/server/auth"
+import { env } from "$env/dynamic/private"
+import { HACKATIME_REVIEW_START_DATE } from "$lib/reviewTools"
 import { getProjectWithHackatime } from "$lib/db"
 import type { Heartbeats } from "$lib/types"
 interface FileBreakdown {
@@ -117,7 +119,10 @@ const secsPerDay = (heartbeats: Heartbeats[], maxGapSecs: number = 120): Record<
 export const POST: RequestHandler = async ({ locals, request }) => {
     requireAdminApi(locals, "t2_reviewer")
     const {projectId} = await request.json()
-    const project = await getProjectWithHackatime(projectId);
+    if (!Number.isSafeInteger(Number(projectId))) {
+        return error(400, "Invalid project id")
+    }
+    const project = await getProjectWithHackatime(String(projectId));
 if (!project.ok) {
     return error(404, "Project not found")
 }
@@ -152,20 +157,22 @@ if (!project.ok) {
             "Authorization": `Bearer ${projectData.fields.hackatimeToken}`
         }
     })
-    const token = (await fetchUserTokens.json()).token
-    if (!fetchUserTokens.ok || !token) {
+    const token = fetchUserTokens.ok ? (await fetchUserTokens.json().catch(() => null))?.token : null
+    if (!token) {
         return error(500, "Failed to fetch Hackatime API token")
     }
-    const heartbeatRespose = await fetch(`https://hackatime.hackclub.com/api/v1/my/heartbeats?start_time=2026-06-18`, {
+    // Same window as the user's Hackatime totals (START_DATE), falling back to the review tools' default
+    const startDate = env.START_DATE || HACKATIME_REVIEW_START_DATE
+    const heartbeatRespose = await fetch(`https://hackatime.hackclub.com/api/v1/my/heartbeats?start_time=${encodeURIComponent(startDate)}`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
     })
-    const heartbeatData = await heartbeatRespose.json()
-    const filteredHeartbeats = filterHeartbeatsByHackatimeProject(heartbeatData.heartbeats, projectData.fields.hackatime)
-    if (!heartbeatRespose.ok || !filteredHeartbeats) {
-        return error(500, "Failed to fetch Hackatime heartbeats")
+    const heartbeatData = heartbeatRespose.ok ? await heartbeatRespose.json().catch(() => null) : null
+    if (!Array.isArray(heartbeatData?.heartbeats)) {
+        return error(502, "Failed to fetch Hackatime heartbeats")
     }
+    const filteredHeartbeats = filterHeartbeatsByHackatimeProject(heartbeatData.heartbeats, projectData.fields.hackatime)
     const aiCat = "ai coding"
     const building = "building"
     const timelapsing = "timelapsing"

@@ -8,11 +8,13 @@ import {
 	createProject,
 	updateProject,
 	getHackatimeTokenByEmail,
+	patchUserHackatime,
 	getProjectForEdit,
 	findHackatimeConflicts,
 } from "$lib/db"
 import { isHttpUrl } from "$lib/urls"
 import { checkImageUpload } from "$lib/server/uploads"
+import { fetchHackatimeProjects } from "$lib/server/hackatime"
 import type {
 	AirtableProject,
 	AirtableProjectWithPII,
@@ -207,27 +209,23 @@ export const actions = {
 		return { success: true }
 	},
 } satisfies Actions
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, cookies }) => {
 	const email = requireUserPage(locals).email
 	const hackatimeAccessToken = await getHackatimeTokenByEmail(email)
 	if (!hackatimeAccessToken) {
 		throw redirect(303, hackatimeAuthUrl)
 	}
-	let hacks: any
 	if (hackatimeAccessToken) {
-		let [hackatimes, projectsResponse] = await Promise.all([
-			fetch(
-				`https://hackatime.hackclub.com/api/v1/authenticated/projects?include_archived=false&start=${env.START_DATE}`,
-				{
-					headers: {
-						Authorization: `Bearer ${hackatimeAccessToken}`,
-						"Content-Type": "application/json",
-					},
-				}
-			),
+		let [hackatime, projectsResponse] = await Promise.all([
+			fetchHackatimeProjects(hackatimeAccessToken, env.START_DATE ?? ""),
 			getProjectsByOwner(email),
 		])
-		hacks = await hackatimes.json()
+		if (!hackatime.ok && hackatime.reason === "unauthorized") {
+			// The stored token was revoked or expired: forget it and send the user to connect Hackatime again
+			await patchUserHackatime(email, "")
+			cookies.delete("hackatime_verified", { path: "/" })
+			throw redirect(303, hackatimeAuthUrl)
+		}
 
 		const projectsData = await projectsResponse.json()
 		let projectsRecords: AirtableProjectWithPII[] = projectsData.records || []
@@ -255,13 +253,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 				},
 			})
 		}
-		let filteredHacks: any[] = []
-		hacks.projects.forEach((project: any) => {
-			filteredHacks.push({
-				name: project.name,
-				total_seconds: project.total_seconds,
-			})
-		})
+		// If Hackatime is down the page still loads, just without Hackatime projects to pick from
+		let filteredHacks = hackatime.ok ? hackatime.projects : []
 		let filteredHacksS = {
 			projects: filteredHacks,
 		}
