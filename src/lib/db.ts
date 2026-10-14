@@ -881,7 +881,8 @@ export const deleteShopItem = async (itemId: string): Promise<DBResponse> => {
 }
 //Admin Functions
 export const doesAdminExist = async (slackId: string): Promise<DBResponse> => {
-    const admins = await db.select().from(adminTable).where(eq(adminTable.slackId, slackId));
+    // An empty Slack ID must never match: admin rows saved without one would otherwise be claimable
+    const admins = slackId.trim() === "" ? [] : await db.select().from(adminTable).where(eq(adminTable.slackId, slackId));
     const records = admins.map(admin => ({ id: admin.id + "", fields: admin }));
     return {
         ok: true,

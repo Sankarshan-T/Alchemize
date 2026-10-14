@@ -2,8 +2,10 @@ import type { RequestHandler } from "@sveltejs/kit"
 import {upsertAdmin} from "$lib/db"
 import {WebClient} from "@slack/web-api"
 import { ADMIN_JWT_SECRET, SLACK_BOT_TOKEN } from "$env/static/private"
+import { SLACK_USER_ID_PATTERN, hasRole } from "$lib/roles"
 import jwt from "jsonwebtoken"
 const webClient = new WebClient(SLACK_BOT_TOKEN)
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const rolesToRoleString = (isReviewer:boolean, isSuperAdmin:boolean, isFulfiller:boolean, isT2Reviewer:boolean, isShopManager:boolean) => {
     let roles = ""
     if (isReviewer) roles += "reviewer,"
@@ -23,20 +25,38 @@ const getUserName = async (userId:string) => {
         return "Unknown User";
     }
 }
+const badRequest = (error: string) => new Response(JSON.stringify({ ok: false, error }), { status: 400 })
 export const POST: RequestHandler = async ({request, cookies}) => {
-    const data = await request.json()
     try{
         const token = cookies.get("admin_jwt")
         if(!token) return new Response(JSON.stringify({ok: false, error: "Unauthorized"}), {status: 401})
         let decoded = jwt.verify(token, ADMIN_JWT_SECRET) as {email: string, roles: string}
-        if(!decoded.roles.includes("super_admin")) return new Response(JSON.stringify({ok: false, error: "Forbidden"}), {status: 403})
+        if(!hasRole(decoded.roles, "super_admin")) return new Response(JSON.stringify({ok: false, error: "Forbidden"}), {status: 403})
     }catch(error){
         console.error("JWT verification failed:", error)
         return new Response(JSON.stringify({ok: false, error: "Forbidden"}), {status: 403})
     }
-    let {email, isReviewer, isSuperAdmin, isFulfiller, isT2Reviewer, isShopManager, slackId, nda} = data
-    const roles = rolesToRoleString(isReviewer, isSuperAdmin, isFulfiller, isT2Reviewer, isShopManager)
+    let data: Record<string, unknown>
+    try {
+        data = await request.json()
+    } catch {
+        return badRequest("Invalid JSON body")
+    }
+    const {email, isReviewer, isSuperAdmin, isFulfiller, isT2Reviewer, isShopManager, nda} = data
+    const slackId = typeof data.slackId === "string" ? data.slackId.trim() : ""
+    if (typeof email !== "string" || !EMAIL_PATTERN.test(email.trim())) {
+        return badRequest("A valid email is required")
+    }
+    // Admin login matches on Slack ID, so every admin row must carry a real one
+    if (!SLACK_USER_ID_PATTERN.test(slackId)) {
+        return badRequest("A valid Slack user ID is required (it starts with U, e.g. U01ABCDEF)")
+    }
+    const flags = [isReviewer, isSuperAdmin, isFulfiller, isT2Reviewer, isShopManager, nda]
+    if (!flags.every(flag => typeof flag === "boolean")) {
+        return badRequest("Role and NDA flags must be booleans")
+    }
+    const roles = rolesToRoleString(isReviewer as boolean, isSuperAdmin as boolean, isFulfiller as boolean, isT2Reviewer as boolean, isShopManager as boolean)
     const name = await getUserName(slackId)
-    const result = await upsertAdmin(slackId, email, roles, name, nda)
+    const result = await upsertAdmin(slackId, email.trim(), roles, name, String(nda))
     return new Response(JSON.stringify({ok: result.ok}), {status: result.ok ? 200 : 500})
 }

@@ -8,7 +8,7 @@ export const POST = async ({ cookies }) => {
     cookies.delete("hackatime_verified", { path: "/" });
     cookies.delete("refer", { path: "/" });
     cookies.delete("admin_access_token", { path: "/" });
-    cookies.delete("admin_access_token", { path: "/" });
+    cookies.delete("admin_jwt", { path: "/" });
     cookies.delete("hackatime_token", { path: "/" });
     cookies.delete("__cf_bm", { path: "/" });
 

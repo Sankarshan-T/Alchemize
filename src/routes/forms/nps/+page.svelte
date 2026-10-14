@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { deserialize } from "$app/forms"
 	let score: number | null = null
 	let slack = ""
 	let heardFrom = ""
@@ -6,6 +7,8 @@
 	let couldImprove = ""
 	let anythingElse = ""
 	let submitted = false
+	let submitting = false
+	let errorMessage = ""
 
 	const checkAllFilled = () => {
 		return (
@@ -26,15 +29,30 @@
 		tempFormData.append("well", wentWell)
 		tempFormData.append("better", couldImprove)
 		tempFormData.append("else", anythingElse)
-		const response = await fetch("/forms/nps", {
-			method: "POST",
-			body: tempFormData,
-		})
-
-		const result = await response.json()
-		console.log(result)
-
-		submitted = true
+		submitting = true
+		errorMessage = ""
+		try {
+			// x-sveltekit-action makes SvelteKit answer with an ActionResult instead of a rendered page
+			const response = await fetch("/forms/nps", {
+				method: "POST",
+				body: tempFormData,
+				headers: { "x-sveltekit-action": "true" },
+			})
+			const result = deserialize(await response.text())
+			if (result.type === "success") {
+				submitted = true
+			} else if (result.type === "failure") {
+				errorMessage =
+					(result.data?.message as string | undefined) ??
+					"Something went wrong, please try again."
+			} else {
+				errorMessage = "Something went wrong, please try again."
+			}
+		} catch {
+			errorMessage = "Could not reach the server, please try again."
+		} finally {
+			submitting = false
+		}
 	}
 </script>
 
@@ -129,6 +147,7 @@
 					<input
 						id="heard"
 						bind:value={heardFrom}
+						maxlength="2000"
 						placeholder="A friend, Slack, Site or something else..."
 						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
@@ -145,6 +164,7 @@
 					<textarea
 						id="well"
 						bind:value={wentWell}
+						maxlength="2000"
 						rows="3"
 						placeholder="The stuff worth keeping..."
 						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
@@ -162,6 +182,7 @@
 					<textarea
 						id="improve"
 						bind:value={couldImprove}
+						maxlength="2000"
 						rows="3"
 						placeholder="Don't hold back..."
 						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
@@ -179,6 +200,7 @@
 					<textarea
 						id="else"
 						bind:value={anythingElse}
+						maxlength="2000"
 						rows="3"
 						placeholder="Anything we didn't ask..."
 						class="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
@@ -196,14 +218,19 @@
 					<input
 						id="slack"
 						bind:value={slack}
+						maxlength="80"
 						placeholder="@username"
 						class="w-full rounded-xl border border-zinc-800 bg-zinc-950/70 px-4 py-3 text-primary-foreground placeholder:text-zinc-600 outline-none transition focus:border-primary"
 					/>
 				</div>
 
+				{#if errorMessage}
+					<p class="text-sm text-red-400" role="alert">{errorMessage}</p>
+				{/if}
+
 				<button
 					type="submit"
-					disabled={checkAllFilled()}
+					disabled={checkAllFilled() || submitting}
 					class="w-full rounded-full bg-primary py-3 font-semibold text-primary-foreground transition
 					enabled:hover:scale-[1.02] enabled:hover:shadow-lg enabled:hover:shadow-primary/30 enabled:active:scale-95
 					disabled:cursor-not-allowed disabled:opacity-40"

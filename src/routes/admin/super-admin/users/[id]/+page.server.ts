@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import { ADMIN_JWT_SECRET, SLACK_BOT_TOKEN } from "$env/static/private"
 import { redirect } from "@sveltejs/kit"
 import { WebClient } from "@slack/web-api"
+import { hasRole } from "$lib/roles"
 
 const slackClient = new WebClient(SLACK_BOT_TOKEN)
 async function getUserName(userId: string) {
@@ -32,7 +33,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         let email = params.id
     let adminRes = await getAdminByEmail(email)
     let adminData = await adminRes.json()
-    console.log("AdminRes:", adminData, "Param email:", email)
     if (!adminRes.ok || !adminData.records || adminData.records.length === 0) {
         return {
             slackName: "Unknown User",
@@ -51,11 +51,11 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         slackName: await getUserName(adminData.records[0].fields.slackId),
         slackId: adminData.records[0].fields.slackId,
         email: adminData.records[0].fields.email,
-        isReviewer: roles.includes("reviewer") || false,
-        isSuperAdmin: roles.includes("super_admin") || false,
-        isFulfiller: roles.includes("fulfiller") || false,
-        isT2Reviewer: roles.includes("t2_reviewer") || false,
-        isShopManager: roles.includes("shop_manager") || false,
+        isReviewer: hasRole(roles, "reviewer"),
+        isSuperAdmin: hasRole(roles, "super_admin"),
+        isFulfiller: hasRole(roles, "fulfiller"),
+        isT2Reviewer: hasRole(roles, "t2_reviewer"),
+        isShopManager: hasRole(roles, "shop_manager"),
         nda: adminData.records[0].fields.nda === "true"
     }
 }
