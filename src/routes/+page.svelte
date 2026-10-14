@@ -407,7 +407,7 @@
 				/>
 				<Accordion
 					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='hackatime.hackclub.com'> Hackatime</a>"
+					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='https://hackatime.hackclub.com'> Hackatime</a>"
 				/>
 				<Accordion
 					Title="Where can I find more information?"

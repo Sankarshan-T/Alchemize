@@ -30,6 +30,8 @@ COPY --from=builder /app/build ./build
 
 ENV NODE_ENV=production
 ENV PORT=3000
+# adapter-node rejects request bodies over 512K by default; project forms carry up to two 5MB screenshots
+ENV BODY_SIZE_LIMIT=12M
 
 EXPOSE 3000
 
