@@ -129,17 +129,18 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	const updatedLog = applyShip(previousLogs, deltaTime, changelog.trim())
 	const response = await patchProjectForShip(String(recordId), projectData.fields.log, updatedLog, `pending_${currentTime}`)
 	if (!response.ok) {
+		const failure = await response.json().catch(() => ({ message: "" }))
 		console.error(`Failed to update project ${recordId}:`, {
 			status: response.status,
-			statusText: await response.text(),
+			statusText: failure.message,
 			timestamp: new Date().toISOString(),
 			slackId: userData.slack_id,
 			projectName: projectData.fields.Name,
 			projectLink: projectData.fields.code,
 		})
-		// 409 = the log changed since it was read (e.g. a review landed); ask the user to retry
+		// 409 = the log changed since it was read (e.g. a review landed), or a Unified submission is in flight
 		if (response.status === 409) {
-			return new Response("Your project was just updated by a reviewer, please refresh and ship again", { status: 409 })
+			return new Response(failure.message || "Your project was just updated by a reviewer, please refresh and ship again", { status: 409 })
 		}
 		return new Response("Failed to ship Project", { status: 500 })
 	}

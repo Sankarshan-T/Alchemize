@@ -899,6 +899,17 @@ export const patchProjectForShip = async (projectId: string, expectedLog: string
             if (current.rows.length === 0) {
                 throw new TransactionAbort(404, "Project not found");
             }
+            // While a Unified submission is in flight (or its outcome is unresolved) the log is frozen: the award
+            // marks every approved entry as sent to HQ but pays only what was counted when it started, so an entry
+            // approved in between would be marked paid without being paid. Checked under the same row lock that
+            // beginUnifiedSubmission takes, so the two can't interleave.
+            const inFlight = await client.query(
+                'SELECT 1 FROM unified_submissions WHERE "projectId" = $1 AND status = \'started\'',
+                [parseInt(projectId)]
+            );
+            if (inFlight.rows.length > 0) {
+                throw new TransactionAbort(409, "This project is being sent to Unified right now (or a T2 reviewer still has to resolve an earlier submission). Please try again later.");
+            }
             if (current.rows[0].log !== expectedLog) {
                 throw new TransactionAbort(409, "This project changed while you were working on it. Refresh and try again.");
             }
