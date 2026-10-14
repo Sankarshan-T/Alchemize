@@ -1,84 +1,32 @@
 import { error } from "@sveltejs/kit"
-import jwt from "jsonwebtoken"
-import { ADMIN_JWT_SECRET, BOT_AUTH } from "$env/static/private"
+import { BOT_AUTH } from "$env/static/private"
+import { requireAdminApi } from "$lib/server/auth"
 import type { RequestHandler } from "./$types";
-import type { Log, AdminJWT, AdminProjectView, Address, AirtableProject } from "$lib/types";
-import { getProjectById, addToJustifications, atomicShipProjectAndAward, TransactionAbort } from "$lib/db";
-import { formatAqua, hundredthsToUnits, minutesToHundredths } from "$lib/currency"
+import type { Log, AdminProjectView, Address } from "$lib/types";
+import { getProjectById, addToJustifications, beginUnifiedSubmission, completeUnifiedSubmission, markUnifiedSubmissionFailed } from "$lib/db";
+import { hasUnpushedApprovedEntries, isOwnProject } from "$lib/server/projectLog";
+import { formatAqua, hundredthsToUnits } from "$lib/currency"
 import { decryptAES, encryptAES } from "$lib/utils.server"
 import { submitProjectToAirtable } from "$lib/airtable"
 import crypto from "crypto"
-const wasEverApproved = (project: AirtableProject) => {
-    //Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
-    const logs = JSON.parse(project.fields.log || "[]") as Log[]
-    return logs.some(log => log.status === 1)
-}
-const areAllPushedToHQ = (log: Log[]): boolean => {
-    return log.every(entry => entry.submmitedToHQ || entry.status !== 1)
-}
-const checkIfAllApprovedLogsArePushed = (log: Log[]): boolean => {
-    if (log.length === 0) {
-        return true
+// Hack Club Auth returns a list of addresses; ship to the one marked primary, not just the first
+const pickShippingAddress = (decryptedAddresses: string): Address | null => {
+    if (decryptedAddresses === "" || decryptedAddresses === "null") return null
+    try {
+        const addresses = JSON.parse(decryptedAddresses) as Address[]
+        if (!Array.isArray(addresses) || addresses.length === 0) return null
+        return addresses.find(address => address.primary) ?? addresses[0]
+    } catch {
+        return null
     }
-    const approvedLogs = log.filter(entry => entry.status === 1)
-    return approvedLogs.every(entry => entry.submmitedToHQ)
-}
-const checkSubmittedToHQ = (log: Log[], justification: string, reviewerName: string): Log[] => {
-    let newLog = log.map(entry => {
-        if (entry.status === 1 && !entry.submmitedToHQ) {
-            return { ...entry, submmitedToHQ: true }
-        }
-        return entry
-    })
-    newLog = [...newLog, {
-        status: 1,
-        timestamp: new Date().toISOString(),
-        deltaTime: 0,
-        message: [{ userExternal: "Currency Awarded", internalNote: "Project sent to Unified", justification: justification, timestamp: new Date().toISOString(), reviewerName: "T2 " + reviewerName }],
-        submmitedToHQ: true
-    }]
-    return newLog
-}
-const parseAddress = (address: string) => {
-    if (address === "") return {
-        line_1: "",
-        city: "",
-        state: "",
-        country: "",
-        postal_code: ""
-    } as Address
-
-    return JSON.parse(address)[0] as Address
-}
-// Minutes approved by T1 that have not been sent to Unified yet
-const calculateNewMinutes = (log: Log[]) => {
-    let minsSpent = 0
-    log.forEach(entry => {
-        if (entry.status === 1 && !entry.submmitedToHQ) {
-            minsSpent += entry.deltaTime
-        }
-    })
-    return minsSpent
 }
 const findGithubUsernameFromCodeUrl = (codeUrl: string): string | null => {
     const githubRegex = /https:\/\/github\.com\/([^\/]+)\/([^\/]+)/;
     const match = codeUrl.match(githubRegex);
     return match ? match[1] : null;
 }
-export const POST: RequestHandler = async ({ request, cookies }) => {
-    const adminJWTToken = cookies.get("admin_jwt")
-    if (!adminJWTToken) {
-        return error(401, "Unauthorized")
-    }
-    let decoded: AdminJWT
-    try {
-        decoded = jwt.verify(adminJWTToken, ADMIN_JWT_SECRET) as AdminJWT
-        if (!decoded.isT2Reviewer) {
-            return error(401, "Unauthorized/ Please Referesh the page and try again")
-        }
-    } catch (err) {
-        return error(401, "Unauthorized/ Please Referesh the page and try again")
-    }
+export const POST: RequestHandler = async ({ request, locals }) => {
+    const decoded = requireAdminApi(locals, "t2_reviewer")
     const body = await request.json()
     const { justification, projectId } = body
     // The optional "Deduct Hours" input is sent as null when left empty
@@ -98,77 +46,117 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
         return error(500, "Failed to fetch project")
     }
     const project = await projectResponse.json() as AdminProjectView
-    const log = JSON.parse(project.fields.log) as Log[]
-    if (!wasEverApproved(project) || areAllPushedToHQ(log)) {
+    if (isOwnProject(decoded, project.fields)) {
+        return error(403, "You can't review or pay out your own project")
+    }
+    const log = JSON.parse(project.fields.log || "[]") as Log[]
+    if (!hasUnpushedApprovedEntries(log)) {
         return error(400, "Project has not been approved or all logs are submitted to HQ")
     }
-    if (checkIfAllApprovedLogsArePushed(log)) {
-        return error(400, "All approved logs are already submitted to HQ")
-    }
-    const decrytedAddress = decryptAES(project.fields.address, project.fields.iv)
-
-    const address = parseAddress(decrytedAddress || "")
+    const address = pickShippingAddress(decryptAES(project.fields.address, project.fields.iv))
     const iv = crypto.randomBytes(16)
     const decryptedBirthdate = decryptAES(project.fields.birthdate, project.fields.iv)
     const decryptedFirstName = decryptAES(project.fields.firstName, project.fields.iv)
     const decryptedLastName = decryptAES(project.fields.lastName, project.fields.iv)
+    // Unified needs a real address, birthday and name; refuse instead of submitting blanks
+    if (!address || !address.line_1 || !address.city || !address.country) {
+        return error(400, "The owner has no complete address on Hack Club Auth. Ask them to add one there and log in to Alchemize again")
+    }
+    if (decryptedBirthdate === "" || decryptedBirthdate === "null" || decryptedFirstName === "") {
+        return error(400, "The owner's birthday or name is missing on Hack Club Auth. Ask them to add it there and log in to Alchemize again")
+    }
 
-    // Everything that moves currency happens under the project + owner row locks: the log is re-read and
-    // re-validated there, Unified is contacted there, and the award is only committed if all of it succeeds.
-    // 1 approved hour = 1 Aqua Regia, credited to the hundredth; Unified receives the same number of hours.
-    let awardedHundredths = 0
-    const shipResult = await atomicShipProjectAndAward(projectIdNum, async (locked) => {
-        if (areAllPushedToHQ(locked.log) || checkIfAllApprovedLogsArePushed(locked.log)) {
-            throw new TransactionAbort(400, "All approved logs are already submitted to HQ")
-        }
-        const approvedMinutes = calculateNewMinutes(locked.log)
-        const deductedMinutes = Math.round(subtraction * 60)
-        if (deductedMinutes > approvedMinutes) {
-            throw new TransactionAbort(400, `Cannot deduct ${subtraction}h, only ${(approvedMinutes / 60).toFixed(2)}h are approved in this review`)
-        }
-        awardedHundredths = minutesToHundredths(approvedMinutes - deductedMinutes)
+    // Three phases, so no row lock is held while Airtable is called and an attempt with an unknown outcome
+    // can never be retried blindly (which would create a duplicate Unified record):
+    //   1. record a "started" attempt with the award amount (beginUnifiedSubmission)
+    //   2. submit to Airtable
+    //   3. mark the entries as sent to HQ, credit the owner and close the attempt, atomically (completeUnifiedSubmission)
+    // If an earlier attempt never finished, the reviewer must check Airtable and say whether the record exists.
+    const resolveInDoubt = body.resolveInDoubt as unknown
+    if (resolveInDoubt !== undefined && resolveInDoubt !== "already_in_airtable" && resolveInDoubt !== "not_in_airtable") {
+        return error(400, "Invalid resolveInDoubt value")
+    }
+    const deductedMinutes = Math.round(subtraction * 60)
+    const awardAndClose = async (submissionId: number, airtableRecordId: string | null) =>
+        completeUnifiedSubmission(submissionId, justification, airtableRecordId)
 
-        const airtableResponse = await submitProjectToAirtable({
-            githubUsername: findGithubUsernameFromCodeUrl(project.fields.code || "") ?? "",
-            email: locked.owner,
-            playableUrl: project.fields.demo || "",
-            codeUrl: project.fields.code || "",
-            description: project.fields.description,
-            screenshot: [project.fields.screenshot, project.fields.screenshot2].filter(Boolean),
-            address1: address.line_1,
-            city: address.city,
-            state: address.state,
-            country: address.country,
-            zip: address.postal_code,
-            birthday: decryptedBirthdate,
-            overrideHoursSpent: hundredthsToUnits(awardedHundredths),
-            overrideHoursJustification: justification,
-            firstName: decryptedFirstName,
-            lastName: decryptedLastName
-        })
+    let completed: Awaited<ReturnType<typeof completeUnifiedSubmission>>
+    let awardedHundredths: number
+    let begun = await beginUnifiedSubmission(projectIdNum, deductedMinutes, { slackId: decoded.slackId, name: decoded.name })
+    if (!begun.ok && begun.inFlight && resolveInDoubt === "not_in_airtable") {
+        await markUnifiedSubmissionFailed(begun.inFlight.id, `${decoded.name} confirmed the record is not in Airtable`)
+        begun = await beginUnifiedSubmission(projectIdNum, deductedMinutes, { slackId: decoded.slackId, name: decoded.name })
+    }
+    if (!begun.ok && begun.inFlight && resolveInDoubt === "already_in_airtable") {
+        // The record exists in Airtable: finish the award for the earlier attempt without submitting again
+        console.info(`Unified submission ${begun.inFlight.id} for project ${projectIdNum}: ${decoded.name} confirmed the Airtable record exists`)
+        awardedHundredths = begun.inFlight.amountHundredths
+        completed = await awardAndClose(begun.inFlight.id, null)
+        if (!completed.ok) {
+            return error(completed.status as any, (await completed.json()).message)
+        }
+    } else {
+        if (!begun.ok) {
+            if (begun.inFlight) {
+                return new Response(JSON.stringify({
+                    code: "SUBMISSION_IN_DOUBT",
+                    message: `An earlier submission of this project to Unified (started ${new Date(begun.inFlight.startedAt).toISOString()} by ${begun.inFlight.reviewerName}) did not finish. Check whether the project is already in Airtable before continuing.`,
+                }), { status: 409, headers: { "Content-Type": "application/json" } })
+            }
+            return error(begun.status as any, begun.message)
+        }
+        const submission = begun.submission
+        awardedHundredths = submission.amountHundredths
+
+        let airtableResponse: Awaited<ReturnType<typeof submitProjectToAirtable>>
+        try {
+            airtableResponse = await submitProjectToAirtable({
+                githubUsername: findGithubUsernameFromCodeUrl(project.fields.code || "") ?? "",
+                email: project.fields.owner,
+                playableUrl: project.fields.demo || "",
+                codeUrl: project.fields.code || "",
+                description: project.fields.description,
+                screenshot: [project.fields.screenshot, project.fields.screenshot2].filter(Boolean),
+                address1: address.line_1,
+                city: address.city,
+                state: address.state,
+                country: address.country,
+                zip: address.postal_code,
+                birthday: decryptedBirthdate,
+                overrideHoursSpent: hundredthsToUnits(awardedHundredths),
+                overrideHoursJustification: justification,
+                firstName: decryptedFirstName,
+                lastName: decryptedLastName
+            })
+        } catch (err) {
+            // Timeout or network error: Airtable may or may not have created the record, so the attempt stays open
+            console.error(`Unified submission ${submission.id} for project ${projectIdNum}: outcome unknown`, err)
+            return error(502, "Airtable did not answer in time, so it's unknown whether the project was submitted. Check Airtable, then press push again to resolve it.")
+        }
         if (!airtableResponse.ok) {
             console.error("Failed to send project to Airtable:", {
                 status: airtableResponse.status,
                 statusText: airtableResponse.statusText,
                 timestamp: new Date().toISOString(),
                 projectId: project.id,
-                slackId: project.fields.slackId,
-                projectName: project.fields.Name,
-                projectLink: project.fields.code,
+                submissionId: submission.id,
             })
-            throw new TransactionAbort(500, "Failed to send project to Airtable")
+            // A 4xx means Airtable rejected the request and created nothing; a 5xx leaves the outcome unknown
+            if (airtableResponse.status >= 400 && airtableResponse.status < 500) {
+                await markUnifiedSubmissionFailed(submission.id, `Airtable answered ${airtableResponse.status}`)
+                return error(502, `Airtable rejected the submission (${airtableResponse.status}), nothing was awarded. Please try again or report it.`)
+            }
+            return error(502, "Airtable returned an error, so it's unknown whether the project was submitted. Check Airtable, then press push again to resolve it.")
         }
 
-        return {
-            newLog: checkSubmittedToHQ(locked.log, justification, decoded.name),
-            amountHundredths: awardedHundredths,
-            remarks: `Added ${formatAqua(awardedHundredths)} for project approval`
+        completed = await awardAndClose(submission.id, airtableResponse.json?.id ?? null)
+        if (!completed.ok) {
+            // Airtable has the record but the award didn't commit; the open attempt makes the next push ask the reviewer
+            console.error(`Unified submission ${submission.id} for project ${projectIdNum} was accepted by Airtable but the award failed`)
+            return error(completed.status as any, `${(await completed.json()).message}. The project IS in Airtable: press push again and confirm it's already there to record the award.`)
         }
-    })
-    if (!shipResult.ok) {
-        return error(shipResult.status as any, (await shipResult.json()).message)
     }
-    const { newLog } = await shipResult.json()
+    const { newLog } = await completed.json()
 
     const [sendToJustificationResponse, botResponse] = await Promise.all([
         addToJustifications({
@@ -201,7 +189,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
                 "Authorization": `Bearer ${BOT_AUTH}`
             },
             body: JSON.stringify(
-                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": "U0B18V07GQ3", "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": formatAqua(awardedHundredths) }
+                { "user_id": project.fields.slackId, "project_name": project.fields.Name, "project_link": project.fields.code, "reviewer_id": decoded.slackId, "feedback": log.at(-1)?.message.at(-1)?.userExternal || "", "currencies": formatAqua(awardedHundredths) }
             )
         })
     ])

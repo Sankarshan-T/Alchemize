@@ -1,54 +1,26 @@
-import type { Log, Project, AdminJWT, AirtableProject } from "$lib/types"
-import jwt from "jsonwebtoken"
-import {ADMIN_JWT_SECRET, BOT_AUTH} from "$env/static/private"
+import type { Log, Project, AirtableProject } from "$lib/types"
+import {BOT_AUTH} from "$env/static/private"
+import { requireAdminApi } from "$lib/server/auth"
 import type { RequestHandler } from "@sveltejs/kit"
 import {error} from "@sveltejs/kit"
 import { patchProjectForShip, getProjectById } from "$lib/db"
-import { updated } from "$app/state"
-function updateLog(log: Log[], rejectionReason: string): Log[] {
-
-	if (log.length === 0) {
-		return log
-	}
-	const lastLog = log[log.length - 1]
-	if (lastLog.status === 0 || lastLog.status === 1) {
-		
-		return [...log.slice(0, -1), {
-			...lastLog,
-			status: 0,
-			timestamp: new Date().toISOString(),
-			deltaTime: lastLog.deltaTime,
-			message: [...lastLog.message, { userExternal: `Hiya! Your project failed T2 review, REASON: ${rejectionReason}`, internalNote: "Rejected at T2", justification: "Rejected at T2", timestamp: new Date().toISOString(), reviewerName: "T2 Reviewer" }],
-			submmitedToHQ: false
-		}]
-	} else {
-		return log
-	}
-
-}
-export const POST: RequestHandler = async ({ request,cookies }) => {
-    const adminJWTToken = cookies.get("admin_jwt")
-    if (!adminJWTToken) {
-        return error(401, "Unauthorized")
-    }
-    let decoded: AdminJWT
-    try {
-         decoded = jwt.verify(adminJWTToken, ADMIN_JWT_SECRET) as AdminJWT
-        if (!decoded.isT2Reviewer ) {
-            return error(401, "Unauthorized")
-        }
-    } catch (err) {
-        return error(401, "Unauthorized")
-    }
-    const {recordId, userExternal, justification, slackId} = await request.json()
-    if (!recordId || !userExternal  || !justification || !slackId) {
+import { applyT2Reject, isOwnProject } from "$lib/server/projectLog"
+export const POST: RequestHandler = async ({ request, locals }) => {
+    const decoded = requireAdminApi(locals, "t2_reviewer")
+    const {recordId, userExternal, justification} = await request.json()
+    if (!recordId || !userExternal  || !justification) {
         return error(400, "Missing required fields")
     }
     const readProject = await getProjectById(recordId)
-    const projectData: AirtableProject = await readProject.json()
-    if (!readProject.ok || !projectData) {
+    if (!readProject.ok) {
         return error(404, "Project not found")
     }
+    const projectData: AirtableProject = await readProject.json()
+    if (isOwnProject(decoded, projectData.fields)) {
+        return error(403, "You can't review your own project")
+    }
+    // The notification goes to the project's owner as stored in the DB, never to a client-supplied ID
+    const slackId = projectData.fields.slackId
     if (projectData.fields.status === "accepted_t2" ) {
         return error(400, "Cannot overturn a project that has been accepted by a T2 reviewer")
     }
@@ -57,7 +29,7 @@ export const POST: RequestHandler = async ({ request,cookies }) => {
     }
     const log = projectData.fields.log
     const name = decoded.name
-    const updatedLog = updateLog(JSON.parse(log),  userExternal)
+    const updatedLog = applyT2Reject(JSON.parse(log || "[]"), userExternal)
     const response = await patchProjectForShip(recordId, log, updatedLog, "rejected")
     if (!response.ok) {
         const errorData = await response.json()

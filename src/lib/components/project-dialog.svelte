@@ -9,7 +9,7 @@
 	import type { AirtableProject } from "$lib/types"
 	import { countCharacters } from "$lib/utils"
 	import { toast } from "svelte-sonner"
-	import { Trash } from "lucide-svelte"
+	import { Plus, Trash } from "lucide-svelte"
 	import type { Log } from "$lib/types"
 	import { cn } from "$lib/lib/utils"
 
@@ -350,7 +350,7 @@
 								></div>
 							{/if}
 
-							<i class="fa-solid fa-plus mr-1"></i>
+							<Plus class="mr-1 h-4 w-4" />
 							Ship
 						</Button>
 					</aside>
@@ -373,6 +373,16 @@
 								if (result.type === "success") {
 									invalidater?.()
 									open = false
+								} else if (result.type === "failure") {
+									toast.error(
+										(result.data?.message as string | undefined) ??
+											"Could not save the project, please try again."
+									)
+								} else if (result.type === "error") {
+									toast.error(
+										result.error?.message ??
+											"Could not save the project, please try again."
+									)
 								}
 							}
 						}}

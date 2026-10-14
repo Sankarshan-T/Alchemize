@@ -1,8 +1,8 @@
 import type { RequestHandler } from "@sveltejs/kit"
-import type { AdminJWT } from "$lib/types"
 import {error} from "@sveltejs/kit"
-import jwt from "jsonwebtoken"
-import { ADMIN_JWT_SECRET } from "$env/static/private"
+import { requireAdminApi } from "$lib/server/auth"
+import { env } from "$env/dynamic/private"
+import { HACKATIME_REVIEW_START_DATE } from "$lib/reviewTools"
 import { getProjectWithHackatime } from "$lib/db"
 import type { Heartbeats } from "$lib/types"
 interface FileBreakdown {
@@ -11,6 +11,12 @@ interface FileBreakdown {
         formatted: string;
     };
 }
+// File paths come from the participant's machine and usually start with their OS username, which is often their
+// real name. Reviewers only need the part inside the home directory.
+const redactHomeDirectory = (path: string): string => path
+    .replace(/^\/(?:Users|home)\/[^/]+/, "~")
+    .replace(/^\/mnt\/[a-z]\/Users\/[^/]+/i, "~")
+    .replace(/^[A-Za-z]:[\\/]Users[\\/][^\\/]+/i, "~")
 function calculateTimePerFile(
     heartbeats: Heartbeats[],
     maxGapSecs: number = 120
@@ -44,8 +50,9 @@ function calculateTimePerFile(
 
         const activeTime = Math.min(gapSec, maxGapSecs);
 
-        fileDurations[prev.entity] ??= 0;
-        fileDurations[prev.entity] += activeTime;
+        const file = redactHomeDirectory(prev.entity);
+        fileDurations[file] ??= 0;
+        fileDurations[file] += activeTime;
     }
 
     const breakdown: FileBreakdown = {};
@@ -109,21 +116,13 @@ const secsPerDay = (heartbeats: Heartbeats[], maxGapSecs: number = 120): Record<
     }
     return dayMap;
 }
-export const POST: RequestHandler = async ({ cookies, request }) => {
+export const POST: RequestHandler = async ({ locals, request }) => {
+    requireAdminApi(locals, "t2_reviewer")
     const {projectId} = await request.json()
-    const adminJWTToken = cookies.get("admin_jwt")
-    if (!adminJWTToken) {
-        return error(401, "Unauthorized")
+    if (!Number.isSafeInteger(Number(projectId))) {
+        return error(400, "Invalid project id")
     }
-    try {
-        const decoded = jwt.verify(adminJWTToken, ADMIN_JWT_SECRET) as AdminJWT
-        if (!decoded.isT2Reviewer) {
-            return error(401, "Unauthorized")
-        }
-    }  catch (err) {
-        return error(401, "Unauthorized")
-    }
-    const project = await getProjectWithHackatime(projectId);
+    const project = await getProjectWithHackatime(String(projectId));
 if (!project.ok) {
     return error(404, "Project not found")
 }
@@ -158,20 +157,22 @@ if (!project.ok) {
             "Authorization": `Bearer ${projectData.fields.hackatimeToken}`
         }
     })
-    const token = (await fetchUserTokens.json()).token
-    if (!fetchUserTokens.ok || !token) {
+    const token = fetchUserTokens.ok ? (await fetchUserTokens.json().catch(() => null))?.token : null
+    if (!token) {
         return error(500, "Failed to fetch Hackatime API token")
     }
-    const heartbeatRespose = await fetch(`https://hackatime.hackclub.com/api/v1/my/heartbeats?start_time=2026-06-18`, {
+    // Same window as the user's Hackatime totals (START_DATE), falling back to the review tools' default
+    const startDate = env.START_DATE || HACKATIME_REVIEW_START_DATE
+    const heartbeatRespose = await fetch(`https://hackatime.hackclub.com/api/v1/my/heartbeats?start_time=${encodeURIComponent(startDate)}`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
     })
-    const heartbeatData = await heartbeatRespose.json()
-    const filteredHeartbeats = filterHeartbeatsByHackatimeProject(heartbeatData.heartbeats, projectData.fields.hackatime)
-    if (!heartbeatRespose.ok || !filteredHeartbeats) {
-        return error(500, "Failed to fetch Hackatime heartbeats")
+    const heartbeatData = heartbeatRespose.ok ? await heartbeatRespose.json().catch(() => null) : null
+    if (!Array.isArray(heartbeatData?.heartbeats)) {
+        return error(502, "Failed to fetch Hackatime heartbeats")
     }
+    const filteredHeartbeats = filterHeartbeatsByHackatimeProject(heartbeatData.heartbeats, projectData.fields.hackatime)
     const aiCat = "ai coding"
     const building = "building"
     const timelapsing = "timelapsing"

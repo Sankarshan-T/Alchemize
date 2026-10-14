@@ -4,21 +4,11 @@ import { hackatimeAuthUrl, getDataFromAccessToken } from "$lib/utils"
 import { error, redirect } from "@sveltejs/kit"
 import type { RequestHandler } from "./$types"
 import type { UserAuthToken } from "$lib/types"
-import type { AirtableUser } from "$lib/types"
 import { encryptAES } from "$lib/utils.server"
-import jwt from "jsonwebtoken"
-import crypto from "crypto"
-import { createNewUser, getUserByEmail, createReferRecord, addUserToAuthTable } from "$lib/db"
-const XORdecrypt = (textInp: string) => {
-	const tb = Buffer.from(textInp, "base64")
-	const kb = Buffer.from(env.USERID_ENCRYPTION_KEY, "hex")
-	const out = Buffer.alloc(tb.length)
-
-	for (let i = 0; i < tb.length; i++) {
-		out[i] = tb[i] ^ kb[i % kb.length]
-	}
-	return out.toString("utf-8")
-}
+import { signUserToken, USER_SESSION_MAX_AGE_SECONDS } from "$lib/server/auth"
+import { consumeOAuthState, verifyHackClubIdToken } from "$lib/server/hackClubAuth"
+import { resolveAccountForLogin, createReferRecord, addUserToAuthTable, isKnownReferrer, type LoginAccount } from "$lib/db"
+import { deriveReferralKey, parseReferralCode } from "$lib/server/referralCode"
 /*
 CLEANUP PLAN DETAILS DO NOT TOUCH:
 Code FLOW:
@@ -32,14 +22,11 @@ Code FLOW:
 */
 export const GET: RequestHandler = async ({ url, cookies }) => {
 	// All Cookies Used
-	// airtable_user_record_id: Stores the Airtable record ID of the user, used for database operations
 	// user_token: JWT containing user information, used for authentication and authorization in the app
-	// access_token_new: The access token from Hack Club OAuth, used for making authenticated requests to Hack Club API
+	//   (verified once per request in hooks.server.ts, valid for 30 days)
 	// hackatime_verified:  flag indicating the user has a verified Hackatime account, read server-side only
 	// slack_id: The user's Slack ID from Hack Club, used for Slack integration features in the app
-	// Hackatime Token stored for 1 year
-	// User Token stored for 4 months
-	// Hack Club Auth tokens stored for 6 months (refresh tokens not used, so access tokens are long-lived)
+	// The Hack Club Auth access token is only used during this request and never stored
 
 
 	const code = url.searchParams.get("code")
@@ -58,15 +45,11 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	}
 
 
-	const state = url.searchParams.get("state")
-	const storedState = cookies.get("oauth_state")
-	if (!state || !storedState || state !== storedState) {
-		cookies.delete("oauth_state", { path: "/" })
+	if (!consumeOAuthState(cookies, "oauth_state", url.searchParams.get("state"))) {
 		throw error(400, "Invalid state parameter")
 	}
-	cookies.delete("oauth_state", { path: "/" })
 
-	const [tokenResponse, keysResponse] = await Promise.all([fetch("https://auth.hackclub.com/oauth/token", {
+	const tokenResponse = await fetch("https://auth.hackclub.com/oauth/token", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -78,15 +61,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 			code,
 			grant_type: "authorization_code",
 		}),
-	}),
-	fetch("https://auth.hackclub.com/oauth/discovery/keys")])
-
-	const [tokenBody, keysBody] = await Promise.all([tokenResponse.json(), keysResponse.json()])
-	const jwk = keysBody.keys[0]
-	const publicKey = crypto.createPublicKey({
-		key: jwk,
-		format: "jwk",
 	})
+	const tokenBody = await tokenResponse.json().catch(() => null)
 	if (!tokenResponse.ok) {
 		console.error("Token exchange failed:", tokenBody)
 		throw error(
@@ -96,9 +72,17 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	}
 	const meResponse = await getDataFromAccessToken(tokenBody.access_token)
 
-	const decodedToken: any = jwt.verify(tokenBody.id_token, publicKey, { algorithms: ["RS256"] })
+	// Signature (key chosen by kid), issuer, audience (our OAuth client) and expiry are checked before any claim is used
+	let decodedToken: any
+	try {
+		decodedToken = await verifyHackClubIdToken(tokenBody.id_token, clientId)
+	} catch (err) {
+		console.error("ID token verification failed:", err)
+		throw error(401, "Your Hack Club login couldn't be verified, please try again")
+	}
 	const email = decodedToken.email
-	const name = decodedToken.name
+	// Optional on Hack Club Auth: a missing name or birthday must not make the login throw
+	const name: string = typeof decodedToken.name === "string" ? decodedToken.name.trim() : ""
 	const slackId = decodedToken.slack_id
 	const hackClubId = decodedToken.sub
 	const firstName = decodedToken.nickname
@@ -113,39 +97,35 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		encryptedAddress = encryptAES(JSON.stringify(meResponse.address)).finalString
 
 	}
-	const encryptedBirthdate = encryptAES(meResponse.birthday).finalString
-	const encryptedFirstName = encryptAES(name.split(" ")[0]).finalString
-	const encryptedLastName = encryptAES(name.split(" ").at(-1)).finalString
-	let userRecordId = ""
-	//Look for user in DB, if not found create new user
-	const [userResponse] = await Promise.all([getUserByEmail(email), addUserToAuthTable(email, encryptedAddress, encryptedBirthdate, encryptedFirstName, encryptedLastName, iv, hackClubId)])
-	if (!userResponse.ok) {
-		console.error("Database error:", await userResponse.text())
-		return error(userResponse.status, "Database error")
+	// "null" (unencrypted) marks a missing value, as for the address: the dashboard lists it as missing and the
+	// T2 award refuses to submit it to Unified
+	const encryptedBirthdate = typeof meResponse.birthday === "string" && meResponse.birthday !== ""
+		? encryptAES(meResponse.birthday).finalString
+		: "null"
+	const nameParts = name.split(" ").filter(Boolean)
+	const encryptedFirstName = nameParts.length > 0 ? encryptAES(nameParts[0]).finalString : "null"
+	const encryptedLastName = nameParts.length > 0 ? encryptAES(nameParts.at(-1)!).finalString : "null"
+	// Find the account by Hack Club Auth id (falling back to email), creating it on first login.
+	// account.email is the account key used everywhere else; it follows email changes on Hack Club Auth.
+	let account: LoginAccount
+	try {
+		account = await resolveAccountForLogin(hackClubId, email, slackId)
+	} catch (err) {
+		console.error("Database error while resolving the account:", err)
+		return error(500, "Database error")
 	}
-	let userData: AirtableUser[] = (await userResponse.json()).records
-
-	if (userData.length === 0) {
-		newUser = true
-		const createResponse = await createNewUser(email, hackClubId, slackId)
-		if (!createResponse.ok) {
-			console.error("Database error:", await createResponse.text())
-			return error(createResponse.status, "Database error")
-		}
-		userRecordId = (await createResponse.json()).id
-	} else {
-
-		userRecordId = userData[0].id
-	}
+	await addUserToAuthTable(account.email, encryptedAddress, encryptedBirthdate, encryptedFirstName, encryptedLastName, iv, hackClubId)
+	newUser = account.isNew
+	const userRecordId = String(account.id)
 	if (referCookie && newUser) {
-		const decodedRefer = XORdecrypt(referCookie)
-		const [referrerId, referrerSlackId] = decodedRefer.split(" ")
-		// A bad referral code is ignored: the account already exists at this point,
-		// so failing here would only lock the new user out of their first login
-		if (decodedRefer.split(" ").length === 2 && referrerId && referrerSlackId?.startsWith("U")) {
+		const referral = parseReferralCode(referCookie, deriveReferralKey(env.USER_JWT_SECRET), env.USERID_ENCRYPTION_KEY ?? "")
+		const isSelfReferral = referral !== null && `ident!${referral.referer.split(" ")[0]}` === hackClubId
+		// Invalid, forged (legacy codes must name a real user) or self-referrals are ignored: the account already
+		// exists at this point, so failing here would only lock the new user out of their first login
+		if (referral && !isSelfReferral && (!referral.legacy || await isKnownReferrer(referral.referer))) {
 			const referRespone = await createReferRecord(
-				email,
-				decodedRefer,
+				account.email,
+				referral.referer,
 				yswsEligible,
 				verification,
 				firstName
@@ -155,7 +135,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 				return error(referRespone.status, "Database error")
 			}
 		} else {
-			console.warn("Ignoring malformed referral cookie for a new user")
+			console.warn("Ignoring an invalid, unknown or self referral for a new user")
 		}
 	}
 	if (referCookie) {
@@ -164,36 +144,21 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const userToken: UserAuthToken = {
 		id: hackClubId,
 		dbid: userRecordId,
-		email,
+		email: account.email,
 		verification_status: verification,
 		first_name: firstName,
-		last_name: name.split(" ").slice(1).join(" "),
+		last_name: nameParts.slice(1).join(" "),
 		slack_id: slackId,
 		ysws_eligible: yswsEligible,
 		version: 3,
 	}
-	const jwtToken = jwt.sign(userToken, env.USER_JWT_SECRET, { expiresIn: "120d" })
+	const jwtToken = signUserToken(userToken)
 	cookies.set("user_token", jwtToken, {
 		httpOnly: true,
 		secure: true,
 		sameSite: "lax",
-		maxAge: 60 * 60 * 24 * 120, // 120 days
+		maxAge: USER_SESSION_MAX_AGE_SECONDS,
 		path: "/",
-	})
-	cookies.set("airtable_user_record_id", "21212", {
-		httpOnly: true,
-		secure: true,
-		sameSite: "lax",
-		maxAge: 60 * 60 * 24 * 365, // 1 year
-		path: "/",
-	})
-	cookies.set("access_token_new", "redact", {
-		httpOnly: true,
-		secure: true,
-		sameSite: "lax",
-		maxAge: 60 * 60 * 24 * 180, // 6 months
-		path: "/",
-
 	})
 	cookies.set("slack_id", slackId, {
 		httpOnly: true,
@@ -202,7 +167,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 		maxAge: 60 * 60 * 24 * 365, // 1 year
 		path: "/",
 	})
-	if (userData.length > 0 && userData[0].fields.hackatime) {
+	if (account.hasHackatime) {
 
 		cookies.set("hackatime_verified", "true", {
 			httpOnly: false,

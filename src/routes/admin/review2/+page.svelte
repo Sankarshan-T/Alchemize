@@ -12,6 +12,9 @@
 	} from "$lib/types"
 	import { toast } from "svelte-sonner"
 	import { invalidateAll } from "$app/navigation"
+	import { readErrorMessage } from "$lib/http"
+	import { Info } from "lucide-svelte"
+	import { safeHref } from "$lib/urls"
 	import { countCharacters } from "$lib/utils"
 	import { cn } from "$lib/lib/utils"
 	import {
@@ -30,14 +33,8 @@
 		Title,
 		Tooltip,
 	} from "chart.js"
-	interface AdminProjectAccess extends AirtableProject {
-		fields: AirtableProject["fields"] & {
-			unifiedId: string
-		}
-	}
-	interface AdminProject extends Project {
-		unifiedId: string
-	}
+	type AdminProjectAccess = AirtableProject
+	type AdminProject = Project
 	let detailsOpen = $state(false)
 	let currentHackatimeAnalysis = $state({} as HackatimeAnalysis)
 	let { data } = $props()
@@ -57,9 +54,7 @@
 	)
 	const wasEverApproved = (project: AirtableProject) => {
 		//Checks the logs and returns true if there was ever an approved log, that is not sent to airtable (aka not pushed)
-		console.log("Checking if project was ever approved:", project.fields.Name)
 		const logs = JSON.parse(project.fields.log || "[]") as Log[]
-		console.log("Checking if project was ever approved:", project.fields.Name)
 		return logs.some(log => log.status === 1)
 	}
 	let currentProject = $state({} as AdminProject)
@@ -122,7 +117,6 @@
 			}),
 		})
 		const data = await response.json()
-		console.log("Hackatime analysis data:", data)
 		currentHackatimeAnalysis = data
 		await tick()
 		renderBar()
@@ -152,14 +146,11 @@
 			readme: nextProject.fields.code,
 			update: nextProject.fields.update,
 			hackatime: nextProject.fields.hackatime,
-			owner: nextProject.fields.owner,
 			screenshot2: nextProject.fields.screenshot2,
 			screenshot: nextProject.fields.screenshot,
-			unifiedId: nextProject.fields.unifiedId,
 		}
 		currentHackatimeAnalysis = {} as HackatimeAnalysis
 		fetchHackatimeAnalysis(currentProject.id + "")
-		console.log("Current project set to log:", currentProject.log)
 	}
 	const calculateDelta = (log: Log[], includePushed = false): number => {
 		let delta = 0
@@ -394,34 +385,84 @@
 		}
 	})
 
-	const sendToDatabase = async () => {
-		airtableProjects = airtableProjects.filter(p => p.id !== currentProject.id)
-		const id = currentProject.id
-		currentProject = {} as AdminProject
-		const response = await fetch("/admin/review2/sendToAirtable", {
+	type InDoubtResolution = "already_in_airtable" | "not_in_airtable"
+	const pushToUnified = (
+		projectId: string,
+		justification: string,
+		deductedHours: number,
+		resolveInDoubt?: InDoubtResolution
+	) =>
+		fetch("/admin/review2/sendToAirtable", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Accept: "application/json",
 			},
 			body: JSON.stringify({
-				projectId: id,
-				justification: template,
-				subtraction,
+				projectId,
+				justification,
+				subtraction: deductedHours,
+				resolveInDoubt,
 			}),
 		})
 
-		if (response.ok) {
-			toast.success(
-				"Pushed " + currentProject.name + " to Airtable successfully!"
+	// An earlier push whose outcome is unknown (timeout, crash) must be resolved by a person: pushing again
+	// blindly could create a second Unified record for the same hours
+	const askHowToResolve = (message: string): InDoubtResolution | null => {
+		if (
+			confirm(
+				`${message}\n\nOpen Airtable (YSWS Project Submission) and look for this project.\n\nPress OK if it IS already there: the award is recorded without submitting again.`
 			)
+		) {
+			return "already_in_airtable"
+		}
+		if (
+			confirm(
+				"Press OK if it is NOT in Airtable, to submit it again now. Press Cancel to do nothing."
+			)
+		) {
+			return "not_in_airtable"
+		}
+		return null
+	}
+
+	const sendToDatabase = async () => {
+		airtableProjects = airtableProjects.filter(p => p.id !== currentProject.id)
+		const id = currentProject.id
+		const name = currentProject.name
+		const justification = template
+		const deductedHours = subtraction
+		currentProject = {} as AdminProject
+		let response = await pushToUnified(id, justification, deductedHours)
+
+		if (response.status === 409) {
+			const body = await response
+				.clone()
+				.json()
+				.catch(() => null)
+			if (body?.code === "SUBMISSION_IN_DOUBT") {
+				const resolution = askHowToResolve(body.message)
+				if (!resolution) {
+					toast.info("Nothing was changed. Resolve it once you've checked Airtable.")
+					loader = false
+					invalidateAll()
+					return
+				}
+				response = await pushToUnified(id, justification, deductedHours, resolution)
+			}
+		}
+
+		if (response.ok) {
+			toast.success("Pushed " + name + " to Airtable successfully!")
 			loader = false
 			invalidateAll()
 			currentProject = {} as AdminProject
 		} else {
 			toast.error(
-				(await response.text()) || "Failed to push project to Airtable"
+				await readErrorMessage(response, "Failed to push project to Airtable")
 			)
 			loader = false
+			invalidateAll()
 		}
 	}
 	const areAllPushedToHQ = (log: Log[]): boolean => {
@@ -437,18 +478,6 @@
 		) ?? []
 	)
 
-	airtableProjects?.forEach(project => {
-		console.log(
-			"Filtered project: ",
-			project.fields.Name,
-			" | Was ever approved: ",
-			wasEverApproved(project),
-			" | All pushed to HQ: ",
-			areAllPushedToHQ(JSON.parse(project.fields.log || "[]") as Log[]),
-			" | Pending: ",
-			pending
-		)
-	})
 
 	let sentCount = $derived(
 		airtableProjects?.filter(
@@ -478,6 +507,7 @@
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				Accept: "application/json",
 			},
 			body: JSON.stringify({
 				recordId: id,
@@ -496,7 +526,7 @@
 			toast.info("Project rejected but notification not sent")
 			loader = false
 		} else {
-			toast.error((await response.text()) || "Failed to reject project")
+			toast.error(await readErrorMessage(response, "Failed to reject project"))
 			loader = false
 		}
 	}
@@ -504,7 +534,6 @@
 	let confirmPushOpen = $state(false)
 	let confirmRejectOpen = $state(false)
 
-	console.log(data)
 </script>
 
 <svelte:head>
@@ -681,21 +710,27 @@
 							</Button>
 							<div class="h-3 w-[1px] bg-zinc-800 mx-0.5"></div>
 							<a
-								href={currentProject.demo}
+								href={safeHref(currentProject.demo)}
 								target="_blank"
 								rel="noreferrer noopener"
 								class="text-[11px] font-medium px-2.5 py-1 bg-primary/20 hover:bg-primary/30 text-primary rounded-md transition"
 								>Demo</a
 							>
 							<a
-								href={currentProject.code}
+								href={safeHref(currentProject.code)}
 								target="_blank"
 								rel="noreferrer noopener"
 								class="text-[11px] font-medium px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md transition"
 								>Repo</a
 							>
 							<a
-								href="https://introspect.sahil.ink?repo_url={currentProject.code}&demo_url={currentProject.demo}&slack_id={currentProject.submittedBy}&hours={currentProject.hours}&project_name={currentProject.name}"
+								href={`https://introspect.sahil.ink?${new URLSearchParams({
+									repo_url: currentProject.code ?? "",
+									demo_url: currentProject.demo ?? "",
+									slack_id: currentProject.submittedBy ?? "",
+									hours: String(currentProject.hours ?? ""),
+									project_name: currentProject.name ?? "",
+								})}`}
 								target="_blank"
 								rel="noreferrer noopener"
 								class="text-[11px] font-medium px-2.5 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md transition"
@@ -751,7 +786,7 @@
 											? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'
 											: 'text-amber-400 border-amber-500/20 bg-amber-500/5'}"
 									>
-										<i class="fa-solid fa-circle-info"></i>
+										<Info class="h-3.5 w-3.5" />
 										<span>
 											{projectDescriptionLength > 250
 												? "Justification character target met."

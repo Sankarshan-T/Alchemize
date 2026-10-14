@@ -2,20 +2,24 @@ import { env } from '$env/dynamic/private';
 import {PUBLIC_HACKATIME_AUTH, PUBLIC_HACKATIME_REDIRECT} from '$env/static/public'
 import { error, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import jwt from 'jsonwebtoken';
-import {USER_JWT_SECRET} from '$env/static/private'
 import { patchUserHackatime } from '$lib/db';
-import type {UserAuthToken} from '$lib/types';
+import { consumeOAuthState } from '$lib/server/hackClubAuth';
 
 
-export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
+export const GET: RequestHandler = async ({ url, cookies, fetch, locals }) => {
 	const code = url.searchParams.get('code');
-	const userToken = cookies.get('user_token');
 	if (!code) {
 		throw error(400, 'Missing authorization code');
 	}
-	if (!userToken) {
+	// Verified once per request in hooks.server.ts
+	const userData = locals.user;
+	if (!userData) {
 		throw redirect(303, '/');
+	}
+	// The code must come back from a flow this browser started (/hackatime_auth), otherwise someone could get
+	// their own Hackatime account linked to the victim's Alchemize account
+	if (!consumeOAuthState(cookies, 'hackatime_oauth_state', url.searchParams.get('state'))) {
+		throw error(400, 'Invalid or expired Hackatime login, please try connecting Hackatime again');
 	}
 
 	const clientId = PUBLIC_HACKATIME_AUTH;
@@ -50,22 +54,7 @@ export const GET: RequestHandler = async ({ url, cookies, fetch }) => {
 
 
 
-	const at = cookies.get('access_token_new') ?? cookies.get('access_token');
-	if (!at) {
-		throw error(401, 'Missing access token cookie');
-	}
-	let userData: UserAuthToken;
-	try {
-		let decoded= jwt.verify(userToken, USER_JWT_SECRET) as unknown as UserAuthToken;
-		if (!decoded.email) {
-			throw new Error('Email claim missing in JWT');
-		}
-		userData = decoded;
-	}catch (err) {
-		console.error('JWT verification failed:', err);
-		throw error(401, 'Invalid User token');
-	}
-	let email = userData?.email
+	const email = userData.email
 
 
 

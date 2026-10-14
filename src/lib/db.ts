@@ -1,9 +1,10 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
-import { eq, and, gte, asc, desc } from 'drizzle-orm'
-import { integer, pgTable, varchar, uuid, jsonb, boolean, real, timestamp } from "drizzle-orm/pg-core";
+import { eq, and, gte, asc, desc, ne, notLike, or, sql } from 'drizzle-orm'
+import { integer, pgTable, varchar, uuid, jsonb, boolean, real, timestamp, uniqueIndex, check } from "drizzle-orm/pg-core";
 import type { Log } from './types'
-import { CURRENCY_KEY, CURRENCY_NAME, hundredthsToUnits, formatAqua } from './currency'
+import { CURRENCY_KEY, CURRENCY_NAME, hundredthsToUnits, formatAqua, minutesToHundredths } from './currency'
+import { applyT2Award, calculateNewMinutes, hasUnpushedApprovedEntries, sharesHackatimeProject } from './server/projectLog'
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -25,8 +26,10 @@ if (!DATABASE_URL) {
 // Schemas
 export const userTable = pgTable("users", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    // Hack Club Auth identity id ("sub"); the stable account key, since emails can change
     userid: varchar({ length: 255 }).notNull(),
-    email: varchar({ length: 455 }).notNull(),
+    // Unique (script/migrations/2026-10-data-integrity.sql): balances are updated WHERE email = $1
+    email: varchar({ length: 455 }).notNull().unique(),
     hackatime: varchar({ length: 1000 }),
     slackId: varchar({ length: 255 }),
     // Legacy multi-currency JSON, kept read-only until the Aqua Regia migration is verified; do not read or write it
@@ -77,16 +80,24 @@ export const ordersTable = pgTable("orders", {
     status: varchar({ length: 255 }).notNull(),
     fulfiller: varchar({ length: 255 }),
     moreData: varchar({ length: 3000 }),
-    dateCreated: varchar({ length: 255 }).notNull().default(new Date().toISOString()),
+    // Evaluated by Postgres on every insert. A JS default (new Date().toISOString()) is evaluated once, when the
+    // schema is pushed, and gave every order the same date.
+    dateCreated: varchar({ length: 255 }).notNull().default(sql`to_char(now() AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`),
+    // Unit price actually paid, in hundredths of Aqua Regia (NULL on orders placed before it was recorded)
+    priceHundredths: integer(),
 })
 export const adminTable = pgTable("admins", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    // Admin login matches on this, so it must be present and unique
     slackId: varchar({ length: 255 }).notNull(),
     email: varchar({ length: 455 }).notNull().unique(),
     roles: varchar({ length: 355 }).notNull(),
     name: varchar({ length: 255 }).notNull(),
     nda: varchar({ length: 255 }).notNull(),
-})
+}, table => [
+    uniqueIndex("admins_slack_id_unique").on(table.slackId).where(sql`"slackId" <> ''`),
+    check("admins_slack_id_not_empty", sql`"slackId" <> ''`),
+])
 export const justifications = pgTable("justifications", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull().default(""),
@@ -148,6 +159,25 @@ export const rsvpTable = pgTable("rsvp", {
     createdAt: timestamp().defaultNow().notNull()
 
 })
+// One row per attempt to submit a project to Unified (Airtable). An attempt is "started" before Airtable is
+// called and only becomes "submitted" together with the award, so an attempt whose outcome is unknown
+// (timeout, crash, failed commit) stays "started" and blocks blind retries that would duplicate the record.
+// Created by script/migrations/2026-10-unified-submissions.sql
+export const unifiedSubmissionsTable = pgTable("unified_submissions", {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    projectId: integer().notNull().references(() => projectTable.id),
+    status: varchar({ length: 32 }).notNull(), // started | submitted | failed
+    approvedMinutes: integer().notNull(),
+    amountHundredths: integer().notNull(),
+    reviewerSlackId: varchar({ length: 255 }).notNull(),
+    reviewerName: varchar({ length: 255 }).notNull(),
+    airtableRecordId: varchar({ length: 255 }),
+    error: varchar({ length: 1000 }),
+    startedAt: timestamp().defaultNow().notNull(),
+    finishedAt: timestamp(),
+}, table => [
+    uniqueIndex("unified_submissions_one_in_flight").on(table.projectId).where(sql`status = 'started'`),
+])
 // Response Interface
 export interface DBResponse {
     ok: boolean;
@@ -159,12 +189,28 @@ export interface airtableReplication {
     id: string
     fields: any
 }
-const isNeon = DATABASE_URL?.includes("neon.tech");
+// TLS to Postgres. DATABASE_SSL (read at runtime) overrides the default:
+//   verify  - TLS, certificate checked against the system CAs (default for Neon)
+//   require - TLS without certificate checks (encrypted but open to MITM; only if verify can't work)
+//   disable - no TLS (default otherwise, e.g. a database on the same private Docker network)
+// sslmode=... parameters in DATABASE_URL take precedence over all of this (node-postgres behaviour).
+const resolveSsl = (url: string) => {
+    const mode = (process.env.DATABASE_SSL ?? "").trim().toLowerCase()
+    if (mode === "verify") return { rejectUnauthorized: true }
+    if (mode === "require") return { rejectUnauthorized: false }
+    if (mode === "disable") return false
+    if (mode !== "") console.warn(`Unknown DATABASE_SSL value "${mode}", using the default`)
+    if (url.includes("neon.tech")) return { rejectUnauthorized: true }
+    let host = ""
+    try { host = new URL(url).hostname } catch { /* leave empty */ }
+    if (host !== "" && !["localhost", "127.0.0.1", "::1"].includes(host)) {
+        console.warn(`Connecting to Postgres at ${host} without TLS; set DATABASE_SSL=verify if it isn't on a private network`)
+    }
+    return false
+}
 const pool = new Pool({
     connectionString: DATABASE_URL,
-    ssl: isNeon
-        ? { rejectUnauthorized: false }
-        : false
+    ssl: resolveSsl(DATABASE_URL)
 });
 
 const db = drizzle(pool); //Database Connection
@@ -243,9 +289,11 @@ export const atomicPurchaseItem = async (
                 };
             }
             const balanceHundredths: number = deduction.rows[0].balanceHundredths;
+            // total = unit price x quantity, so this division is exact
+            const unitPriceHundredths = totalPriceHundredths / quantity;
             const orderResult = await client.query(
-                'INSERT INTO orders ("orderItem", "itemID", qty, "ordererEmail", "ordererUid", status, fulfiller, "moreData") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
-                [itemName, itemID, String(quantity), email, ordererUid, 'pending', '', moreData]
+                'INSERT INTO orders ("orderItem", "itemID", qty, "ordererEmail", "ordererUid", status, fulfiller, "moreData", "priceHundredths") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+                [itemName, itemID, String(quantity), email, ordererUid, 'pending', '', moreData, unitPriceHundredths]
             );
             await insertLedgerEntryTx(client, {
                 email,
@@ -273,50 +321,124 @@ export const atomicPurchaseItem = async (
     }
 };
 
-// Atomic T2 ship + award: locks the project and owner rows, hands the locked log to `ship` (which validates,
-// computes the award and performs the external Unified submission), then writes the new log, credits the
-// owner and records the ledger entry. If anything throws, nothing is written, and a concurrent ship of the
-// same project blocks on the row lock and then sees the logs already pushed.
-export const atomicShipProjectAndAward = async (
+export interface UnifiedSubmission {
+    id: number
+    projectId: number
+    status: "started" | "submitted" | "failed"
+    approvedMinutes: number
+    amountHundredths: number
+    reviewerSlackId: string
+    reviewerName: string
+    startedAt: Date
+}
+
+const abortResponse = (error: unknown, fallback: string): DBResponse => {
+    const status = error instanceof TransactionAbort ? error.status : 500;
+    const message = error instanceof TransactionAbort ? error.message : fallback;
+    if (!(error instanceof TransactionAbort)) {
+        console.error(`${fallback}:`, error);
+    }
+    return {
+        ok: false,
+        status,
+        json: async () => ({ message }),
+        text: async () => JSON.stringify({ message }),
+    };
+};
+
+// Unified submission, phase 1 of 3: under the project row lock, check there is approved time to send and
+// no earlier attempt with an unknown outcome, then record a "started" attempt with the award amount. The
+// lock is released before Airtable is called, so no row stays locked during the external request.
+export const beginUnifiedSubmission = async (
     projectId: number,
-    ship: (locked: { log: Log[], owner: string, theme: string }) => Promise<{
-        newLog: Log[],
-        amountHundredths: number,
-        remarks: string
-    }>
-): Promise<DBResponse> => {
+    deductedMinutes: number,
+    reviewer: { slackId: string, name: string }
+): Promise<{ ok: true, submission: UnifiedSubmission } | { ok: false, status: number, message: string, inFlight?: UnifiedSubmission }> => {
     try {
         return await withTransaction(async (client) => {
-            const projectResult = await client.query(
-                'SELECT log, owner, "Theme" FROM projects WHERE id = $1 FOR UPDATE',
-                [projectId]
-            );
+            const projectResult = await client.query('SELECT log, owner FROM projects WHERE id = $1 FOR UPDATE', [projectId]);
             if (projectResult.rows.length === 0) {
                 throw new TransactionAbort(404, "Project not found");
             }
-            const { log, owner, Theme } = projectResult.rows[0];
-            // Lock the owner before any external side effect, so a missing user fails before Unified is contacted
-            const userResult = await client.query(
-                'SELECT "slackId" FROM users WHERE email = $1 FOR UPDATE',
-                [owner]
+            const inFlight = await client.query(
+                'SELECT * FROM unified_submissions WHERE "projectId" = $1 AND status = \'started\'',
+                [projectId]
             );
+            if (inFlight.rows.length > 0) {
+                return { ok: false as const, status: 409, message: "An earlier submission of this project to Unified did not finish", inFlight: inFlight.rows[0] as UnifiedSubmission };
+            }
+            const log = JSON.parse(projectResult.rows[0].log || "[]") as Log[];
+            if (!hasUnpushedApprovedEntries(log)) {
+                throw new TransactionAbort(400, "All approved logs are already submitted to HQ");
+            }
+            const userResult = await client.query('SELECT 1 FROM users WHERE email = $1', [projectResult.rows[0].owner]);
             if (userResult.rows.length === 0) {
                 throw new TransactionAbort(404, "Project owner not found");
             }
+            const approvedMinutes = calculateNewMinutes(log);
+            if (!Number.isSafeInteger(deductedMinutes) || deductedMinutes < 0 || deductedMinutes > approvedMinutes) {
+                throw new TransactionAbort(400, `Cannot deduct ${(deductedMinutes / 60).toFixed(2)}h, only ${(approvedMinutes / 60).toFixed(2)}h are approved in this review`);
+            }
+            // 1 approved hour = 1 Aqua Regia, credited to the hundredth
+            const amountHundredths = minutesToHundredths(approvedMinutes - deductedMinutes);
+            const inserted = await client.query(
+                'INSERT INTO unified_submissions ("projectId", status, "approvedMinutes", "amountHundredths", "reviewerSlackId", "reviewerName") VALUES ($1, \'started\', $2, $3, $4, $5) RETURNING *',
+                [projectId, approvedMinutes - deductedMinutes, amountHundredths, reviewer.slackId, reviewer.name]
+            );
+            return { ok: true as const, submission: inserted.rows[0] as UnifiedSubmission };
+        });
+    } catch (error) {
+        const response = abortResponse(error, "Starting the Unified submission failed");
+        return { ok: false, status: response.status, message: (await response.json()).message };
+    }
+};
 
+// The submission definitely did not create an Airtable record (Airtable refused it, or a reviewer checked):
+// release the in-flight slot so a new attempt can start.
+export const markUnifiedSubmissionFailed = async (submissionId: number, reason: string): Promise<void> => {
+    await pool.query(
+        'UPDATE unified_submissions SET status = \'failed\', error = $2, "finishedAt" = now() WHERE id = $1 AND status = \'started\'',
+        [submissionId, reason.slice(0, 1000)]
+    );
+};
+
+// Unified submission, phase 3 of 3 (after Airtable accepted the record, or a reviewer confirmed it is there):
+// in one transaction, mark the approved entries as sent to HQ, credit the owner with the amount recorded
+// when the attempt started, write the ledger entry and close the attempt.
+export const completeUnifiedSubmission = async (
+    submissionId: number,
+    justification: string,
+    airtableRecordId: string | null
+): Promise<DBResponse> => {
+    try {
+        return await withTransaction(async (client) => {
+            const submissionResult = await client.query('SELECT * FROM unified_submissions WHERE id = $1 FOR UPDATE', [submissionId]);
+            const submission = submissionResult.rows[0] as UnifiedSubmission | undefined;
+            if (!submission || submission.status !== "started") {
+                throw new TransactionAbort(409, "This submission was already completed or cancelled. Refresh and try again.");
+            }
+            const projectResult = await client.query('SELECT log, owner FROM projects WHERE id = $1 FOR UPDATE', [submission.projectId]);
+            if (projectResult.rows.length === 0) {
+                throw new TransactionAbort(404, "Project not found");
+            }
+            const { log, owner } = projectResult.rows[0];
+            const userResult = await client.query('SELECT "slackId" FROM users WHERE email = $1 FOR UPDATE', [owner]);
+            if (userResult.rows.length === 0) {
+                throw new TransactionAbort(404, "Project owner not found");
+            }
             const lockedLog = JSON.parse(log || "[]") as Log[];
-            const { newLog, amountHundredths, remarks } = await ship({ log: lockedLog, owner, theme: Theme });
+            const newLog = applyT2Award(lockedLog, justification, submission.reviewerName);
             const violation = findPushedEntryViolation(lockedLog, newLog);
             if (violation) {
                 throw new TransactionAbort(500, `Refusing award: ${violation}`);
             }
+            const amountHundredths = submission.amountHundredths;
             if (!Number.isSafeInteger(amountHundredths) || amountHundredths < 0) {
                 throw new TransactionAbort(500, "Invalid award amount");
             }
-
             await client.query(
                 'UPDATE projects SET log = $1, status = $2 WHERE id = $3',
-                [JSON.stringify(newLog), "accepted_t2", projectId]
+                [JSON.stringify(newLog), "accepted_t2", submission.projectId]
             );
             if (amountHundredths > 0) {
                 await client.query(
@@ -329,9 +451,13 @@ export const atomicShipProjectAndAward = async (
                     sign: true,
                     amountHundredths,
                     reason: "review-accept",
-                    remarks
+                    remarks: `Added ${formatAqua(amountHundredths)} for project approval`
                 });
             }
+            await client.query(
+                'UPDATE unified_submissions SET status = \'submitted\', "airtableRecordId" = $2, "finishedAt" = now() WHERE id = $1',
+                [submissionId, airtableRecordId]
+            );
             return {
                 ok: true,
                 status: 200,
@@ -340,27 +466,26 @@ export const atomicShipProjectAndAward = async (
             };
         });
     } catch (error) {
-        const status = error instanceof TransactionAbort ? error.status : 500;
-        const message = error instanceof TransactionAbort ? error.message : "Ship and award failed";
-        if (!(error instanceof TransactionAbort)) {
-            console.error("Atomic ship and award failed:", error);
-        }
-        return {
-            ok: false,
-            status,
-            json: async () => ({ message }),
-            text: async () => JSON.stringify({ message }),
-        };
+        return abortResponse(error, "Completing the Unified submission failed");
     }
 };
 
 // Database Compatiblity Layer
 
 //User Functions
+// Account fields only. The Hackatime OAuth token is never part of this: callers that need it for a server-side
+// Hackatime request use getHackatimeTokenByEmail, so it can't end up in page data by spreading a user row.
 export const getUserByEmail = async (email: string): Promise<DBResponse> => {
 
     try {
-        const users = await db.select().from(userTable).where(eq(userTable.email, email));
+        const users = await db.select({
+            id: userTable.id,
+            userid: userTable.userid,
+            email: userTable.email,
+            slackId: userTable.slackId,
+            balanceHundredths: userTable.balanceHundredths,
+            hasHackatime: sql<boolean>`coalesce(${userTable.hackatime}, '') <> ''`,
+        }).from(userTable).where(eq(userTable.email, email));
         const records = users.map(user => ({ id: user.id + "", fields: user })) as airtableReplication[];
         return {
             ok: true,
@@ -381,28 +506,78 @@ export const getUserByEmail = async (email: string): Promise<DBResponse> => {
     }
 }
 
-export const createNewUser = async (email: string, userid: string, slackId: string): Promise<DBResponse> => {
-    try {
-        const newUser = await db.insert(userTable).values({ email, userid: userid, slackId, hackatime: "" }).returning();
+// Every column that refers to a user account by email. The account key is users.email; when someone changes
+// their email on Hack Club Auth, all of these move to the new email together.
+const ACCOUNT_EMAIL_COLUMNS: [table: string, column: string][] = [
+    ["users", "email"],
+    ["projects", "owner"],
+    ["orders", "ordererEmail"],
+    ["ledger", "email"],
+    ["refers", "referedEmail"],
+    ["justifications", "email"],
+    ["user_internal_data", "email"],
+]
 
-        return {
-            ok: true,
-            status: 201,
-            json: async () => ({ id: newUser[0].id + "", fields: { email, userid, slackId, hackatime: "", balanceHundredths: 0 } } as airtableReplication),
-            text: async () => JSON.stringify({ id: newUser[0].id + "", fields: { email, userid, slackId, hackatime: "", balanceHundredths: 0 } } as airtableReplication),
-        } as DBResponse;
-    } catch (error) {
-        console.error("Database insert failed:", error);
-        return {
-            ok: false,
-            status: 500,
-            json: async () => ({ message: "Database insert failed" }),
-            text: async () => JSON.stringify({ message: "Database insert failed" }),
-        };
-    }
+export interface LoginAccount {
+    id: number
+    // The account key to put in the session; normally the user's current Hack Club Auth email
+    email: string
+    isNew: boolean
+    hasHackatime: boolean
+}
+
+// Finds (or creates) the account for a Hack Club Auth login. Matched on the Hack Club Auth id first, so an
+// email change keeps the same account (balance, projects, orders) instead of silently creating a new, empty one.
+// Runs under a per-identity advisory lock, so two concurrent first logins can't create two rows.
+export const resolveAccountForLogin = async (hackClubId: string, email: string, slackId: string): Promise<LoginAccount> => {
+    return withTransaction(async (client) => {
+        await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', ['login:' + hackClubId]);
+        const bySub = await client.query('SELECT id, email, hackatime FROM users WHERE userid = $1 ORDER BY id', [hackClubId]);
+        let row: { id: number, email: string, hackatime: string | null } | undefined = bySub.rows.find(user => user.email === email);
+        if (!row && bySub.rows.length > 0) {
+            const current = bySub.rows[0];
+            const taken = await client.query('SELECT 1 FROM users WHERE email = $1', [email]);
+            if (taken.rows.length === 0) {
+                for (const [table, column] of ACCOUNT_EMAIL_COLUMNS) {
+                    await client.query(`UPDATE ${table} SET "${column}" = $1 WHERE "${column}" = $2`, [email, current.email]);
+                }
+                console.info(`Moved account ${current.id} to its new Hack Club Auth email`);
+                row = { ...current, email };
+            } else {
+                // Another row already uses the new email (e.g. created by a login before this fix): keep using the
+                // existing account and leave merging the two to an admin
+                console.warn(`Account ${current.id} changed email, but the new email already has a users row; keeping the old account key`);
+                row = current;
+            }
+        }
+        if (!row) {
+            // Rows created before userid was relied on: fall back to the email
+            const byEmail = await client.query('SELECT id, email, hackatime FROM users WHERE email = $1', [email]);
+            row = byEmail.rows[0];
+        }
+        if (row) {
+            return { id: row.id, email: row.email, isNew: false, hasHackatime: !!row.hackatime };
+        }
+        const inserted = await client.query(
+            'INSERT INTO users (email, userid, "slackId", hackatime) VALUES ($1, $2, $3, \'\') ON CONFLICT DO NOTHING RETURNING id, email',
+            [email, hackClubId, slackId]
+        );
+        if (inserted.rows.length === 0) {
+            const existing = await client.query('SELECT id, email, hackatime FROM users WHERE email = $1', [email]);
+            return { id: existing.rows[0].id, email, isNew: false, hasHackatime: !!existing.rows[0].hackatime };
+        }
+        return { id: inserted.rows[0].id, email, isNew: true, hasHackatime: false };
+    });
+}
+
+// Server-side only: the user's Hackatime OAuth token, or null when they haven't connected Hackatime
+export const getHackatimeTokenByEmail = async (email: string): Promise<string | null> => {
+    const rows = await db.select({ hackatime: userTable.hackatime }).from(userTable).where(eq(userTable.email, email));
+    const token = rows[0]?.hackatime;
+    return token ? token : null;
 }
 export const patchUserHackatime = async (email: string, hackatimeToken: string): Promise<DBResponse> => {
-    const updatedUser = await db.update(userTable).set({ hackatime: hackatimeToken }).where(eq(userTable.email, email)).returning();
+    const updatedUser = await db.update(userTable).set({ hackatime: hackatimeToken }).where(eq(userTable.email, email)).returning({ id: userTable.id });
     if (updatedUser.length === 0) {
         return {
             ok: false,
@@ -431,6 +606,14 @@ export const getAllRefers = async (): Promise<DBResponse> => {
         json: async () => ({ records }),
         text: async () => JSON.stringify({ records }),
     } as DBResponse;
+}
+// Whether a referer from a legacy (forgeable) referral code names a real Alchemize user
+export const isKnownReferrer = async (referer: string): Promise<boolean> => {
+    const [idWithoutPrefix, slackId] = referer.split(" ")
+    if (!idWithoutPrefix || !slackId) return false
+    const rows = await db.select({ id: userTable.id }).from(userTable)
+        .where(and(eq(userTable.userid, "ident!" + idWithoutPrefix), eq(userTable.slackId, slackId)))
+    return rows.length > 0
 }
 export const createReferRecord = async (referedEmail: string, referer: string, yswsEligible: string, verified: string, referedName: string): Promise<DBResponse> => {
     const newRefer = await db.insert(refersTable).values({ referedEmail, referer, yswsEligible, verified, referedName }).returning();
@@ -499,17 +682,15 @@ export const getProjectWithHackatime = async (projectId: string): Promise<DBResp
         text: async () => JSON.stringify({ records }),
     } as DBResponse;
 }
+// T1 review queue: shipped projects only, and only what reviewers use (no owner email, no journals)
 export const getAllProjects = async (): Promise<DBResponse> => {
-    // Explicitly select only non-sensitive fields
     const projects = await db.select({
         id: projectTable.id,
         Name: projectTable.Name,
         type: projectTable.type,
         description: projectTable.description,
-        owner: projectTable.owner,
         log: projectTable.log,
         languages: projectTable.languages,
-        journals: projectTable.journals,
         hackatime: projectTable.hackatime,
         update: projectTable.update,
         code: projectTable.code,
@@ -518,7 +699,7 @@ export const getAllProjects = async (): Promise<DBResponse> => {
         slackId: projectTable.slackId,
         status: projectTable.status,
         screenshot: projectTable.screenshot,
-    }).from(projectTable);
+    }).from(projectTable).where(ne(projectTable.status, "unshipped"));
 
     const records = projects.map(project => ({ id: project.id + "", fields: project }));
 
@@ -529,17 +710,15 @@ export const getAllProjects = async (): Promise<DBResponse> => {
         text: async () => JSON.stringify({ records }),
     } as DBResponse;
 }
+// T2 review queue: shipped projects only. No owner email, journals or Unified ID (the T2 page uses none of them)
 export const getAllProjectsAdmin = async (): Promise<DBResponse> => {
-    // Explicitly select only non-sensitive fields
     const projects = await db.select({
         id: projectTable.id,
         Name: projectTable.Name,
         type: projectTable.type,
         description: projectTable.description,
-        owner: projectTable.owner,
         log: projectTable.log,
         languages: projectTable.languages,
-        journals: projectTable.journals,
         hackatime: projectTable.hackatime,
         update: projectTable.update,
         code: projectTable.code,
@@ -549,8 +728,7 @@ export const getAllProjectsAdmin = async (): Promise<DBResponse> => {
         status: projectTable.status,
         screenshot: projectTable.screenshot,
         screenshot2: projectTable.screenshot2,
-        unifiedId: projectTable.unifiedId
-    }).from(projectTable);
+    }).from(projectTable).where(ne(projectTable.status, "unshipped"));
 
     const records = projects.map(project => ({ id: project.id + "", fields: project }));
 
@@ -571,12 +749,40 @@ export const createProject = async (projectData: any): Promise<DBResponse> => {
         text: async () => JSON.stringify({ id: newProject[0].id + "", fields: newProject[0] } as airtableReplication),
     } as DBResponse;
 }
+// Read for edit checks: only the owner's own project, only the fields the edit rules need
+export const getProjectForEdit = async (projectId: string, owner: string) => {
+    const id = parseInt(projectId)
+    if (!Number.isSafeInteger(id)) return null
+    const rows = await db.select({
+        id: projectTable.id,
+        Name: projectTable.Name,
+        status: projectTable.status,
+        log: projectTable.log,
+        hackatime: projectTable.hackatime,
+    }).from(projectTable).where(and(eq(projectTable.id, id), eq(projectTable.owner, owner)))
+    return rows[0] ?? null
+}
+// A user's other projects that already use any of the given Hackatime project names.
+// Each Hackatime project may back only one Alchemize project, or the same hours would be paid twice.
+export const findHackatimeConflicts = async (owner: string, hackatime: string, excludeProjectId?: number) => {
+    const projects = await db.select({
+        id: projectTable.id,
+        Name: projectTable.Name,
+        hackatime: projectTable.hackatime,
+        log: projectTable.log,
+    }).from(projectTable).where(eq(projectTable.owner, owner))
+    return projects.filter(project => project.id !== excludeProjectId && sharesHackatimeProject(project.hackatime, hackatime))
+}
+// Edits are refused while a project is in review (pending_* or T1-accepted awaiting T2), so what the
+// reviewers approved is what gets paid and sent to Unified. The Hackatime project cannot change once the
+// project has been shipped: detaching it would let another project claim the same hours again.
 export const updateProject = async (projectId: string, projectData: any, email: string): Promise<DBResponse> => {
     const allowedFields = ['Name', 'description', 'type', 'demo', 'code', 'hackatime', 'update', 'screenshot', 'Theme', 'screenshot2'];
 
     const updatePayload = Object.fromEntries(
         Object.entries(projectData)
-            .filter(([key, value]) => allowedFields.includes(key) && value !== undefined && value !== "")
+            // formData.get() returns null for absent fields; those are "not changing", like ""
+            .filter(([key, value]) => allowedFields.includes(key) && value !== undefined && value !== null && value !== "")
     );
 
     if (Object.keys(updatePayload).length === 0) {
@@ -589,18 +795,22 @@ export const updateProject = async (projectId: string, projectData: any, email: 
     }
 
     try {
+        const editable = and(notLike(projectTable.status, "pending%"), ne(projectTable.status, "accepted"))
+        const hackatimeUnchangedOrUnshipped = typeof updatePayload.hackatime === "string"
+            ? or(eq(projectTable.log, ""), eq(projectTable.hackatime, updatePayload.hackatime))
+            : undefined
         const updatedProject = await db
             .update(projectTable)
             .set(updatePayload)
-            .where(and(eq(projectTable.id, parseInt(projectId)), eq(projectTable.owner, email)))
-            .returning();
+            .where(and(eq(projectTable.id, parseInt(projectId)), eq(projectTable.owner, email), editable, hackatimeUnchangedOrUnshipped))
+            .returning({ id: projectTable.id });
 
         if (updatedProject.length === 0) {
             return {
                 ok: false,
-                status: 404,
-                json: async () => ({ message: "Project not found/project not yours" }),
-                text: async () => JSON.stringify({ message: "Project not found/project not yours" }),
+                status: 409,
+                json: async () => ({ message: "Project not found, not yours, or locked for review" }),
+                text: async () => JSON.stringify({ message: "Project not found, not yours, or locked for review" }),
             };
         }
 
@@ -688,6 +898,17 @@ export const patchProjectForShip = async (projectId: string, expectedLog: string
             const current = await client.query('SELECT log FROM projects WHERE id = $1 FOR UPDATE', [parseInt(projectId)]);
             if (current.rows.length === 0) {
                 throw new TransactionAbort(404, "Project not found");
+            }
+            // While a Unified submission is in flight (or its outcome is unresolved) the log is frozen: the award
+            // marks every approved entry as sent to HQ but pays only what was counted when it started, so an entry
+            // approved in between would be marked paid without being paid. Checked under the same row lock that
+            // beginUnifiedSubmission takes, so the two can't interleave.
+            const inFlight = await client.query(
+                'SELECT 1 FROM unified_submissions WHERE "projectId" = $1 AND status = \'started\'',
+                [parseInt(projectId)]
+            );
+            if (inFlight.rows.length > 0) {
+                throw new TransactionAbort(409, "This project is being sent to Unified right now (or a T2 reviewer still has to resolve an earlier submission). Please try again later.");
             }
             if (current.rows[0].log !== expectedLog) {
                 throw new TransactionAbort(409, "This project changed while you were working on it. Refresh and try again.");
@@ -784,10 +1005,11 @@ export const getOrdersByEmail = async (email: string): Promise<DBResponse> => {
         itemID: ordersTable.itemID,
         qty: ordersTable.qty,
         ordererEmail: ordersTable.ordererEmail,
-        fulfiller: ordersTable.fulfiller,
+        status: ordersTable.status,
         itemName: shopItemsTable.name,
         cdnImage: shopItemsTable.cdnImage,
-        priceHundredths: shopItemsTable.priceHundredths
+        // Price paid; orders from before it was recorded fall back to the item's current price
+        priceHundredths: sql<number>`coalesce(${ordersTable.priceHundredths}, ${shopItemsTable.priceHundredths})`
     }).from(ordersTable).where(eq(ordersTable.ordererEmail, email)).leftJoin(shopItemsTable, eq(ordersTable.itemID, shopItemsTable.itemID));
     const records = orders.map(order => ({ id: order.id + "", fields: order }));
     return {
@@ -891,12 +1113,11 @@ export const doesAdminExist = async (slackId: string): Promise<DBResponse> => {
         text: async () => JSON.stringify({ records }),
     } as DBResponse;
 }
+// Super-admin user list: email and balance only (no Hack Club Auth ids or Slack IDs)
 export const getAllUsers = async (): Promise<DBResponse> => {
     const users = await db.select({
         email: userTable.email,
         id: userTable.id,
-        userid: userTable.userid,
-        slackId: userTable.slackId,
         balanceHundredths: userTable.balanceHundredths
     }).from(userTable);
     const records = users.map(user => ({ id: user.id + "", fields: user }));
@@ -1061,7 +1282,8 @@ export const getOrderDetailsById = async (orderId: string): Promise<DBResponse> 
 
             itemName: shopItemsTable.name,
             itemDescription: shopItemsTable.description,
-            priceHundredths: shopItemsTable.priceHundredths,
+            // Price paid; orders from before it was recorded fall back to the item's current price
+            priceHundredths: sql<number>`coalesce(${ordersTable.priceHundredths}, ${shopItemsTable.priceHundredths})`,
             cdnImage: shopItemsTable.cdnImage,
             priority: shopItemsTable.priority,
 
@@ -1097,6 +1319,8 @@ export const addUserToAuthTable = async (email: string, address: string, birthda
         const newAuthUser = await db.insert(userInternal).values({ email, address, birthdate, firstName, lastName, iv, userId: uid }).onConflictDoUpdate({
             target: userInternal.userId,
             set: {
+                // Kept in sync with the account email: PII is joined to projects/orders on it
+                email,
                 address,
                 birthdate,
                 firstName,

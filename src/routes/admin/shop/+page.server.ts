@@ -2,29 +2,13 @@ import type { PageServerLoad } from './$types';
 import type { Item } from "$lib/types"
 import { unitsToHundredths } from "$lib/currency"
 import { deleteShopItem, fetchAllItems, upsertShopItem } from '$lib/db';
-import { redirect, error } from '@sveltejs/kit';
-import jwt from 'jsonwebtoken';
-import { ADMIN_JWT_SECRET, CDN_UPLOAD_SECRET } from '$env/static/private';
+import { error } from '@sveltejs/kit';
+import { CDN_UPLOAD_SECRET } from '$env/static/private';
+import { requireAdminApi, requireAdminPage } from '$lib/server/auth';
+import { checkImageUpload } from '$lib/server/uploads';
 export const actions = {
     upsert: async (event) => {
-        const userToken = event.cookies.get('admin_jwt');
-
-        let data: { email: string; isShopManager: boolean } | null = null;
-        if (userToken) {
-            try {
-                data = jwt.verify(userToken, ADMIN_JWT_SECRET) as { email: string; isShopManager: boolean };
-            }
-            catch (err) {
-                console.error("Error verifying JWT:", err);
-                return error(401, "Unauthorized");
-            }
-        } else {
-            return error(401, "Unauthorized");
-        }
-        if (!data || !data.email || data.isShopManager !== true) {
-            console.log(data)
-            return error(403, "Forbidden");
-        }
+        requireAdminApi(event.locals, "shop_manager");
         //Fetch all the form data
         const formData = await event.request.formData();
         let itemID = formData.get('itemID') as string | null;
@@ -33,7 +17,11 @@ export const actions = {
         // Price is entered in Aqua Regia (up to two decimals) and stored in hundredths
         const priceHundredths = unitsToHundredths(Number(formData.get('itemPrice')));
         const cdnImage = formData.get('cdnImage') as string;
-        const img = formData.get('img') as File | null;
+        const imageCheck = await checkImageUpload(formData.get('img'), 'Item image');
+        if (!imageCheck.ok) {
+            return error(400, imageCheck.message);
+        }
+        const img = imageCheck.file;
         if (!name || !description) {
             return error(400, "Bad Request");
         }
@@ -44,10 +32,6 @@ export const actions = {
             itemID = null;
         }
         let cdnLink = cdnImage;
-        console.log("Received form data:", {
-            name,
-            description
-        })
         if (img) {
             const tempFormData = new FormData();
             tempFormData.append('file', img);
@@ -91,24 +75,7 @@ export const actions = {
         }
     },
     delete: async (event) => {
-        const userToken = event.cookies.get('admin_jwt');
-
-        let data: { email: string; isShopManager: boolean } | null = null;
-        if (userToken) {
-            try {
-                data = jwt.verify(userToken, ADMIN_JWT_SECRET) as { email: string; isShopManager: boolean };
-            }
-            catch (err) {
-                console.error("Error verifying JWT:", err);
-                return error(401, "Unauthorized");
-            }
-        } else {
-            return error(401, "Unauthorized");
-        }
-        if (!data || !data.email || data.isShopManager !== true) {
-            console.log(data)
-            return error(403, "Forbidden");
-        }
+        requireAdminApi(event.locals, "shop_manager");
         //Fetch all the form data
         const formData = await event.request.formData();
         let itemID = formData.get('itemID') as string | null;
@@ -129,28 +96,8 @@ export const actions = {
     }
 }
 
-export const load: PageServerLoad = async ({ cookies }) => {
-
-    const at = cookies.get('access_token_new');
-    const userToken = cookies.get('admin_jwt');
-
-    let data: { email: string; isShopManager: boolean } | null = null;
-    if (userToken) {
-        try {
-            data = jwt.verify(userToken, ADMIN_JWT_SECRET) as { email: string; isShopManager: boolean };
-        }
-        catch (err) {
-            console.error("Error verifying JWT:", err);
-            return redirect(302, '/admin/login');
-        }
-    } else {
-        return redirect(302, '/admin/login');
-    }
-    if (!data || !data.email || data.isShopManager !== true) {
-        console.log(data)
-        return redirect(302, '/admin/login');
-    }
-    const email = data?.email;
+export const load: PageServerLoad = async ({ locals }) => {
+    requireAdminPage(locals, "shop_manager");
     const itemsResponse = await fetchAllItems();
     if (!itemsResponse.ok) {
         throw new Error("Failed to fetch items from the database");

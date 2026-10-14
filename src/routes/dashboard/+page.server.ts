@@ -1,11 +1,12 @@
 import type { PageServerLoad } from './$types';
-import { START_DATE, SLACK_BOT_TOKEN, USER_JWT_SECRET } from '$env/static/private';
-import { getProjectsByOwner, getUserByEmail, checkConfigByEmail } from '$lib/db';
+import { START_DATE, SLACK_BOT_TOKEN } from '$env/static/private';
+import { getProjectsByOwner, getUserByEmail, checkConfigByEmail, getHackatimeTokenByEmail, patchUserHackatime } from '$lib/db';
+import { fetchHackatimeProjects } from '$lib/server/hackatime';
 import { WebClient } from "@slack/web-api"
 import { hackatimeAuthUrl, authUrl } from '$lib/utils';
 import { filterLogs } from '$lib/utils.server';
 import { redirect } from '@sveltejs/kit';
-import jwt from "jsonwebtoken"
+import { requireUserPage } from '$lib/server/auth';
 
 let slackClient: WebClient = new WebClient(SLACK_BOT_TOKEN);
 
@@ -17,81 +18,53 @@ const getSlackProfile = async (slackId: string) => {
 
         }
     }
-    const result = await slackClient.users.info({ user: slackId });
-    return result.user?.profile || null;
+    // A Slack hiccup (rate limit, deactivated account) only costs the display name and avatar, not the page
+    try {
+        const result = await slackClient.users.info({ user: slackId });
+        return result.user?.profile || null;
+    } catch (error) {
+        console.warn("Slack profile lookup failed:", (error as Error).message)
+        return null
+    }
 }
 
-export const load: PageServerLoad = async ({ cookies }) => {
-    const at = cookies.get('access_token_new');
+export const load: PageServerLoad = async ({ cookies, locals }) => {
     const hackatimeVerified = cookies.get('hackatime_verified');
-    const userToken = cookies.get("user_token")
-    let decodedToken: any = null
-
-    try {
-        if (userToken) {
-            const decoded: any = jwt.verify(userToken, USER_JWT_SECRET);
-            decodedToken = decoded
-        } else {
-            throw redirect(302, authUrl);
-        }
-    } catch (error) {
-        console.error("Error decoding user token:", error);
-        throw redirect(302, authUrl);
-    }
+    const decodedToken = requireUserPage(locals)
 
     
 
 
-    let [projectsResponse, userResponse, slackprofile, configResponse] = await Promise.all([
+    let [projectsResponse, userResponse, slackprofile, configResponse, hackatimeAccessToken] = await Promise.all([
 
         getProjectsByOwner(decodedToken.email),
         getUserByEmail(decodedToken.email),
         getSlackProfile(decodedToken.slack_id),
-        checkConfigByEmail(decodedToken.email)
+        checkConfigByEmail(decodedToken.email),
+        getHackatimeTokenByEmail(decodedToken.email)
     ])
 
 
-    if (!at) {
-        return {
-            projects: [],
-            hacks: [],
-            email: decodedToken.email,
-            eligiblity: decodedToken.ysws_eligible,
-            name: slackprofile?.display_name || decodedToken.first_name,
-            hackatimeVerified: hackatimeVerified === "true",
-            user: {},
-            admin: !!cookies.get("admin_access_token"),
-            pfp: slackprofile?.image_512 || "",
-            misconfigured: []
-        }
-    }
     const configs = await configResponse.json();
     const projectsData = typeof projectsResponse.json === 'function' ? await projectsResponse.json() : projectsResponse;
     const userData = typeof userResponse.json === 'function' ? await userResponse.json() : userResponse;
     const admin = !!cookies.get("admin_access_token")
-    let hackatimeAccessToken = userData?.records?.[0]?.fields?.hackatime;
     if (userData?.records?.length === 0) {
         throw redirect(303, "/")
     }
-if (!hackatimeAccessToken || hackatimeAccessToken === "") {
-    throw redirect(303, hackatimeAuthUrl)
-}
-    let hackatimes = await fetch(`https://hackatime.hackclub.com/api/v1/authenticated/projects?include_archived=false&start=${START_DATE}`, {
-            headers: {
-                Authorization: `Bearer ${hackatimeAccessToken}`,
-                "Content-Type": 'application/json'
-            }
-        });
-    let hacks = await hackatimes.json()
-    let filteredHacks: any[] = []
-    hacks.projects.forEach((project: any) => {
-        filteredHacks.push({
-            name: project.name,
-            total_seconds: project.total_seconds,
-        })
-    })
+    if (!hackatimeAccessToken) {
+        throw redirect(303, hackatimeAuthUrl)
+    }
+    const hackatime = await fetchHackatimeProjects(hackatimeAccessToken, START_DATE)
+    if (!hackatime.ok && hackatime.reason === "unauthorized") {
+        // The stored token was revoked or expired: forget it and send the user to connect Hackatime again
+        await patchUserHackatime(decodedToken.email, "")
+        cookies.delete("hackatime_verified", { path: "/" })
+        throw redirect(303, hackatimeAuthUrl)
+    }
+    // If Hackatime is down the dashboard still loads, just without Hackatime projects
     let filteredHacksS = {
-        projects: filteredHacks
+        projects: hackatime.ok ? hackatime.projects : []
     }
     let userFields = userData?.records?.[0]?.fields
     let misconfigured = []
