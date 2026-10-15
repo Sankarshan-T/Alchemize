@@ -3,11 +3,11 @@ import { PUBLIC_HACKATIME_AUTH, PUBLIC_HACKATIME_REDIRECT } from "$env/static/pu
 import { createOAuthState } from "$lib/server/hackClubAuth"
 
 // Starts the Hackatime OAuth flow with a state value that /hackatime_callback checks
-export const GET: RequestHandler = async ({ cookies, locals }) => {
+export const GET: RequestHandler = async ({ cookies, locals, url }) => {
 	if (!locals.user) {
 		throw redirect(303, "/auth")
 	}
-	const state = createOAuthState(cookies, "hackatime_oauth_state")
+	const state = createOAuthState(cookies, "hackatime_oauth_state", url.protocol === "https:")
 	const params = new URLSearchParams({
 		client_id: PUBLIC_HACKATIME_AUTH,
 		redirect_uri: PUBLIC_HACKATIME_REDIRECT,

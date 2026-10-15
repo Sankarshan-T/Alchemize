@@ -31,6 +31,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 	const code = url.searchParams.get("code")
 	const referCookie = cookies.get("refer")
+	const secureCookies = url.protocol === "https:"
 
 	let userHackatime = ""
 	if (!code) {
@@ -155,14 +156,14 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 	const jwtToken = signUserToken(userToken)
 	cookies.set("user_token", jwtToken, {
 		httpOnly: true,
-		secure: true,
+		secure: secureCookies,
 		sameSite: "lax",
 		maxAge: USER_SESSION_MAX_AGE_SECONDS,
 		path: "/",
 	})
 	cookies.set("slack_id", slackId, {
 		httpOnly: true,
-		secure: true,
+		secure: secureCookies,
 		sameSite: "lax",
 		maxAge: 60 * 60 * 24 * 365, // 1 year
 		path: "/",
@@ -171,7 +172,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
 		cookies.set("hackatime_verified", "true", {
 			httpOnly: false,
-			secure: true,
+			secure: secureCookies,
 			sameSite: "lax",
 			maxAge: 60 * 60 * 24 * 365, // 1 year
 			path: "/",

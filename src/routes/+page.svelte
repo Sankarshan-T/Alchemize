@@ -1,13 +1,4 @@
 <script lang="ts">
-	import {
-		ArrowDown,
-		Blocks,
-		ChevronsRight,
-		FlaskConical,
-		Rocket,
-		ShoppingCart,
-		LoaderCircleIcon,
-	} from "lucide-svelte"
 	import { onMount } from "svelte"
 	import { browser } from "$app/environment"
 	import {
@@ -15,12 +6,14 @@
 		PUBLIC_HACKCLUB_REDIRECT,
 		PUBLIC_TURNED_OFF,
 	} from "$env/static/public"
-	import Accordion from "$lib/components/accordion.svelte"
-	import Button from "$lib/components/ui/button/button.svelte"
 
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
 	let showRotator = $state(false)
+	let shopItems: { itemID: string; name: string; cdnImage: string }[] = $state(
+		[]
+	)
+	let shopItemsError = $state(false)
 	const clientId = PUBLIC_HACKCLUB_AUTH
 	const uri = encodeURIComponent(PUBLIC_HACKCLUB_REDIRECT)
 
@@ -98,6 +91,21 @@
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
 
+		fetch("/api/shop/items")
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(
+						`Shop items request failed with status ${response.status}`
+					)
+				}
+				return response.json()
+			})
+			.then(items => (shopItems = items))
+			.catch(error => {
+				console.error("Failed to load homepage shop items", error)
+				shopItemsError = true
+			})
+
 		referUrl =
 			PUBLIC_TURNED_OFF !== "false"
 				? `./turned-off`
@@ -114,385 +122,1053 @@
 	})
 </script>
 
-<div class="home-page relative min-h-screen w-full overflow-x-hidden">
-	<div
-		class="absolute top-3 left-0 z-50 transition-transform duration-100 hover:scale-[1.02]"
-	>
-		<a href="https://hackclub.com/">
-			<img
-				class="w-24 md:w-40 bg-transparent p-1 rounded-md"
-				src="https://assets.hackclub.com/banners/2026.svg"
-				alt="Hack Club"
-			/>
+<header
+	class="fixed inset-x-0 top-0 z-1000 h-16 pointer-events-none"
+	id="site-header"
+>
+	<div class="h-full max-w-full flex items-center justify-end px-10">
+		<div class="flex-1"></div>
+		<a
+			href={authUrl}
+			type="button"
+			class="pointer-events-auto inline-flex items-center justify-center mt-5 mr-6 py-2.5 px-5 text-sm font-bold tracking-[0.03em] rounded-sm cursor-pointer bg-brand-accent text-brand-text shadow-[0_4px_0_0_var(--home-berry)] transition-[transform,box-shadow,background-color] duration-300 ease-[ease] hover:bg-brand-accent-light active:translate-y-[3px]"
+			id="btn-header-oauth"
+		>
+			Sign in with Hack Club
 		</a>
+	</div>
+</header>
+
+<section
+	id="hero"
+	class="home-section home-section--hero relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
+>
+	<div class="absolute inset-0 pointer-events-none z-0">
+		<div
+			class="absolute inset-0 pointer-events-none z-0 bg-brand-background"
+		></div>
+		<div class="absolute inset-0 pointer-events-none z-1">
+			<div
+				class="asset-slot top-[10%] left-0 w-80 h-[480px]"
+				aria-hidden="true"
+			></div>
+			<div
+				class="asset-slot top-[5%] right-0 w-[350px] h-[500px]"
+				aria-hidden="true"
+			></div>
+		</div>
+		<div class="absolute inset-0 pointer-events-none z-2">
+			<div
+				class="asset-slot top-[60px] left-20 size-30"
+				aria-hidden="true"
+			></div>
+			<div
+				class="asset-slot bottom-20 right-[100px] size-[140px]"
+				aria-hidden="true"
+			></div>
+		</div>
 	</div>
 
 	<div
-		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
-	></div>
-	<div class="fixed inset-0 z-0 bg-background/90 bg-contain bg-scale"></div>
-	<img
-		src="/pmix_v2.png"
-		alt=""
-		class="absolute h-40 -rotate-25 object-contain top-[50vh] left-[10vw] opacity-80 animate-pulse"
-	/>
-	<img
-		src="/pmix_v2.png"
-		alt=""
-		class="absolute h-40 rotate-25 object-contain top-[50vh] right-[10vw] opacity-80 animate-pulse"
-	/>
-	<main class="relative w-full px-4 sm:px-6 md:px-10 home">
-		<section
-			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
-		>
-			<div class="flex flex-col items-center gap-5">
-				<div
-					class="flex items-center gap-2 text-2xl font-decor text-foreground tracking-[0.3em] uppercase"
-				>
-					<span>Season 2</span>
-				</div>
-				<h1
-					class="text-7xl sm:text-6xl md:text-9xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
-				>
-					ALCHEMIZE
-				</h1>
-				<h3
-					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none flex flex-col items-center break-all sm:break-normal"
-				>
-					Make themed projects, earn Aqua Regia!<br />
-					<span class="text-sm shadow-none font-note font-light tracking-wider">
-						With more mixing this time</span
-					>
-				</h3>
-				<span
-					class="mt-2 font-display text-foreground font-semibold tracking-wider"
-				>
-					Starts soon...
-				</span>
-				<div class="p-3 w-full flex items-center justify-center gap-3">
-					<a href={authUrl}>
-						<Button
-							variant="primary"
-							class="p-6 w-full text-xl justify-between flex"
-						>
-							<p>Get Started</p>
-							{#if showRotator}
-								<LoaderCircleIcon class="animate-spin" />
-							{:else}
-								<ChevronsRight />
-							{/if}
-						</Button>
-					</a>
-					<a href="/shop">
-						<Button variant="secondary" class="py-6">
-							<ShoppingCart class="size-8" />
-							See the shop!
-						</Button>
-					</a>
-				</div>
-			</div>
-
-			<a
-				href="#features"
-				class="animate-bounce border border-border p-2 hover:border-primary bg-secondary transition-colors rounded-full"
-			>
-				<ArrowDown class="w-5 h-5 text-foreground" />
-			</a>
-		</section>
-
-		<section
-			id="features"
-			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
-		>
-			<h2
-				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
-			>
-				HOW IT WORKS
-			</h2>
-
-			<div
-				class="grid grid-cols-1 md:grid-cols-4 gap-6 xl:gap-8 2xl:gap-10 w-full"
-			>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<Blocks class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							1 - Create
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
-						hours via Hackatime.
-					</p>
-				</div>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<Rocket class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							2 - Ship
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Submit your project for review to earn Aqua Regia.
-					</p>
-				</div>
-
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<FlaskConical class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							3 - Earn
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Every approved hour earns you 1 Aqua Regia ($5), no matter which
-						theme you pick.
-					</p>
-				</div>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<ShoppingCart class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							4 - Spend!
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Spend your precious Aqua Regia on rewards. New items are
-						added frequently!
-					</p>
-				</div>
-			</div>
-		</section>
-
-		<section
-			id="themes"
-			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
-		>
-			<h2
-				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
-			>
-				Themes for Season 2
-			</h2>
-
-			<div class="grid grid-cols-2 gap-4 xl:gap-8 2xl:gap-10 w-full">
-				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						1. Bots
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Make a bot that does something useful or fun! It could be a Discord
-						bot or a slack bot or a bot for your own website. It could be a bot
-						that does something fun or a bot that does something useful. The
-						choice is yours!
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						2. Co-Op
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Create a project with that involves <strong>team play</strong>...
-						could be literally anything multiplayer! Like maybe a multiplayer
-						game or a simple collaborative canvas.
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-				<div
-					class="col-span-2 w-1/2 justify-self-center flex flex-col bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						3. Electro Art
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Make something by which your code returns art. Like a dynamic
-						website creating various patterns or a generative art piece or a
-						music visualizer. Anything that is artistic and uses code to create
-						it.
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-			</div>
-		</section>
-
-		<section
-			id="faq"
-			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
-		>
-			<h2
-				class="text-3xl xl:text-4xl 2xl:text-5xl font-black tracking-tight uppercase text-foreground"
-			>
-				FAQ
-			</h2>
-
-			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
-				<Accordion
-					Title="What is a 'ship'?"
-					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run and is recreatable."
-				/>
-				<Accordion
-					Title="Who can participate here?"
-					Content="Anyone ages 13-18 (inclusive) can participate."
-				/>
-				<Accordion
-					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='https://hackatime.hackclub.com'> Hackatime</a>"
-				/>
-				<Accordion
-					Title="Where can I find more information?"
-					Content="If you have any questions or need help with anything, just join the <a class='text-foreground p-1 hover:bg-primary/60 font-semibold transition rounded hover:text-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
-				/>
-			</div>
-		</section>
-	</main>
-
-	<footer
-		class="w-full border-t-2 border-border bg-secondary/50 relative z-20 mt-24 py-16"
+		class="relative z-2 w-full max-w-[1440px] mx-auto min-h-screen grid grid-cols-2 items-center gap-12 pt-[100px] px-12 pb-20"
 	>
-		<div
-			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
-		>
-			<div class="flex flex-col gap-2 max-w-xs">
-				<h3
-					class="text-xl font-black font-decor text-foreground tracking-wide uppercase"
-				>
-					Hack Club
-				</h3>
-				<p class="text-muted-foreground font-display text-xs leading-relaxed">
-					Hack Club is a 501(c)(3) nonprofit and network of 100k+ technical high
-					schoolers. We believe you learn best by building, so we're creating
-					community and providing grants so you can make awesome projects.
-				</p>
-			</div>
+		<div class="flex flex-col items-start gap-5">
+			<img
+				src="assets/Alchemize.png"
+				alt="Alchemize Logo"
+				class="w-[440px] h-[130px] object-contain object-left -mb-8"
+			/>
 
-			<div
-				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider font-decor"
-			>
-				<div class="flex flex-col gap-3">
+			<p class="max-w-[540px] text-[1.15rem] leading-[1.8] text-brand-muted">
+				Make themed projects, get themed prizes! With more mixing this time!
+			</p>
+
+			<div class="flex flex-col items-start gap-4">
+				<div
+					class="flex items-stretch h-[52px] border-2 border-brand-border rounded-sm overflow-hidden"
+				>
+					<input
+						type="email"
+						id="hero-email"
+						class="w-[300px] px-5 text-[1rem] text-brand-foreground bg-brand-surface/35 outline-none placeholder:text-brand-muted-soft/70"
+						placeholder="you@example.com"
+						aria-label="Email address"
+					/>
 					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/philosophy/">Philosophy</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/team/">The Team</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/brand/">Branding</a
-					>
-				</div>
-				<div class="flex flex-col gap-3">
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackatime.hackclub.com/">Hackatime</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://app.slack.com/client/E09V59WQY1E/C0ASY6R552R"
-						>join our slack</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://github.com/hackclub">github</a
-					>
-				</div>
-				<div class="flex flex-col gap-3">
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/jams/">Jams</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://toolbox.hackclub.com/">Toolbox</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/conduct/">Code of Conduct</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/privacy/">Privacy</a
+						href={authUrl}
+						type="button"
+						class="inline-flex items-center justify-center px-7 text-[1rem] font-bold tracking-[0.03em] cursor-pointer bg-brand-surface text-brand-foreground border-l-2 border-brand-border transition-[transform,box-shadow,background-color] duration-300 ease-[ease] hover:bg-brand-lavender active:translate-y-[2px]"
+						id="btn-sign-in">Sign In</a
 					>
 				</div>
 			</div>
 		</div>
-	</footer>
-</div>
 
-<style>
-	main {
-		transform: translateZ(0);
-	}
-</style>
+		<div class="flex items-center justify-center h-full">
+			<div
+				class="relative w-full max-w-[560px] h-[480px] flex items-center justify-center border-2 border-dashed border-brand-border rounded-lg"
+			>
+				<div class="asset-slot relative size-full border-none">
+					<img alt="pmix" src="/pmix_v2.png" />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	id="how-it-works"
+	class="home-section home-section--how relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+>
+	<div class="absolute inset-0 pointer-events-none z-0">
+		<div
+			class="absolute inset-0 pointer-events-none z-0 bg-brand-background-deep"
+		></div>
+		<div class="absolute inset-0 pointer-events-none z-1">
+			<div
+				class="asset-slot inset-0 size-full border-none"
+				aria-hidden="true"
+			></div>
+		</div>
+		<div class="absolute inset-0 pointer-events-none z-2">
+			<div class="asset-slot top-10 right-10 size-45" aria-hidden="true"></div>
+		</div>
+	</div>
+
+	<div class="relative z-2 w-full max-w-content mx-auto px-12 py-12">
+		<h2
+			class="font-heading text-[3rem] font-bold text-brand-foreground text-center mb-3 tracking-[-0.02em]"
+		>
+			How does this work?
+		</h2>
+		<p class="text-[1.15rem] text-brand-muted text-center mb-12">
+			All about Alchemize!!!
+		</p>
+
+		<div class="relative max-w-[1100px] h-[1000px] mx-auto grid grid-rows-4">
+			<svg
+				class="absolute top-0 left-0 size-full pointer-events-none z-0"
+				aria-hidden="true"
+				viewBox="0 0 1100 1000"
+				preserveAspectRatio="none"
+			>
+				<circle
+					class="stroke-brand-border"
+					cx="550"
+					cy="-80"
+					r="280"
+					fill="none"
+					stroke-width="1"
+					opacity="0.25"
+				/>
+				<circle
+					class="stroke-brand-border"
+					cx="550"
+					cy="-80"
+					r="400"
+					fill="none"
+					stroke-width="1"
+					opacity="0.15"
+				/>
+				<circle
+					class="stroke-brand-border"
+					cx="550"
+					cy="-80"
+					r="520"
+					fill="none"
+					stroke-width="1"
+					opacity="0.08"
+				/>
+			</svg>
+
+			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
+				<div class="w-[380px] ml-auto text-left">
+					<div class="flex items-center justify-start gap-3 mb-2">
+						<span
+							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-brand-berry text-brand-foreground font-extrabold text-[1rem]"
+							>1</span
+						>
+						<h3
+							class="font-heading text-[1.35rem] font-bold text-brand-foreground"
+						>
+							Pick a Idea
+						</h3>
+					</div>
+					<p
+						class="text-[0.9rem] leading-[1.65] text-brand-muted max-w-[360px]"
+					>
+						Got your own idea? Build it. Making something completely crazy. Just
+						pick a project youre actually hyped to ship!!
+					</p>
+				</div>
+				<div class="w-full h-[240px] pl-0 pr-6 flex justify-start">
+					<img
+						src="assets/step 1.png"
+						alt="Step 1"
+						class="max-h-full w-auto object-contain"
+					/>
+				</div>
+			</div>
+
+			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
+				<div class="w-full h-[240px] pl-6 pr-0 flex justify-end">
+					<img
+						src="assets/step_2.png"
+						alt="Step 2 "
+						class="max-h-full w-auto object-contain"
+					/>
+				</div>
+				<div class="w-[380px] text-left">
+					<div class="flex items-center justify-start gap-3 mb-2">
+						<span
+							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-brand-berry text-brand-foreground font-extrabold text-[1rem]"
+							>2</span
+						>
+						<h3
+							class="font-heading text-[1.35rem] font-bold text-brand-foreground"
+						>
+							Build the Project
+						</h3>
+					</div>
+					<p
+						class="text-[0.9rem] leading-[1.65] text-brand-muted max-w-[360px]"
+					>
+						Turn your idea into a real, working project. Code it, design it, and
+						ship it-just remember to track your hours as you build.
+					</p>
+				</div>
+			</div>
+
+			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
+				<div class="w-[380px] ml-auto text-left">
+					<div class="flex items-center justify-start gap-3 mb-2">
+						<span
+							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-brand-berry text-brand-foreground font-extrabold text-[1rem]"
+							>3</span
+						>
+						<h3
+							class="font-heading text-[1.35rem] font-bold text-brand-foreground"
+						>
+							Submit It for Review
+						</h3>
+					</div>
+					<p
+						class="text-[0.9rem] leading-[1.65] text-brand-muted max-w-[360px]"
+					>
+						Once your project is ready, submit it with a short description and a
+						link to try it out. Our reviewers will check it and approve your
+						hours.
+					</p>
+				</div>
+				<div class="w-full h-[240px] pl-0 pr-6 flex justify-start">
+					<img
+						src="assets/step%203.png"
+						alt="Step 3 Illustration"
+						class="max-h-full w-auto object-contain"
+					/>
+				</div>
+			</div>
+
+			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
+				<div class="w-full h-[240px] pl-6 pr-0 flex justify-end">
+					<img
+						src="assets/step%204.png"
+						alt="Step 4 Illustration"
+						class="max-h-full w-auto object-contain"
+					/>
+				</div>
+				<div class="w-[380px] text-left">
+					<div class="flex items-center justify-start gap-3 mb-2">
+						<span
+							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-brand-berry text-brand-foreground font-extrabold text-[1rem]"
+							>4</span
+						>
+						<h3
+							class="font-heading text-[1.35rem] font-bold text-brand-foreground"
+						>
+							Spend Your Potion
+						</h3>
+					</div>
+					<p
+						class="text-[0.9rem] leading-[1.65] text-brand-muted max-w-[360px]"
+					>
+						Every approved hour fills your potion. Spend it in the shop on
+						amazing rewards like hardware, tools and licenses to help your next
+						project.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	id="projects"
+	class="home-section home-section--projects relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+>
+	<div class="absolute inset-0 pointer-events-none z-0">
+		<div
+			class="absolute inset-0 pointer-events-none z-0 bg-brand-background"
+		></div>
+		<div class="absolute inset-0 pointer-events-none z-1">
+			<div
+				class="asset-slot inset-0 size-full border-none"
+				aria-hidden="true"
+			></div>
+		</div>
+		<div class="absolute inset-0 pointer-events-none z-2">
+			<div class="asset-slot bottom-0 left-0 size-50" aria-hidden="true">
+				<!-- SVG/PNG: bottom-left vine -->
+			</div>
+			<div class="asset-slot top-10 right-10 w-40 h-60" aria-hidden="true">
+				<!-- SVG/PNG: top-right potion bottle -->
+			</div>
+		</div>
+	</div>
+
+	<div class="relative z-2 w-full max-w-content mx-auto px-12 py-[60px]">
+		<div class="flex items-center justify-center mb-12">
+			<h2
+				class="font-heading text-[3rem] font-bold text-brand-foreground text-center mb-3 tracking-[-0.02em]"
+			>
+				What Hack Clubbers Made
+			</h2>
+			<div
+				class="asset-slot relative inline-flex w-20 h-10 ml-3"
+				aria-hidden="true"
+			>
+				<!-- SVG/PNG: heading decoration -->
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
+			<!-- 1. LibrePods (Top row, span 3 cols) -->
+			<a
+				href="https://github.com/librepods-org/librepods"
+				target="_blank"
+				rel="noreferrer"
+				class="group md:col-span-3 flex flex-col overflow-hidden bg-brand-surface border-2 border-brand-blossom rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-brand-accent"
+			>
+				<div
+					class="relative w-full aspect-video flex items-center justify-center bg-brand-background/50 border-b-2 border-brand-blossom transition-colors duration-500 group-hover:border-brand-accent group-hover:bg-brand-background/60"
+				>
+					<img
+						src="https://crescent.hackclub.com/vite/assets/librepods-BU-zFwYq.webp"
+						alt="LibrePods"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+				<div class="px-5 py-5 flex flex-col flex-1 bg-brand-text/50">
+					<h3
+						class="font-heading text-[1.2rem] font-bold mb-1.5 text-brand-foreground"
+					>
+						LibrePods
+					</h3>
+					<p class="text-[0.9rem] text-brand-muted leading-[1.5] mb-4">
+						AirPods off Apple's leash: noise control, ear detection and battery
+						on Android and Linux.
+					</p>
+					<div class="flex items-center justify-between mt-auto">
+						<span class="text-[0.8rem] text-brand-blossom font-semibold"
+							>@kavishdevar</span
+						>
+						<span
+							class="text-[0.7rem] px-2 py-0.5 rounded-full border border-brand-border text-brand-muted"
+							>Kotlin</span
+						>
+					</div>
+				</div>
+			</a>
+
+			<!-- 2. Specter (Top row, span 3 cols) -->
+			<a
+				href="https://shaaarkai.itch.io/specter"
+				target="_blank"
+				rel="noreferrer"
+				class="group md:col-span-3 flex flex-col overflow-hidden bg-brand-surface border-2 border-brand-blossom rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-brand-accent"
+			>
+				<div
+					class="relative w-full aspect-video flex items-center justify-center bg-brand-background/50 border-b-2 border-brand-blossom transition-colors duration-500 group-hover:border-brand-accent group-hover:bg-brand-background/60"
+				>
+					<img
+						src="https://crescent.hackclub.com/vite/assets/specter-BHuwe-eU.webp"
+						alt="Specter"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+				<div class="px-5 py-5 flex flex-col flex-1 bg-brand-text/50">
+					<h3
+						class="font-heading text-[1.2rem] font-bold mb-1.5 text-brand-foreground"
+					>
+						Specter
+					</h3>
+					<p class="text-[0.9rem] text-brand-muted leading-[1.5] mb-4">
+						A platformer where the run you just failed comes back as a ghost,
+						and helping it is how you finish the level.
+					</p>
+					<div class="flex items-center justify-between mt-auto">
+						<span class="text-[0.8rem] text-brand-blossom font-semibold"
+							>@ayessaaa</span
+						>
+						<span
+							class="text-[0.7rem] px-2 py-0.5 rounded-full border border-brand-border text-brand-muted"
+							>GDScript</span
+						>
+					</div>
+				</div>
+			</a>
+
+			<!-- 3. VERT (Bottom row, span 2 cols) -->
+			<a
+				href="https://vert.sh"
+				target="_blank"
+				rel="noreferrer"
+				class="group md:col-span-2 flex flex-col overflow-hidden bg-brand-surface border-2 border-brand-blossom rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-brand-accent"
+			>
+				<div
+					class="relative w-full aspect-video flex items-center justify-center bg-brand-background/50 border-b-2 border-brand-blossom transition-colors duration-500 group-hover:border-brand-accent group-hover:bg-brand-background/60"
+				>
+					<img
+						src="https://crescent.hackclub.com/vite/assets/vert-D90femPm.webp"
+						alt="VERT"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+				<div class="px-4 py-4 flex flex-col flex-1 bg-brand-text/50">
+					<h3
+						class="font-heading text-[1.1rem] font-bold mb-1 text-brand-foreground"
+					>
+						VERT
+					</h3>
+					<p
+						class="text-[0.8rem] text-brand-muted leading-[1.5] mb-3 line-clamp-3"
+					>
+						A file converter for images, audio and documents that does the work
+						in your own browser rather than on somebody's server.
+					</p>
+					<div class="flex items-center justify-between mt-auto">
+						<span
+							class="text-[0.75rem] text-brand-blossom font-semibold truncate max-w-[80px]"
+							>@JovannMC</span
+						>
+						<span
+							class="text-[0.65rem] px-2 py-0.5 rounded-full border border-brand-border text-brand-muted"
+							>Svelte</span
+						>
+					</div>
+				</div>
+			</a>
+
+			<!-- 4. Blind Defusal (Bottom row, span 2 cols) -->
+			<a
+				href="https://blind-defusal.jayx2u.fyi"
+				target="_blank"
+				rel="noreferrer"
+				class="group md:col-span-2 flex flex-col overflow-hidden bg-brand-surface border-2 border-brand-blossom rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-brand-accent"
+			>
+				<div
+					class="relative w-full aspect-video flex items-center justify-center bg-brand-background/50 border-b-2 border-brand-blossom transition-colors duration-500 group-hover:border-brand-accent group-hover:bg-brand-background/60"
+				>
+					<img
+						src="https://crescent.hackclub.com/vite/assets/blind-defusal-CgCv7Jns.webp"
+						alt="Blind Defusal"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+				<div class="px-4 py-4 flex flex-col flex-1 bg-brand-text/50">
+					<h3
+						class="font-heading text-[1.1rem] font-bold mb-1 text-brand-foreground line-clamp-1"
+					>
+						Blind Defusal
+					</h3>
+					<p
+						class="text-[0.8rem] text-brand-muted leading-[1.5] mb-3 line-clamp-3"
+					>
+						A two-player bomb to defuse. One of you holds the box, the other
+						holds the manual, and neither can see the other's half.
+					</p>
+					<div class="flex items-center justify-between mt-auto">
+						<span
+							class="text-[0.75rem] text-brand-blossom font-semibold truncate max-w-[80px]"
+							>@Jayx2u</span
+						>
+						<span
+							class="text-[0.65rem] px-1.5 py-0.5 rounded-full border border-brand-border text-brand-muted"
+							>Python</span
+						>
+					</div>
+				</div>
+			</a>
+
+			<!-- 5. Angel Keyboard (Bottom row, span 2 cols) -->
+			<a
+				href="https://github.com/geg-tech/biblicallyaccuratekeyboard"
+				target="_blank"
+				rel="noreferrer"
+				class="group md:col-span-2 flex flex-col overflow-hidden bg-brand-surface border-2 border-brand-blossom rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-brand-accent"
+			>
+				<div
+					class="relative w-full aspect-video flex items-center justify-center bg-brand-background/50 border-b-2 border-brand-blossom transition-colors duration-500 group-hover:border-brand-accent group-hover:bg-brand-background/60"
+				>
+					<img
+						src="https://crescent.hackclub.com/vite/assets/angel-keyboard-DXV1reQP.webp"
+						alt="Biblically Accurate Keyboard"
+						class="w-full h-full object-cover"
+					/>
+				</div>
+				<div class="px-4 py-4 flex flex-col flex-1 bg-brand-text/50">
+					<h3
+						class="font-heading text-[1.1rem] font-bold mb-1 text-brand-foreground line-clamp-1"
+						title="Biblically Accurate Keyboard"
+					>
+						Angel Keyboard
+					</h3>
+					<p
+						class="text-[0.8rem] text-brand-muted leading-[1.5] mb-3 line-clamp-3"
+					>
+						A keyboard in the shape of a biblically accurate angel. Be not
+						afraid. CAD, PCBs and all.
+					</p>
+					<div class="flex items-center justify-between mt-auto">
+						<span
+							class="text-[0.75rem] text-brand-blossom font-semibold truncate max-w-[80px]"
+							>@geg-tech</span
+						>
+						<span
+							class="text-[0.65rem] px-1.5 py-0.5 rounded-full border border-brand-border text-brand-muted"
+							>Hardware</span
+						>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</section>
+
+<section
+	id="prizes"
+	class="home-section home-section--shop relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+>
+	<div class="absolute inset-0 pointer-events-none z-0">
+		<div
+			class="absolute inset-0 pointer-events-none z-0 bg-brand-background-deep"
+		></div>
+		<div class="absolute inset-0 pointer-events-none z-1">
+			<div
+				class="asset-slot inset-0 size-full border-none"
+				aria-hidden="true"
+			></div>
+		</div>
+		<div class="absolute inset-0 pointer-events-none z-2">
+			<div class="asset-slot bottom-0 left-10 size-50" aria-hidden="true"></div>
+		</div>
+	</div>
+
+	<div
+		class="relative z-2 w-full max-w-content mx-auto px-12 pt-[60px] pb-10 flex flex-col items-center"
+	>
+		<h2
+			class="font-heading text-[3rem] font-bold text-brand-foreground text-center mb-3 tracking-[-0.02em]"
+		>
+			The Shop
+		</h2>
+		<p class="text-[1.15rem] text-brand-muted text-center mb-12">
+			Ship real projects. Earn real rewards.
+		</p>
+
+		<div
+			class="group relative w-full overflow-hidden mt-8 py-4 border-2 border-brand-border rounded-md"
+			data-marquee
+			aria-label="Prize items scrolling ribbon forward"
+		>
+			<div
+				class="flex w-max animate-marquee will-change-transform group-hover:[animation-play-state:paused]"
+				id="marquee-track-1"
+				data-marquee-track
+			>
+				{#if shopItemsError}
+					<p class="px-10 text-sm text-brand-muted">
+						Shop items are temporarily unavailable.
+					</p>
+				{:else}
+					<div class="flex items-center gap-10 pr-10 shrink-0">
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-brand-muted text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+					<div
+						class="flex items-center gap-10 pr-10 shrink-0"
+						aria-hidden="true"
+					>
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-brand-muted text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+
+		<div
+			class="group relative w-full overflow-hidden mt-[calc(14px+1rem)] mb-12 py-4 border-2 border-brand-border rounded-md"
+			data-marquee
+			aria-label="Prize items scrolling ribbon reverse"
+		>
+			<div
+				class="flex w-max animate-marquee-reverse will-change-transform group-hover:[animation-play-state:paused]"
+				id="marquee-track-2"
+				data-marquee-track
+			>
+				{#if shopItemsError}
+					<p class="px-10 text-sm text-brand-muted">
+						Shop items are temporarily unavailable.
+					</p>
+				{:else}
+					<div class="flex items-center gap-10 pr-10 shrink-0">
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-brand-muted text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+					<div
+						class="flex items-center gap-10 pr-10 shrink-0"
+						aria-hidden="true"
+					>
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-brand-muted text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	id="faq"
+	class="home-section home-section--faq relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+>
+	<div class="absolute inset-0 pointer-events-none z-0">
+		<div
+			class="absolute inset-0 pointer-events-none z-0 bg-brand-background"
+		></div>
+		<div class="absolute inset-0 pointer-events-none z-1">
+			<div
+				class="asset-slot inset-0 size-full border-none"
+				aria-hidden="true"
+			></div>
+		</div>
+		<div class="absolute inset-0 pointer-events-none z-2">
+			<div
+				class="asset-slot top-1/2 left-5 w-25 h-75 -translate-y-1/2"
+				aria-hidden="true"
+			></div>
+		</div>
+	</div>
+
+	<div class="relative z-2 w-full max-w-[820px] mx-auto px-12 py-20">
+		<div class="text-center mb-12">
+			<img
+				src="assets/faq-title.svg"
+				alt="Frequently Asked Questions"
+				class="inline-block max-h-16 w-auto min-w-80 min-h-14 border-2 border-dashed border-brand-border rounded-sm"
+			/>
+		</div>
+
+		<div class="flex flex-col" id="faq-accordion">
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-1"
+					aria-controls="faq-panel-1"
+				>
+					<span>Who is eligible?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-1"
+					role="region"
+					aria-labelledby="faq-btn-1"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						Anyone aged 13 through 18! Everyone from all over the world can
+						participate.
+					</p>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-2"
+					aria-controls="faq-panel-2"
+				>
+					<span>Is this free/legit?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-2"
+					role="region"
+					aria-labelledby="faq-btn-2"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						Yeah! Hack Club is a 501(c)(3) non-profit, with donations from
+						donors like Michael Dell and Tom Preston-Werner covering all of the
+						prizes! We also ran programs like High Seas, Summer of Making,
+						Flavortown in the past.
+					</p>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-3"
+					aria-controls="faq-panel-3"
+				>
+					<span>What types of projects count?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-3"
+					role="region"
+					aria-labelledby="faq-btn-3"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						All kinds of technical projects, as long as they’re open-source!
+						(Note: We don't support hardware projects just yet.)
+					</p>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-4"
+					aria-controls="faq-panel-4"
+				>
+					<span>Duis aute irure dolor in reprehenderit?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-4"
+					role="region"
+					aria-labelledby="faq-btn-4"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						At vero eos et accusamus et iusto odio dignissimos ducimus qui
+						blanditiis praesentium voluptatum deleniti atque corrupti quos
+						dolores et quas molestias excepturi sint occaecati cupiditate non
+						provident.
+					</p>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-5"
+					aria-controls="faq-panel-5"
+				>
+					<span>Excepteur sint occaecat cupidatat?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-5"
+					role="region"
+					aria-labelledby="faq-btn-5"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						Similique sunt in culpa qui officia deserunt mollitia animi, id est
+						laborum et dolorum fuga. Et harum quidem rerum facilis est et
+						expedita distinctio.
+					</p>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-brand-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-brand-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-brand-accent"
+					data-accordion-trigger
+					aria-expanded="false"
+					id="faq-btn-6"
+					aria-controls="faq-panel-6"
+				>
+					<span>Sunt in culpa qui officia deserunt?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-brand-blossom before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-brand-blossom after:transition-all after:duration-300 group-aria-expanded:before:bg-brand-accent group-aria-expanded:after:bg-brand-accent group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					id="faq-panel-6"
+					role="region"
+					aria-labelledby="faq-btn-6"
+				>
+					<p class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-brand-muted">
+						Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
+						impedit quo minus id quod maxime placeat facere possimus, omnis
+						voluptas assumenda est.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer
+	class="home-section home-section--footer bg-brand-text border-t-3 border-brand-border pt-16 px-12"
+	id="footer"
+>
+	<div
+		class="max-w-content mx-auto flex justify-between items-start gap-12 pb-12"
+	>
+		<div class="flex flex-col gap-3">
+			<img
+				src="assets/Alchemize.png"
+				alt="Alchemize Logo"
+				class="w-[240px] h-16 object-contain object-left -mb-3"
+			/>
+			<p class="text-[0.82rem] leading-[1.65] text-brand-muted max-w-80">
+				A Hack Club program. Hack Club is a 501(c)(3) non-profit with a network
+				of more than 100,000 teenagers in 119 countries, all of them learning by
+				shipping.
+			</p>
+		</div>
+
+		<nav
+			class="grid grid-cols-[repeat(3,auto)] gap-14"
+			aria-label="Footer navigation"
+		>
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-brand-blossom mb-5"
+				>
+					ALCHEMIZE
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="#how-it-works">How it works</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="#prizes">The shop</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="#projects">Explore projects</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="#">The handbook</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-brand-blossom mb-5"
+				>
+					HACK CLUB
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/philosophy"
+							target="_blank"
+							rel="noopener">Philosophy</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/team"
+							target="_blank"
+							rel="noopener">Team</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/donate"
+							target="_blank"
+							rel="noopener">Donate</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/brand"
+							target="_blank"
+							rel="noopener">Branding</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-brand-blossom mb-5"
+				>
+					HELP
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/slack"
+							target="_blank"
+							rel="noopener">#alchemize-help on Slack</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="mailto:identity@hackclub.com">identity@hackclub.com</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="#">Fulfilment bounty</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/conduct"
+							target="_blank"
+							rel="noopener">Code of conduct</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-brand-muted transition-colors duration-300 ease-[ease] hover:text-brand-foreground"
+							href="https://hackclub.com/privacy"
+							target="_blank"
+							rel="noopener">Privacy &amp; terms</a
+						>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div
+		class="max-w-content mx-auto py-6 border-t border-brand-border text-center"
+	>
+		<p class="text-[0.8rem] text-brand-muted tracking-[0.02em]">
+			&copy; 2026 Hack Club. Made by teenagers, mostly at night.
+		</p>
+	</div>
+</footer>
+
+<svelte:head>
+	<script
+		src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"
+	></script>
+	<script src="/js/main.js" defer></script>
+</svelte:head>

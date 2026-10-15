@@ -7,7 +7,7 @@
 	import { type VariantProps, tv } from "tailwind-variants"
 
 	export const buttonVariants = tv({
-		base: "inline-flex items-center justify-center gap-2 font-note whitespace-nowrap cursor-pointer select-none border-2 border-border rounded-tl-xl rounded-br-xl rounded-tr-sm rounded-bl-sm transition-all duration-150 hover:-translate-y-px hover:shadow-neo active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+		base: "inline-flex items-center justify-center gap-2 font-sans whitespace-nowrap cursor-pointer select-none border-2 border-border rounded-tl-xl rounded-br-xl rounded-tr-sm rounded-bl-sm transition-all duration-150 hover:-translate-y-px hover:shadow-neo active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
 		variants: {
 			variant: {
 				primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
@@ -15,8 +15,9 @@
 					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
 				outline: "bg-card text-card-foreground hover:bg-secondary",
 				ghost:
-					"border-transparent shadow-none bg-transparent hover:bg-secondary",
-				destructive: "bg-red-700 text-white hover:bg-red-800",
+					"border-transparent shadow-none bg-transparent text-foreground hover:bg-secondary",
+				destructive:
+					"bg-destructive text-destructive-foreground hover:bg-destructive/90",
 			},
 			size: {
 				xs: "h-8 px-3 text-xs",

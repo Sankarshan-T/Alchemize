@@ -3,8 +3,8 @@ import { PUBLIC_ADMIN_HACKCLUB_AUTH, PUBLIC_ADMIN_HACKCLUB_REDIRECT } from "$env
 import { createOAuthState } from "$lib/server/hackClubAuth"
 
 // Starts the admin Hack Club Auth flow with a state value that /admin/callback checks
-export const GET: RequestHandler = async ({ cookies }) => {
-	const state = createOAuthState(cookies, "admin_oauth_state")
+export const GET: RequestHandler = async ({ cookies, url }) => {
+	const state = createOAuthState(cookies, "admin_oauth_state", url.protocol === "https:")
 	const params = new URLSearchParams({
 		client_id: PUBLIC_ADMIN_HACKCLUB_AUTH,
 		response_type: "code",

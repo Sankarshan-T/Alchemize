@@ -174,7 +174,7 @@
 									Balance
 								</p>
 								<p
-									class="font-body font-black text-muted-foreground text-base leading-none mt-0.5"
+									class="font-body font-bold text-card-foreground text-sm leading-tight whitespace-nowrap mt-0.5"
 								>
 									{formatAqua(balanceHundredths)}
 								</p>
@@ -256,7 +256,7 @@
 					>
 						<div class="flex items-center justify-between">
 							<p
-								class="text-card-foreground text-xs font-bold uppercase tracking-widest flex items-center"
+								class="font-body text-card-foreground text-xs font-bold uppercase tracking-wide flex items-center"
 							>
 								HCA Configs
 								<a
@@ -296,7 +296,7 @@
 						class="  flex flex-col gap-2 bg-card border border-border/60 p-4 rounded-tl-2xl rounded-br-2xl rounded-md justify-center"
 					>
 						<p
-							class="text-card-foreground text-xs font-bold uppercase tracking-widest"
+							class="font-body text-card-foreground text-xs font-bold uppercase tracking-wide"
 						>
 							YSWS Eligibility
 						</p>

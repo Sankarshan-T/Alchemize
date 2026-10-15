@@ -22,6 +22,7 @@ interface TokenPayload extends AirtableUser {
 }
 export const GET: RequestHandler = async ({ url, cookies }) => {
     const code = url.searchParams.get("code")
+    const secureCookies = url.protocol === "https:"
 
     if (!code) {
         throw redirect(302, "/admin/error?code=missing_code");
@@ -102,14 +103,14 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
     // access token is never needed after login, so it is not kept in a cookie
     cookies.set("admin_access_token", "1", {
         httpOnly: true,
-        secure: true,
+        secure: secureCookies,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 30 * 6,
     })
     cookies.set("admin_jwt", jwtToken, {
         httpOnly: true,
-        secure: true,
+        secure: secureCookies,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 1, // JWT Expires in 6 hours, but set cookie to expire in 1 hour to force revalidation
