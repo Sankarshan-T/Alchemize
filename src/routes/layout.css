@@ -1,16 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:wght@400;500;600;700&family=IM+Fell+English&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 @import "@fontsource-variable/inter";
 @source "src/**/*.{svelte,ts,js,html,md}";
 
-:root {
-  --font-display: "Lora", serif;
-  --font-decor: "Lora", serif;
-  --font-body: "Inter", sans-serif;
-  --font-note: "Inter", sans-serif;
 
+.dark {
   --background: #F7F4FB;
   --background-texture:
     radial-gradient(ellipse at 18% 12%, rgba(157, 126, 198, 0.10), transparent 55%),
@@ -64,37 +60,16 @@
 
   --frame-radius: 46px 14px 46px 14px;
   --frame-radius-alt: 14px 46px 14px 46px;
-
-  /* Homepage palette: edit these values to update the landing page colors. */
-  --home-deepest: #1D1728;
-  --home-deep: #292137;
-  --home-mid: #3B304B;
-  --home-raised: #514064;
-  --home-foreground: #F4EEF9;
-  --home-muted: #C1B5CF;
-  --home-muted-soft: #D4CADD;
-  --home-accent: #B69AE2;
-  --home-accent-light: #D2BFF0;
-  --home-berry: #69439B;
-  --home-border: #665675;
-
-  /* Map each homepage section to its background colors here. */
-  --home-hero-background: var(--home-deep);
-  --home-hero-deep-background: var(--home-deepest);
-  --home-how-background: var(--home-deepest);
-  --home-how-deep-background: var(--home-deepest);
-  --home-projects-background: var(--home-deep);
-  --home-projects-deep-background: var(--home-deepest);
-  --home-shop-background: var(--home-deepest);
-  --home-shop-deep-background: var(--home-deepest);
-  --home-faq-background: var(--home-deep);
-  --home-faq-deep-background: var(--home-deepest);
-  --home-footer-background: var(--home-deepest);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-.dark {
+:root {
+  --font-display: "Cinzel", serif;
+  --font-decor: "Cinzel Decorative", serif;
+  --font-body: "EB Garamond", serif;
+  --font-note: "IM Fell English", serif;
+
   --background: #1D1728;
   --background-texture:
     radial-gradient(ellipse at 18% 12%, rgba(143, 108, 190, 0.13), transparent 55%),
@@ -135,6 +110,8 @@
   --sidebar-ring: #B69AE2;
   --admin-bg: #302641;
   --admin2-bg: #241D31;
+
+  --radius: .625rem;
 }
 
 body {
@@ -193,6 +170,11 @@ body {
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -206,55 +188,9 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Homepage semantic colors inherit each section's background mapping. */
-  --color-brand-background: var(--home-section-background, var(--home-deep));
-  --color-brand-background-deep: var(--home-section-deep-background, var(--home-deepest));
-  --color-brand-text: var(--home-deepest);
-  --color-brand-surface: var(--home-mid);
-  --color-brand-foreground: var(--home-foreground);
-  --color-brand-muted: var(--home-muted);
-  --color-brand-muted-soft: var(--home-muted-soft);
-  --color-brand-accent: var(--home-accent);
-  --color-brand-accent-light: var(--home-accent-light);
-  --color-brand-berry: var(--home-berry);
-  --color-brand-blossom: var(--home-accent-light);
-  --color-brand-border: var(--home-border);
-  --color-brand-lavender: var(--home-raised);
-
   /* Animations */
   --animate-marquee: marquee-slide 32s linear infinite;
   --animate-marquee-reverse: marquee-slide-reverse 32s linear infinite;
-}
-
-/* Section mappings: change the values above to choose each section's colors. */
-.home-section--hero {
-  --home-section-background: var(--home-hero-background);
-  --home-section-deep-background: var(--home-hero-deep-background);
-}
-
-.home-section--how {
-  --home-section-background: var(--home-how-background);
-  --home-section-deep-background: var(--home-how-deep-background);
-}
-
-.home-section--projects {
-  --home-section-background: var(--home-projects-background);
-  --home-section-deep-background: var(--home-projects-deep-background);
-}
-
-.home-section--shop {
-  --home-section-background: var(--home-shop-background);
-  --home-section-deep-background: var(--home-shop-deep-background);
-}
-
-.home-section--faq {
-  --home-section-background: var(--home-faq-background);
-  --home-section-deep-background: var(--home-faq-deep-background);
-}
-
-.home-section--footer {
-  --home-section-background: var(--home-footer-background);
-  --home-section-deep-background: var(--home-footer-background);
 }
 
 @layer base {
@@ -286,16 +222,15 @@ body {
   }
 }
 
-/* Landing-page illustration placeholders */
 @layer components {
   .asset-slot {
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px dashed var(--color-brand-border);
+    border: 2px dashed var(--border);
     border-radius: var(--radius-sm, 6px);
-    color: var(--color-brand-muted);
+    color: var(--muted-foreground);
     font-size: 0.7rem;
     opacity: 0.35;
     overflow: hidden;
@@ -323,9 +258,8 @@ body {
   }
 }
 
-/* Landing-page prize carousel */
 [data-marquee] {
-  background-color: var(--color-brand-background-deep);
+  background-color: var(--background);
 }
 
 [data-marquee-track]>div>div {
