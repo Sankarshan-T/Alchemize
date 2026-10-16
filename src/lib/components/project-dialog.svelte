@@ -657,9 +657,9 @@
 											bind:value={theme}
 										>
 											<option value="" disabled selected> Choose Theme </option>
-											<option value="endless">Endless</option>
-											<option value="no-internet">No Internet</option>
-											<option value="indie-game">Indie Game</option>
+											<option value="endless">Bots</option>
+											<option value="no-internet">Co-op</option>
+											<option value="indie-game">Electroart</option>
 										</select>
 									</div>
 
@@ -801,7 +801,7 @@
 									disabled={!allFieldsFilled ||
 										showSecondRotator ||
 										shipLoading}
-									// type="submit"
+									type="submit"
 									class={cn(
 										"bg-primary hover:bg-primary/80 text-primary-foreground font-display text-xs font-bold uppercase tracking-wider px-6 h-10",
 										!allFieldsFilled && "pointer-events-none"
