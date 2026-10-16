@@ -65,7 +65,7 @@
 		</Dialog.Trigger>
 
 		<Dialog.Content
-			class="bg-secondary/80 backdrop-blur-md border-2 border-primary shadow-sm shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
+			class="bg-secondary/40 backdrop-blur-md border-2 border-primary shadow-sm shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
 		>
 			<div
 				class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center w-full"

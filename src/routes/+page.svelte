@@ -483,12 +483,12 @@
 	</div>
 
 	<div class="relative z-2 w-full max-w-[820px] mx-auto px-12 py-20">
-		<div class="text-center mb-12">
-			<h2
-				class="font-heading text-[2rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
-			>
-				Frequently asked questions
-			</h2>
+		<div class="flex w-full items-center justify-center mb-12">
+			<img
+				src="/assets/FAQ.png"
+				alt="Alchemize FAQ"
+				class=" h-[100px] object-contain object-left -mb-8"
+			/>
 		</div>
 
 		<div class="flex flex-col" id="faq-accordion">
