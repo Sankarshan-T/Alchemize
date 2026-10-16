@@ -690,7 +690,7 @@
 					<li>
 						<a
 							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
-							href="https://hackclub.com/slack"
+							href="https://hackclub.enterprise.slack.com/archives/C0ASVK0HHEX"
 							target="_blank"
 							rel="noopener">#alchemize-help on Slack</a
 						>
@@ -704,7 +704,7 @@
 					<li>
 						<a
 							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
-							href="#">Fulfilment bounty</a
+							href="https://forms.hackclub.com/bounty">Fulfilment bounty</a
 						>
 					</li>
 					<li>
