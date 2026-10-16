@@ -33,7 +33,7 @@
 	<Docsaside {openGroups} {toggleGroup} />
 
 	<div
-		class="relative h-full max-h-screen w-full overflow-y-auto p-10 font-light font-body"
+		class="relative h-full max-h-screen w-full overflow-y-auto px-5 py-8 font-body sm:px-8 sm:py-10 lg:px-12"
 	>
 		{#if isOutdatedSection}
 			<div
