@@ -151,7 +151,7 @@
 					<a
 						href={authUrl}
 						type="button"
-						class="inline-flex items-center justify-center px-7 text-lg tracking-[0.03em] cursor-pointer bg-chart-3 font-semibold text-foreground border-l-2 border-border transition-all duration-300 ease-[ease] hover:bg-chart-3/80 active:translate-y-[2px]"
+						class="inline-flex items-center justify-center px-7 text-lg tracking-[0.03em] cursor-pointer bg-primary font-semibold text-primary-foreground border-l-2 border-border transition-all duration-300 ease-[ease] hover:bg-primary/80 active:translate-y-[2px]"
 						id="btn-sign-in">Sign In</a
 					>
 				</div>
@@ -197,149 +197,102 @@
 			All about Alchemize!!!
 		</p>
 
-		<div class="relative max-w-[1100px] h-[1000px] mx-auto grid grid-rows-4">
-			<svg
-				class="absolute top-0 left-0 size-full pointer-events-none z-0"
-				aria-hidden="true"
-				viewBox="0 0 1100 1000"
-				preserveAspectRatio="none"
+		<div class="mx-auto grid max-w-[1000px] grid-cols-1 gap-6 md:grid-cols-2">
+			<article
+				class="overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card"
 			>
-				<circle
-					class="stroke-border"
-					cx="550"
-					cy="-80"
-					r="280"
-					fill="none"
-					stroke-width="1"
-					opacity="0.25"
-				/>
-				<circle
-					class="stroke-border"
-					cx="550"
-					cy="-80"
-					r="400"
-					fill="none"
-					stroke-width="1"
-					opacity="0.15"
-				/>
-				<circle
-					class="stroke-border"
-					cx="550"
-					cy="-80"
-					r="520"
-					fill="none"
-					stroke-width="1"
-					opacity="0.08"
-				/>
-			</svg>
-
-			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
-				<div class="w-[380px] ml-auto text-left">
-					<div class="flex items-center justify-start gap-3 mb-2">
-						<span
-							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-primary text-foreground font-extrabold text-[1rem]"
-							>1</span
-						>
-						<h3 class="font-heading text-[1.35rem] font-bold text-foreground">
-							Pick a Idea
-						</h3>
-					</div>
-					<p
-						class="text-[0.9rem] leading-[1.65] text-muted-foreground max-w-[360px]"
-					>
-						Got your own idea? Build it. Making something completely crazy. Just
-						pick a project youre actually hyped to ship!!
-					</p>
-				</div>
-				<div class="w-full h-[240px] pl-0 pr-6 flex justify-start">
+				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
 					<img
 						src="assets/step_1.png"
-						alt="Step 1"
-						class="max-h-full w-auto object-contain"
+						alt="Alchemize character choosing potions"
+						class="h-full w-full object-contain"
 					/>
 				</div>
-			</div>
+				<div class="p-6">
+					<div class="mb-2 flex items-center gap-3">
+						<span
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
+							>1</span
+						>
+						<h3 class="font-heading text-xl font-bold text-foreground">
+							Pick an Idea
+						</h3>
+					</div>
+					<p class="text-sm leading-relaxed text-muted-foreground">
+						Got your own idea? Build it. Make something completely crazy. Just
+						pick a project you're actually interested to build!
+					</p>
+				</div>
+			</article>
 
-			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
-				<div class="w-full h-[240px] pl-6 pr-0 flex justify-end">
+			<article
+				class="overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card"
+			>
+				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
 					<img
 						src="assets/step_2.png"
-						alt="Step 2 "
-						class="max-h-full w-auto object-contain"
+						alt="Alchemize character building a project"
+						class="h-full w-full object-contain"
 					/>
 				</div>
-				<div class="w-[380px] text-left">
-					<div class="flex items-center justify-start gap-3 mb-2">
+				<div class="p-6">
+					<div class="mb-2 flex items-center gap-3">
 						<span
-							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-primary text-foreground font-extrabold text-[1rem]"
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
 							>2</span
 						>
-						<h3 class="font-heading text-[1.35rem] font-bold text-foreground">
+						<h3 class="font-heading text-xl font-bold text-foreground">
 							Build the Project
 						</h3>
 					</div>
-					<p
-						class="text-[0.9rem] leading-[1.65] text-muted-foreground max-w-[360px]"
-					>
+					<p class="text-sm leading-relaxed text-muted-foreground">
 						Turn your idea into a real, working project. Code it, design it, and
-						ship it-just remember to track your hours as you build.
+						ship it, just remember to track your hours as you build.
 					</p>
 				</div>
-			</div>
+			</article>
 
-			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
-				<div class="w-[380px] ml-auto text-left">
-					<div class="flex items-center justify-start gap-3 mb-2">
-						<span
-							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-primary text-foreground font-extrabold text-[1rem]"
-							>3</span
-						>
-						<h3 class="font-heading text-[1.35rem] font-bold text-foreground">
-							Submit It for Review
-						</h3>
-					</div>
-					<p
-						class="text-[0.9rem] leading-[1.65] text-muted-foreground max-w-[360px]"
-					>
-						Once your project is ready, submit it with a short description and a
-						link to try it out. Our reviewers will check it and approve your
-						hours.
-					</p>
-				</div>
-				<div class="w-full h-[240px] pl-0 pr-6 flex justify-start">
-					<img
-						src="assets/step%203.png"
-						alt="Step 3 Illustration"
-						class="max-h-full w-auto object-contain"
-					/>
-				</div>
-			</div>
+			<div
+				class="rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 md:col-span-2"
+			>
+				<p
+					class="mb-5 font-note text-xs font-bold uppercase tracking-[0.2em] text-primary"
+				>
+					Then, ship and earn!!!!!!!
+				</p>
+				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+					<article>
+						<div class="mb-2 flex items-center gap-3">
+							<span
+								class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
+								>3</span
+							>
+							<h3 class="font-heading text-xl font-bold text-foreground">
+								Submit It for Review
+							</h3>
+						</div>
+						<p class="pl-12 text-sm leading-relaxed text-muted-foreground">
+							Once your project is ready, submit it with your code and a link to
+							try it out. Our reviewers will check it and approve your hours.
+						</p>
+					</article>
 
-			<div class="relative z-2 grid grid-cols-2 items-center gap-12 px-5">
-				<div class="w-full h-[240px] pl-6 pr-0 flex justify-end">
-					<img
-						src="assets/step%204.png"
-						alt="Step 4 Illustration"
-						class="max-h-full w-auto object-contain"
-					/>
-				</div>
-				<div class="w-[380px] text-left">
-					<div class="flex items-center justify-start gap-3 mb-2">
-						<span
-							class="inline-flex shrink-0 items-center justify-center size-9 rounded-full bg-primary text-foreground font-extrabold text-[1rem]"
-							>4</span
-						>
-						<h3 class="font-heading text-[1.35rem] font-bold text-foreground">
-							Spend Your Stones!
-						</h3>
-					</div>
-					<p
-						class="text-[0.9rem] leading-[1.65] text-muted-foreground max-w-[360px]"
-					>
-						Every approved hour award you aqua regia. Spend it in the shop on
-						amazing rewards like hardware, tools and licenses to help your next
-						project.
-					</p>
+					<article>
+						<div class="mb-2 flex items-center gap-3">
+							<span
+								class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
+								>4</span
+							>
+							<h3 class="font-heading text-xl font-bold text-foreground">
+								Spend Your Stones!
+							</h3>
+						</div>
+						<p class="pl-12 text-sm leading-relaxed text-muted-foreground">
+							Every approved hour earns you Aqua Regia. Spend it in the shop on
+							amazing rewards like hardware, tools, and licenses to help your
+							next project.
+						</p>
+					</article>
 				</div>
 			</div>
 		</div>
@@ -527,11 +480,11 @@
 
 	<div class="relative z-2 w-full max-w-[820px] mx-auto px-12 py-20">
 		<div class="text-center mb-12">
-			<img
-				src="assets/faq-title.svg"
-				alt="Frequently Asked Questions"
-				class="inline-block max-h-16 w-auto min-w-80 min-h-14 border-2 border-dashed border-border rounded-sm"
-			/>
+			<h2
+				class="font-heading text-[2rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
+			>
+				Frequently asked questions
+			</h2>
 		</div>
 
 		<div class="flex flex-col" id="faq-accordion">
@@ -575,7 +528,7 @@
 					id="faq-btn-2"
 					aria-controls="faq-panel-2"
 				>
-					<span>All this for free?</span>
+					<span>All this? For free?</span>
 					<span
 						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
 						aria-hidden="true"
@@ -609,7 +562,7 @@
 					id="faq-btn-3"
 					aria-controls="faq-panel-3"
 				>
-					<span>What types of projects count?</span>
+					<span>What projects count?</span>
 					<span
 						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
 						aria-hidden="true"
@@ -627,7 +580,7 @@
 							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
 						>
 							All kinds of software, technical projects count, as long as
-							they’re open-source!
+							they're open-source!
 						</p>
 					</div>
 				</div>
