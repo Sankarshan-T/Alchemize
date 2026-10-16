@@ -1,21 +1,15 @@
 <script lang="ts">
 	import { onMount } from "svelte"
 	import { browser } from "$app/environment"
-	import {
-		PUBLIC_HACKCLUB_AUTH,
-		PUBLIC_HACKCLUB_REDIRECT,
-		PUBLIC_TURNED_OFF,
-	} from "$env/static/public"
+	import { PUBLIC_TURNED_OFF } from "$env/static/public"
 
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
-	let showRotator = $state(false)
+	let openFaq = $state<number | null>(null)
 	let shopItems: { itemID: string; name: string; cdnImage: string }[] = $state(
 		[]
 	)
 	let shopItemsError = $state(false)
-	const clientId = PUBLIC_HACKCLUB_AUTH
-	const uri = encodeURIComponent(PUBLIC_HACKCLUB_REDIRECT)
 
 	let hasaccessToken = $state(
 		browser &&
@@ -33,47 +27,11 @@
 
 	let referUrl = $state(`./refer`)
 
-	const targetDate = new Date("2026-06-21T01:00:00Z").getTime()
-	let timeLeft = $state(Math.max(0, targetDate - Date.now()))
-
-	let time = $derived(formatTime(timeLeft))
-
-	$effect(() => {
-		const interval = setInterval(() => {
-			const difference = targetDate - Date.now()
-
-			if (difference <= 0) {
-				timeLeft = 0
-				clearInterval(interval)
-			} else {
-				timeLeft = difference
-			}
-		}, 1000)
-
-		return () => clearInterval(interval)
-	})
-
-	function formatTime(ms: number) {
-		if (ms <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-
-		const seconds = Math.floor((ms / 1000) % 60)
-		const minutes = Math.floor((ms / 1000 / 60) % 60)
-		const hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
-		const days = Math.floor(ms / (1000 * 60 * 60 * 24))
-
-		return {
-			days: days.toString().padStart(2, "0"),
-			hours: hours.toString().padStart(2, "0"),
-			minutes: minutes.toString().padStart(2, "0"),
-			seconds: seconds.toString().padStart(2, "0"),
-		}
+	function toggleFaq(question: number) {
+		openFaq = openFaq === question ? null : question
 	}
 
 	onMount(() => {
-		const html = document.documentElement
-		const wasDark = html.classList.contains("dark")
-		html.classList.remove("dark")
-
 		if (data.error) {
 			alert(data.error)
 		}
@@ -115,10 +73,6 @@
 		fetch("/rsvp")
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
-
-		return () => {
-			if (wasDark) html.classList.add("dark")
-		}
 	})
 </script>
 
@@ -506,7 +460,6 @@
 				</div>
 			</a>
 
-			<!-- 3. VERT (Bottom row, span 2 cols) -->
 			<a
 				href="https://vert.sh"
 				target="_blank"
@@ -545,7 +498,6 @@
 				</div>
 			</a>
 
-			<!-- 4. Blind Defusal (Bottom row, span 2 cols) -->
 			<a
 				href="https://blind-defusal.jayx2u.fyi"
 				target="_blank"
@@ -823,8 +775,8 @@
 			<div class="border-b-2 border-border first:border-t-2">
 				<button
 					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
+					onclick={() => toggleFaq(1)}
+					aria-expanded={openFaq === 1}
 					id="faq-btn-1"
 					aria-controls="faq-panel-1"
 				>
@@ -835,56 +787,62 @@
 					></span>
 				</button>
 				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 1 ? "1fr" : "0fr"}
 					id="faq-panel-1"
 					role="region"
 					aria-labelledby="faq-btn-1"
 				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						Anyone aged 13 through 18! Everyone from all over the world can
-						participate.
-					</p>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Anyone aged 13 through 18! Everyone from all over the world can
+							participate.
+						</p>
+					</div>
 				</div>
 			</div>
 
 			<div class="border-b-2 border-border first:border-t-2">
 				<button
 					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
+					onclick={() => toggleFaq(2)}
+					aria-expanded={openFaq === 2}
 					id="faq-btn-2"
 					aria-controls="faq-panel-2"
 				>
-					<span>Is this free/legit?</span>
+					<span>All this for free?</span>
 					<span
 						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
 						aria-hidden="true"
 					></span>
 				</button>
 				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 2 ? "1fr" : "0fr"}
 					id="faq-panel-2"
 					role="region"
 					aria-labelledby="faq-btn-2"
 				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						Yeah! Hack Club is a 501(c)(3) non-profit, with donations from
-						donors like Michael Dell and Tom Preston-Werner covering all of the
-						prizes! We also ran programs like High Seas, Summer of Making,
-						Flavortown in the past.
-					</p>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Yeah! Hack Club is a 501(c)(3) non-profit, with donations from
+							donors like Michael Dell and Tom Preston-Werner covering all of
+							the prizes! We also ran programs like High Seas, Summer of Making,
+							Flavortown in the past.
+						</p>
+					</div>
 				</div>
 			</div>
 
 			<div class="border-b-2 border-border first:border-t-2">
 				<button
 					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
+					onclick={() => toggleFaq(3)}
+					aria-expanded={openFaq === 3}
 					id="faq-btn-3"
 					aria-controls="faq-panel-3"
 				>
@@ -895,108 +853,20 @@
 					></span>
 				</button>
 				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 3 ? "1fr" : "0fr"}
 					id="faq-panel-3"
 					role="region"
 					aria-labelledby="faq-btn-3"
 				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						All kinds of technical projects, as long as they’re open-source!
-						(Note: We don't support hardware projects just yet.)
-					</p>
-				</div>
-			</div>
-
-			<div class="border-b-2 border-border first:border-t-2">
-				<button
-					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
-					id="faq-btn-4"
-					aria-controls="faq-panel-4"
-				>
-					<span>Duis aute irure dolor in reprehenderit?</span>
-					<span
-						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
-						aria-hidden="true"
-					></span>
-				</button>
-				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
-					id="faq-panel-4"
-					role="region"
-					aria-labelledby="faq-btn-4"
-				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						At vero eos et accusamus et iusto odio dignissimos ducimus qui
-						blanditiis praesentium voluptatum deleniti atque corrupti quos
-						dolores et quas molestias excepturi sint occaecati cupiditate non
-						provident.
-					</p>
-				</div>
-			</div>
-
-			<div class="border-b-2 border-border first:border-t-2">
-				<button
-					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
-					id="faq-btn-5"
-					aria-controls="faq-panel-5"
-				>
-					<span>Excepteur sint occaecat cupidatat?</span>
-					<span
-						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
-						aria-hidden="true"
-					></span>
-				</button>
-				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
-					id="faq-panel-5"
-					role="region"
-					aria-labelledby="faq-btn-5"
-				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						Similique sunt in culpa qui officia deserunt mollitia animi, id est
-						laborum et dolorum fuga. Et harum quidem rerum facilis est et
-						expedita distinctio.
-					</p>
-				</div>
-			</div>
-
-			<div class="border-b-2 border-border first:border-t-2">
-				<button
-					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
-					data-accordion-trigger
-					aria-expanded="false"
-					id="faq-btn-6"
-					aria-controls="faq-panel-6"
-				>
-					<span>Sunt in culpa qui officia deserunt?</span>
-					<span
-						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
-						aria-hidden="true"
-					></span>
-				</button>
-				<div
-					class="max-h-0 overflow-hidden transition-[max-height,padding] duration-400 ease-[ease]"
-					id="faq-panel-6"
-					role="region"
-					aria-labelledby="faq-btn-6"
-				>
-					<p
-						class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
-					>
-						Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-						impedit quo minus id quod maxime placeat facere possimus, omnis
-						voluptas assumenda est.
-					</p>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							All kinds of software, technical projects count, as long as
+							they’re open-source!
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1047,12 +917,6 @@
 						<a
 							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
 							href="#projects">Explore projects</a
-						>
-					</li>
-					<li>
-						<a
-							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
-							href="#">The handbook</a
 						>
 					</li>
 				</ul>
@@ -1150,7 +1014,9 @@
 
 	<div class="max-w-content mx-auto py-6 border-t border-border text-center">
 		<p class="text-[0.8rem] text-muted-foreground tracking-[0.02em]">
-			&copy; 2026 Hack Club. Made by teenagers, mostly at night.
+			Sponsored by, <a
+				href="https://hackclub.enterprise.slack.com/team/U01PJ08PR7S">Josias</a
+			>
 		</p>
 	</div>
 </footer>

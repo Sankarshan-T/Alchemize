@@ -71,33 +71,33 @@
 		if (status.startsWith("pending")) {
 			return {
 				dot: "bg-foreground",
-				text: "text-foreground",
+				badge: "border-border bg-secondary text-secondary-foreground",
 				title: "pending",
 			}
 		}
 		if (status.startsWith("rejected")) {
 			return {
 				dot: "bg-red-500",
-				text: "text-red-400",
+				badge: "border-red-400/30 bg-red-500/15 text-red-300",
 				title: "changes needed",
 			}
 		}
 		if (status.startsWith("accepted_t2")) {
 			return {
 				dot: "bg-emerald-500",
-				text: "text-emerald-400",
+				badge: "border-emerald-400/30 bg-emerald-500/15 text-emerald-300",
 				title: "approved",
 			}
 		} else if (status.startsWith("accepted")) {
 			return {
-				dot: "bg-yellow-500",
-				text: "text-yellow-400",
+				dot: "bg-amber-500",
+				badge: "border-amber-400/30 bg-amber-500/15 text-amber-300",
 				title: "under review",
 			}
 		}
 		return {
 			dot: "bg-blue-500",
-			text: "text-blue-400",
+			badge: "border-blue-400/30 bg-blue-500/15 text-blue-300",
 			title: "unshipped",
 		}
 	}
@@ -264,7 +264,7 @@
 			{#each projects as project}
 				<button
 					class="w-full min-h-[28vh] bg-card border-2 border-border rounded-md rounded-tl-2xl rounded-br-2xl overflow-hidden flex items-center gap-5 p-2 py-2 hover:-translate-x-0.5 hover:-translate-y-0.5 transition text-card-foreground"
-					// onclick={() => openUpdateProjWindow(project)}
+					onclick={() => openUpdateProjWindow(project)}
 				>
 					<div class="w-[35%] h-full shrink-0 overflow-hidden">
 						{#if project.fields.screenshot}
@@ -296,11 +296,11 @@
 						</div>
 
 						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-2 uppercase text-xs font-body">
-								<span class={`h-2 w-2 rounded-full ${applyBadge(project).dot}`}
-								></span>
-
-								<span class={`font-semibold ${applyBadge(project).text}`}>
+							<div
+								class={`inline-flex items-center gap-2 self-start rounded-full border px-2 py-1 uppercase text-xs font-body ${applyBadge(project).badge}`}
+							>
+								<span class={`h-2 w-2 rounded-full ${applyBadge(project).dot}`}></span>
+								<span class="font-semibold">
 									{applyBadge(project).title}
 								</span>
 							</div>
@@ -327,9 +327,7 @@
 			<div class="flex flex-col items-center justify-center py-24 gap-6">
 				<p class="text-secondary-foreground">No mixes yet.</p>
 
-				<Button 
-					onclick={() => (newProjWindowOpened = true)}
-				>
+				<Button onclick={() => (newProjWindowOpened = true)}>
 					<Plus class="size-4 mr-2" />
 					Create your first mix
 				</Button>
@@ -338,7 +336,7 @@
 	</div>
 </main>
 
-<!-- <ProjectDialog
+<ProjectDialog
 	bind:open={newProjWindowOpened}
 	mode="create"
 	{availableHacks}
@@ -356,4 +354,4 @@
 	{showRotator}
 	{invalidater}
 	{onDelete}
-/> -->
+/>

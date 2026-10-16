@@ -86,7 +86,7 @@
 									<span
 										class="inline-flex text-[10px] font-display font-bold tracking-wider uppercase px-2 py-1 rounded-md border {isPending
 											? 'border-primary/40 bg-primary/10 text-primary'
-											: 'border-emerald-700/50 bg-emerald-700/10 text-emerald-700'}"
+											: 'border-emerald-400/40 bg-emerald-500/15 text-emerald-300'}"
 									>
 										{isPending ? "Pending" : "Fulfilled"}
 									</span>

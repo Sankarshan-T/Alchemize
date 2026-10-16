@@ -12,7 +12,6 @@
 		Moon,
 		Sun,
 	} from "lucide-svelte"
-	import { mode, toggleMode } from "mode-watcher"
 
 	const isAdmin = $derived(!page.data?.admin)
 
@@ -36,7 +35,7 @@
 		// 	icon: Compass,
 		// 	side: "left",
 		// },
-		{ href: "/docs", label: "Documentation", icon: Newspaper, side: "left" },
+		{ href: "/docs", label: "Docs", icon: Newspaper, side: "left" },
 		{ href: "/refer", label: "Refer", icon: Users, side: "left" },
 		{
 			href: "/dashboard/projects",
@@ -51,8 +50,6 @@
 			side: "right",
 		},
 	]
-
-	const isDark = $derived(mode.current === "dark")
 </script>
 
 <div class="relative font-mono tracking-wide">
@@ -68,7 +65,7 @@
 		</Dialog.Trigger>
 
 		<Dialog.Content
-			class="bg-secondary/80 backdrop-blur-md border-2 border-primary shadow-lg shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
+			class="bg-secondary/80 backdrop-blur-md border-2 border-primary shadow-sm shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
 		>
 			<div
 				class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center w-full"
@@ -134,21 +131,6 @@
 								</a>
 							</Dialog.Close>
 						{/each}
-						<button
-							type="button"
-							class="flex items-center justify-center gap-2 self-center rounded-md border-2 border-primary/40 bg-card p-2 text-foreground shadow-sm shadow-primary transition-all duration-150 hover:border-primary hover:text-primary"
-							onclick={toggleMode}
-							aria-label={isDark
-								? "Switch to light mode"
-								: "Switch to dark mode"}
-							title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-						>
-							{#if isDark}
-								<Sun class="h-4 w-4" />
-							{:else}
-								<Moon class="h-4 w-4" />
-							{/if}
-						</button>
 					</div>
 				</div>
 

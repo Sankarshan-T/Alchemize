@@ -5,65 +5,6 @@
 @import "@fontsource-variable/inter";
 @source "src/**/*.{svelte,ts,js,html,md}";
 
-
-.dark {
-  --background: #F7F4FB;
-  --background-texture:
-    radial-gradient(ellipse at 18% 12%, rgba(157, 126, 198, 0.10), transparent 55%),
-    radial-gradient(circle at 83% 18%, rgba(128, 92, 171, 0.08), transparent 42%),
-    radial-gradient(circle at 78% 82%, rgba(194, 170, 218, 0.10), transparent 40%);
-
-  --foreground: #30243D;
-  --card: #FFFFFF;
-  --card-foreground: #30243D;
-  --popover: #FFFFFF;
-  --popover-foreground: #30243D;
-
-  --primary: #69439B;
-  --primary-hover: #55357F;
-  --primary-foreground: #FFFFFF;
-  --secondary: #EAE2F2;
-  --secondary-foreground: #392A4B;
-
-  --muted: #F0ECF5;
-  --muted-foreground: #70627E;
-
-  --accent: #DCCDEC;
-  --accent-foreground: #352545;
-
-  --destructive: #B4233C;
-  --destructive-foreground: #FFFFFF;
-
-  --border: #D8CDE4;
-  --input: #FFFFFF;
-  --ring: #8C68BC;
-
-  --chart-1: #69439B;
-  --chart-2: #9571C2;
-  --chart-3: #B69AD5;
-  --chart-4: #D58A50;
-  --chart-5: #9F526C;
-
-  --sidebar: #F2EDF7;
-  --sidebar-foreground: #30243D;
-  --sidebar-primary: #69439B;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #E4D9EF;
-  --sidebar-accent-foreground: #30243D;
-  --sidebar-border: #D8CDE4;
-  --sidebar-ring: #8C68BC;
-
-  --admin-bg: #EAE2F2;
-  --admin2-bg: #F7F4FB;
-
-  --radius: .625rem;
-
-  --frame-radius: 46px 14px 46px 14px;
-  --frame-radius-alt: 14px 46px 14px 46px;
-}
-
-@custom-variant dark (&:where(.dark, .dark *));
-
 :root {
   --font-display: "Cinzel", serif;
   --font-decor: "Cinzel Decorative", serif;
@@ -188,7 +129,6 @@ body {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Animations */
   --animate-marquee: marquee-slide 32s linear infinite;
   --animate-marquee-reverse: marquee-slide-reverse 32s linear infinite;
 }
@@ -273,7 +213,6 @@ body {
   border-color: rgba(255, 255, 255, 0.65);
 }
 
-/* Lenis smooth-scroll integration */
 html.lenis,
 html.lenis body {
   height: auto;
