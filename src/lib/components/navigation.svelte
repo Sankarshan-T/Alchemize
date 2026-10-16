@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Dialog from "$lib/components/ui/dialog/index.js"
 	import { page } from "$app/state"
+	import { buttonVariants } from "$lib/components/ui/button/button.svelte"
 	import {
 		CompassIcon,
 		Home,
@@ -12,6 +13,8 @@
 		Moon,
 		Sun,
 	} from "lucide-svelte"
+
+	let { inline = false }: { inline?: boolean } = $props()
 
 	const isAdmin = $derived(!page.data?.admin)
 
@@ -56,16 +59,14 @@
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class={`fixed z-50 flex items-center justify-center border-2 border-primary/80 bg-secondary/90 py-1 px-5 rounded-md text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group gap-3 ${
-				page.url.pathname === "/dashboard/projects"
-					? "bottom-6 right-6"
-					: "left-1/2 top-3 -translate-x-1/2"
-			}`}
+			class={inline
+				? `${buttonVariants({ variant: "outline", size: "sm" })} group`
+				: "fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center justify-center gap-3 rounded-md border-2 border-primary/80 bg-secondary/90 px-5 py-1 text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group"}
 		>
 			<CompassIcon
-				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"
+				class="size-4 text-secondary-foreground transition-colors group-hover:text-primary"
 			/>
-			Go Somewhere?
+			{inline ? "Navigate" : "Go Somewhere?"}
 		</Dialog.Trigger>
 
 		<Dialog.Content

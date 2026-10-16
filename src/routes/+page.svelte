@@ -154,30 +154,6 @@
 	id="hero"
 	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
 >
-	<div class="absolute inset-0 pointer-events-none z-0">
-		<div class="absolute inset-0 pointer-events-none z-0 bg-background"></div>
-		<div class="absolute inset-0 pointer-events-none z-1">
-			<div
-				class="asset-slot top-[10%] left-0 w-80 h-[480px]"
-				aria-hidden="true"
-			></div>
-			<div
-				class="asset-slot top-[5%] right-0 w-[350px] h-[500px]"
-				aria-hidden="true"
-			></div>
-		</div>
-		<div class="absolute inset-0 pointer-events-none z-2">
-			<div
-				class="asset-slot top-[60px] left-20 size-30"
-				aria-hidden="true"
-			></div>
-			<div
-				class="asset-slot bottom-20 right-[100px] size-[140px]"
-				aria-hidden="true"
-			></div>
-		</div>
-	</div>
-
 	<div
 		class="relative z-2 w-full max-w-[1440px] mx-auto min-h-screen grid grid-cols-2 items-center gap-12 pt-[100px] px-12 pb-20"
 	>
@@ -217,13 +193,60 @@
 
 		<div class="flex items-center justify-center h-full">
 			<div
-				class="relative w-full max-w-[560px] h-[480px] flex items-center justify-center border-2 border-dashed border-border rounded-lg"
+				class="group/potion-cluster pointer-events-none relative w-full max-w-[560px] h-[480px]"
 			>
-				<div class="relative flex size-full items-center justify-center">
+				<div
+					class="hero-potion-float pointer-events-auto absolute left-[34%] top-[26%] w-[190px] sm:w-[220px]"
+				>
 					<img
-						alt="Potion Mix"
+						alt=""
 						src="/pmix_v2.png"
-						class="max-h-full max-w-full object-contain"
+						class="w-full rotate-[-5deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-y-10 group-hover/potion-cluster:scale-110 group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute left-[7%] top-[7%] w-[105px] sm:w-[135px]"
+					style="animation-delay: -1.2s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[14deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-x-10 group-hover/potion-cluster:-translate-y-8 group-hover/potion-cluster:rotate-[22deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute right-[6%] top-[10%] w-[110px] sm:w-[140px]"
+					style="animation-delay: -2.8s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[-14deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:translate-x-10 group-hover/potion-cluster:-translate-y-8 group-hover/potion-cluster:rotate-[-22deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute bottom-[3%] left-[15%] w-[115px] sm:w-[145px]"
+					style="animation-delay: -3.6s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[-12deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-x-10 group-hover/potion-cluster:translate-y-8 group-hover/potion-cluster:rotate-[-20deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute right-[11%] bottom-[4%] w-[105px] sm:w-[135px]"
+					style="animation-delay: -4.4s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[16deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:translate-x-10 group-hover/potion-cluster:translate-y-8 group-hover/potion-cluster:rotate-[24deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
 					/>
 				</div>
 			</div>
@@ -234,20 +257,8 @@
 <section
 	id="how-it-works"
 	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 92%, var(--primary));"
 >
-	<div class="absolute inset-0 pointer-events-none z-0">
-		<div class="absolute inset-0 pointer-events-none z-0 bg-background"></div>
-		<div class="absolute inset-0 pointer-events-none z-1">
-			<div
-				class="asset-slot inset-0 size-full border-none"
-				aria-hidden="true"
-			></div>
-		</div>
-		<div class="absolute inset-0 pointer-events-none z-2">
-			<div class="asset-slot top-10 right-10 size-45" aria-hidden="true"></div>
-		</div>
-	</div>
-
 	<div class="relative z-2 w-full max-w-content mx-auto px-12 py-12">
 		<h2
 			class="font-heading text-[3rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
@@ -260,19 +271,19 @@
 
 		<div class="mx-auto grid max-w-[1000px] grid-cols-1 gap-6 md:grid-cols-2">
 			<article
-				class="overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card"
+				class="group overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
 			>
 				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
 					<img
 						src="assets/step_1.png"
 						alt="Alchemize character choosing potions"
-						class="h-full w-full object-contain"
+						class="h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
 					/>
 				</div>
 				<div class="p-6">
 					<div class="mb-2 flex items-center gap-3">
 						<span
-							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
 							>1</span
 						>
 						<h3 class="font-heading text-xl font-bold text-foreground">
@@ -287,19 +298,19 @@
 			</article>
 
 			<article
-				class="overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card"
+				class="group overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
 			>
 				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
 					<img
 						src="assets/step_2.png"
 						alt="Alchemize character building a project"
-						class="h-full w-full object-contain"
+						class="h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
 					/>
 				</div>
 				<div class="p-6">
 					<div class="mb-2 flex items-center gap-3">
 						<span
-							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
 							>2</span
 						>
 						<h3 class="font-heading text-xl font-bold text-foreground">
@@ -313,49 +324,42 @@
 				</div>
 			</article>
 
-			<div
-				class="rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 md:col-span-2"
+			<article
+				class="group rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
 			>
-				<p
-					class="mb-5 font-note text-xs font-bold uppercase tracking-[0.2em] text-primary"
-				>
-					Then, ship and earn!!!!!!!
-				</p>
-				<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-					<article>
-						<div class="mb-2 flex items-center gap-3">
-							<span
-								class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
-								>3</span
-							>
-							<h3 class="font-heading text-xl font-bold text-foreground">
-								Submit It for Review
-							</h3>
-						</div>
-						<p class="pl-12 text-sm leading-relaxed text-muted-foreground">
-							Once your project is ready, submit it with your code and a link to
-							try it out. Our reviewers will check it and approve your hours.
-						</p>
-					</article>
-
-					<article>
-						<div class="mb-2 flex items-center gap-3">
-							<span
-								class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base"
-								>4</span
-							>
-							<h3 class="font-heading text-xl font-bold text-foreground">
-								Spend Your Stones!
-							</h3>
-						</div>
-						<p class="pl-12 text-sm leading-relaxed text-muted-foreground">
-							Every approved hour earns you Aqua Regia. Spend it in the shop on
-							amazing rewards like hardware, tools, and licenses to help your
-							next project.
-						</p>
-					</article>
+				<div class="mb-2 flex items-center gap-3">
+					<span
+						class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+						>3</span
+					>
+					<h3 class="font-heading text-xl font-bold text-foreground">
+						Submit It for Review
+					</h3>
 				</div>
-			</div>
+				<p class="text-sm leading-relaxed text-muted-foreground">
+					Once your project is ready, submit it with your code and a link to try
+					it out. Our reviewers will check it and approve your hours.
+				</p>
+			</article>
+
+			<article
+				class="group rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
+			>
+				<div class="mb-2 flex items-center gap-3">
+					<span
+						class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+						>4</span
+					>
+					<h3 class="font-heading text-xl font-bold text-foreground">
+						Spend Your Stones!
+					</h3>
+				</div>
+				<p class="text-sm leading-relaxed text-muted-foreground">
+					Every approved hour earns you Aqua Regia. Spend it in the shop on
+					amazing rewards like hardware, tools, and licenses to help your next
+					project.
+				</p>
+			</article>
 		</div>
 	</div>
 </section>
@@ -363,20 +367,8 @@
 <section
 	id="prizes"
 	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 88%, var(--secondary));"
 >
-	<div class="absolute inset-0 pointer-events-none z-0">
-		<div class="absolute inset-0 pointer-events-none z-0 bg-background"></div>
-		<div class="absolute inset-0 pointer-events-none z-1">
-			<div
-				class="asset-slot inset-0 size-full border-none"
-				aria-hidden="true"
-			></div>
-		</div>
-		<div class="absolute inset-0 pointer-events-none z-2">
-			<div class="asset-slot bottom-0 left-10 size-50" aria-hidden="true"></div>
-		</div>
-	</div>
-
 	<div
 		class="relative z-2 w-full max-w-content mx-auto px-12 pt-[60px] pb-10 flex flex-col items-center"
 	>
@@ -522,23 +514,8 @@
 <section
 	id="faq"
 	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 80%, var(--secondary));"
 >
-	<div class="absolute inset-0 pointer-events-none z-0">
-		<div class="absolute inset-0 pointer-events-none z-0 bg-background"></div>
-		<div class="absolute inset-0 pointer-events-none z-1">
-			<div
-				class="asset-slot inset-0 size-full border-none"
-				aria-hidden="true"
-			></div>
-		</div>
-		<div class="absolute inset-0 pointer-events-none z-2">
-			<div
-				class="asset-slot top-1/2 left-5 w-25 h-75 -translate-y-1/2"
-				aria-hidden="true"
-			></div>
-		</div>
-	</div>
-
 	<div class="relative z-2 w-full max-w-[820px] mx-auto px-12 py-20">
 		<div class="flex w-full items-center justify-center mb-12">
 			<img
@@ -547,6 +524,13 @@
 				class=" h-[100px] object-contain object-left -mb-8"
 			/>
 		</div>
+
+		<p
+			class="mb-8 rounded-lg border border-primary/40 bg-card/50 px-5 py-4 text-center text-sm font-semibold text-foreground"
+			role="status"
+		>
+			Season 2 docs are coming soon. Check back for the latest program details!
+		</p>
 
 		<div class="flex flex-col" id="faq-accordion">
 			<div class="border-b-2 border-border first:border-t-2">
@@ -589,7 +573,7 @@
 					id="faq-btn-2"
 					aria-controls="faq-panel-2"
 				>
-					<span>All this? For free?</span>
+					<span>Is this free and legitimate?</span>
 					<span
 						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
 						aria-hidden="true"
@@ -606,10 +590,45 @@
 						<p
 							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
 						>
-							Yeah! Hack Club is a 501(c)(3) non-profit, with donations from
-							donors like Michael Dell and Tom Preston-Werner covering all of
-							the prizes! We also ran programs like High Seas, Summer of Making,
-							Flavortown in the past.
+							Yes! Alchemize is a Hack Club program. Hack Club is a 501(c)(3)
+							nonprofit, and donations from people like
+							<a
+								href="https://en.wikipedia.org/wiki/Michael_Dell"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Michael Dell</a
+							>
+							and
+							<a
+								href="https://en.wikipedia.org/wiki/Tom_Preston-Werner"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Tom Preston-Werner</a
+							>
+							help cover the prizes. Hack Club has also run programs like
+							<a
+								href="https://highseas.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>High Seas</a
+							>,
+							<a
+								href="https://summer.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Summer of Making</a
+							>, and
+							<a
+								href="https://flavortown.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Flavortown</a
+							>.
 						</p>
 					</div>
 				</div>
@@ -640,8 +659,79 @@
 						<p
 							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
 						>
-							All kinds of software, technical projects count, as long as
-							they're open-source!
+							Software projects count, as long as they're open-source.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(4)}
+					aria-expanded={openFaq === 4}
+					id="faq-btn-4"
+					aria-controls="faq-panel-4"
+				>
+					<span>Does hardware count?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 4 ? "1fr" : "0fr"}
+					id="faq-panel-4"
+					role="region"
+					aria-labelledby="faq-btn-4"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Not at this time. Alchemize currently supports software projects
+							only; we do not yet have the review and tracking process needed to
+							assess hardware submissions consistently. If this changes, we’ll
+							share an update through our official channels.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(5)}
+					aria-expanded={openFaq === 5}
+					id="faq-btn-5"
+					aria-controls="faq-panel-5"
+				>
+					<span>I've got more questions...</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 5 ? "1fr" : "0fr"}
+					id="faq-panel-5"
+					role="region"
+					aria-labelledby="faq-btn-5"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							If you're on Hack Club Slack, send a message in
+							<a
+								href="https://hackclub.enterprise.slack.com/archives/C0ASVK0HHEX"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>#alchemize-help</a
+							>. We'll be happy to help and answer your questions.
 						</p>
 					</div>
 				</div>
@@ -650,7 +740,11 @@
 	</div>
 </section>
 
-<footer class="bg-background border-t-3 border-border pt-16 px-12" id="footer">
+<footer
+	class="border-t-3 border-border pt-16 px-12"
+	id="footer"
+	style="background-color: var(--background);"
+>
 	<div
 		class="max-w-content mx-auto flex justify-between items-start gap-12 pb-12"
 	>
@@ -797,3 +891,25 @@
 		</p>
 	</div>
 </footer>
+
+<style>
+	.hero-potion-float {
+		animation: hero-potion-float 5.5s ease-in-out infinite;
+	}
+
+	@keyframes hero-potion-float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-potion-float {
+			animation: none;
+		}
+	}
+</style>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte"
+	import Navigation from "$lib/components/navigation.svelte"
 	import ProjectDialog from "$lib/components/project-dialog.svelte"
 	import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js"
 	import { Plus, Clock, ArrowUpRight, Blocks } from "lucide-svelte"
@@ -249,14 +250,17 @@
 			</h1>
 		</div>
 
-		<Button
-			size="sm"
-			variant="outline"
-			onclick={() => (newProjWindowOpened = true)}
-		>
-			<Plus class="size-4 mr-1 stroke-3" />
-			<span>New Mix</span>
-		</Button>
+		<div class="flex items-center gap-3">
+			<Button
+				size="sm"
+				variant="outline"
+				onclick={() => (newProjWindowOpened = true)}
+			>
+				<Plus class="size-4 mr-1 stroke-3" />
+				<span>New Mix</span>
+			</Button>
+			<Navigation inline />
+		</div>
 	</div>
 
 	<div class="overflow-y-auto flex flex-col gap-6 px-15 py-5 pb-24">

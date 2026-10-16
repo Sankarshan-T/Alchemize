@@ -62,7 +62,7 @@ To submit a project:
 5. Add the GitHub repository link.
 6. Add a working demo link, if available.
 7. Upload a cover image or screenshot.
-8. Select the project type (Software, Hardware, etc.).
+8. Select Software as the project type.
 9. Choose one of the current season's themes.
 10. Select the corresponding Hackatime project used to track your work.
 

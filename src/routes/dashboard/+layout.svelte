@@ -57,7 +57,8 @@
 <div
 	class="relative z-10 root h-screen w-screen flex items-center justify-start text-primary-foreground"
 >
-	{#if !excludedRoutes.includes(page.url.pathname)}
+	{#if !excludedRoutes.includes(page.url.pathname) &&
+		page.url.pathname !== "/dashboard/projects"}
 		<Navigation />
 	{/if}
 	{#if unVerified}

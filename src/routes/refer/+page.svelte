@@ -67,12 +67,22 @@
 <main
 	class="w-full h-screen text-foreground p-10 flex flex-col gap-10 items-center select-none"
 >
-	<h1
-		class="font-black font-decor text-4xl text-foreground uppercase tracking-tighter flex flex-col items-center gap-1"
-	>
-		Alchemize
-		<span class="uppercase font-display font-medium text-sm">Refer</span>
-	</h1>
+	<div class="flex flex-col items-center">
+		<img
+			src="/assets/Alchemize.png"
+			alt="Alchemize"
+			class="w-72 max-w-[80vw] object-contain"
+		/>
+		<div class="mt-2 flex items-center gap-3">
+			<span class="h-px w-8 bg-primary/60" aria-hidden="true"></span>
+			<h1
+				class="font-note text-xs font-bold uppercase tracking-[0.3em] text-primary"
+			>
+				Refer
+			</h1>
+			<span class="h-px w-8 bg-primary/60" aria-hidden="true"></span>
+		</div>
+	</div>
 	<div
 		class="w-[60%] flex items-center gap-4 bg-card p-3 rounded-tl-2xl rounded-br-2xl rounded-md border border-border shadow-sm shadow-primary"
 	>
