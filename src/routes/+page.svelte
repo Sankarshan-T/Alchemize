@@ -330,255 +330,18 @@
 							>4</span
 						>
 						<h3 class="font-heading text-[1.35rem] font-bold text-foreground">
-							Spend Your Potion
+							Spend Your Stones!
 						</h3>
 					</div>
 					<p
 						class="text-[0.9rem] leading-[1.65] text-muted-foreground max-w-[360px]"
 					>
-						Every approved hour fills your potion. Spend it in the shop on
+						Every approved hour award you aqua regia. Spend it in the shop on
 						amazing rewards like hardware, tools and licenses to help your next
 						project.
 					</p>
 				</div>
 			</div>
-		</div>
-	</div>
-</section>
-
-<section
-	id="projects"
-	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
->
-	<div class="absolute inset-0 pointer-events-none z-0">
-		<div class="absolute inset-0 pointer-events-none z-0 bg-background"></div>
-		<div class="absolute inset-0 pointer-events-none z-1">
-			<div
-				class="asset-slot inset-0 size-full border-none"
-				aria-hidden="true"
-			></div>
-		</div>
-		<div class="absolute inset-0 pointer-events-none z-2">
-			<div class="asset-slot bottom-0 left-0 size-50" aria-hidden="true">
-				<!-- SVG/PNG: bottom-left vine -->
-			</div>
-			<div class="asset-slot top-10 right-10 w-40 h-60" aria-hidden="true">
-				<!-- SVG/PNG: top-right potion bottle -->
-			</div>
-		</div>
-	</div>
-
-	<div class="relative z-2 w-full max-w-content mx-auto px-12 py-[60px]">
-		<div class="flex items-center justify-center mb-12">
-			<h2
-				class="font-heading text-[3rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
-			>
-				What Hack Clubbers Made
-			</h2>
-			<div
-				class="asset-slot relative inline-flex w-20 h-10 ml-3"
-				aria-hidden="true"
-			>
-				<!-- SVG/PNG: heading decoration -->
-			</div>
-		</div>
-
-		<div class="grid grid-cols-1 md:grid-cols-6 gap-6">
-			<!-- 1. LibrePods (Top row, span 3 cols) -->
-			<a
-				href="https://github.com/librepods-org/librepods"
-				target="_blank"
-				rel="noreferrer"
-				class="group md:col-span-3 flex flex-col overflow-hidden bg-card border-2 border-primary rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-primary"
-			>
-				<div
-					class="relative w-full aspect-video flex items-center justify-center bg-background/50 border-b-2 border-primary transition-colors duration-500 group-hover:border-primary group-hover:bg-background/60"
-				>
-					<img
-						src="https://crescent.hackclub.com/vite/assets/librepods-BU-zFwYq.webp"
-						alt="LibrePods"
-						class="w-full h-full object-cover"
-					/>
-				</div>
-				<div class="px-5 py-5 flex flex-col flex-1 bg-foreground/50">
-					<h3
-						class="font-heading text-[1.2rem] font-bold mb-1.5 text-foreground"
-					>
-						LibrePods
-					</h3>
-					<p class="text-[0.9rem] text-muted-foreground leading-[1.5] mb-4">
-						AirPods off Apple's leash: noise control, ear detection and battery
-						on Android and Linux.
-					</p>
-					<div class="flex items-center justify-between mt-auto">
-						<span class="text-[0.8rem] text-primary font-semibold"
-							>@kavishdevar</span
-						>
-						<span
-							class="text-[0.7rem] px-2 py-0.5 rounded-full border border-border text-muted-foreground"
-							>Kotlin</span
-						>
-					</div>
-				</div>
-			</a>
-
-			<!-- 2. Specter (Top row, span 3 cols) -->
-			<a
-				href="https://shaaarkai.itch.io/specter"
-				target="_blank"
-				rel="noreferrer"
-				class="group md:col-span-3 flex flex-col overflow-hidden bg-card border-2 border-primary rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-primary"
-			>
-				<div
-					class="relative w-full aspect-video flex items-center justify-center bg-background/50 border-b-2 border-primary transition-colors duration-500 group-hover:border-primary group-hover:bg-background/60"
-				>
-					<img
-						src="https://crescent.hackclub.com/vite/assets/specter-BHuwe-eU.webp"
-						alt="Specter"
-						class="w-full h-full object-cover"
-					/>
-				</div>
-				<div class="px-5 py-5 flex flex-col flex-1 bg-foreground/50">
-					<h3
-						class="font-heading text-[1.2rem] font-bold mb-1.5 text-foreground"
-					>
-						Specter
-					</h3>
-					<p class="text-[0.9rem] text-muted-foreground leading-[1.5] mb-4">
-						A platformer where the run you just failed comes back as a ghost,
-						and helping it is how you finish the level.
-					</p>
-					<div class="flex items-center justify-between mt-auto">
-						<span class="text-[0.8rem] text-primary font-semibold"
-							>@ayessaaa</span
-						>
-						<span
-							class="text-[0.7rem] px-2 py-0.5 rounded-full border border-border text-muted-foreground"
-							>GDScript</span
-						>
-					</div>
-				</div>
-			</a>
-
-			<a
-				href="https://vert.sh"
-				target="_blank"
-				rel="noreferrer"
-				class="group md:col-span-2 flex flex-col overflow-hidden bg-card border-2 border-primary rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-primary"
-			>
-				<div
-					class="relative w-full aspect-video flex items-center justify-center bg-background/50 border-b-2 border-primary transition-colors duration-500 group-hover:border-primary group-hover:bg-background/60"
-				>
-					<img
-						src="https://crescent.hackclub.com/vite/assets/vert-D90femPm.webp"
-						alt="VERT"
-						class="w-full h-full object-cover"
-					/>
-				</div>
-				<div class="px-4 py-4 flex flex-col flex-1 bg-foreground/50">
-					<h3 class="font-heading text-[1.1rem] font-bold mb-1 text-foreground">
-						VERT
-					</h3>
-					<p
-						class="text-[0.8rem] text-muted-foreground leading-[1.5] mb-3 line-clamp-3"
-					>
-						A file converter for images, audio and documents that does the work
-						in your own browser rather than on somebody's server.
-					</p>
-					<div class="flex items-center justify-between mt-auto">
-						<span
-							class="text-[0.75rem] text-primary font-semibold truncate max-w-[80px]"
-							>@JovannMC</span
-						>
-						<span
-							class="text-[0.65rem] px-2 py-0.5 rounded-full border border-border text-muted-foreground"
-							>Svelte</span
-						>
-					</div>
-				</div>
-			</a>
-
-			<a
-				href="https://blind-defusal.jayx2u.fyi"
-				target="_blank"
-				rel="noreferrer"
-				class="group md:col-span-2 flex flex-col overflow-hidden bg-card border-2 border-primary rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-primary"
-			>
-				<div
-					class="relative w-full aspect-video flex items-center justify-center bg-background/50 border-b-2 border-primary transition-colors duration-500 group-hover:border-primary group-hover:bg-background/60"
-				>
-					<img
-						src="https://crescent.hackclub.com/vite/assets/blind-defusal-CgCv7Jns.webp"
-						alt="Blind Defusal"
-						class="w-full h-full object-cover"
-					/>
-				</div>
-				<div class="px-4 py-4 flex flex-col flex-1 bg-foreground/50">
-					<h3
-						class="font-heading text-[1.1rem] font-bold mb-1 text-foreground line-clamp-1"
-					>
-						Blind Defusal
-					</h3>
-					<p
-						class="text-[0.8rem] text-muted-foreground leading-[1.5] mb-3 line-clamp-3"
-					>
-						A two-player bomb to defuse. One of you holds the box, the other
-						holds the manual, and neither can see the other's half.
-					</p>
-					<div class="flex items-center justify-between mt-auto">
-						<span
-							class="text-[0.75rem] text-primary font-semibold truncate max-w-[80px]"
-							>@Jayx2u</span
-						>
-						<span
-							class="text-[0.65rem] px-1.5 py-0.5 rounded-full border border-border text-muted-foreground"
-							>Python</span
-						>
-					</div>
-				</div>
-			</a>
-
-			<!-- 5. Angel Keyboard (Bottom row, span 2 cols) -->
-			<a
-				href="https://github.com/geg-tech/biblicallyaccuratekeyboard"
-				target="_blank"
-				rel="noreferrer"
-				class="group md:col-span-2 flex flex-col overflow-hidden bg-card border-2 border-primary rounded-md transition-all duration-500 ease-out hover:-translate-y-2 hover:border-primary"
-			>
-				<div
-					class="relative w-full aspect-video flex items-center justify-center bg-background/50 border-b-2 border-primary transition-colors duration-500 group-hover:border-primary group-hover:bg-background/60"
-				>
-					<img
-						src="https://crescent.hackclub.com/vite/assets/angel-keyboard-DXV1reQP.webp"
-						alt="Biblically Accurate Keyboard"
-						class="w-full h-full object-cover"
-					/>
-				</div>
-				<div class="px-4 py-4 flex flex-col flex-1 bg-foreground/50">
-					<h3
-						class="font-heading text-[1.1rem] font-bold mb-1 text-foreground line-clamp-1"
-						title="Biblically Accurate Keyboard"
-					>
-						Angel Keyboard
-					</h3>
-					<p
-						class="text-[0.8rem] text-muted-foreground leading-[1.5] mb-3 line-clamp-3"
-					>
-						A keyboard in the shape of a biblically accurate angel. Be not
-						afraid. CAD, PCBs and all.
-					</p>
-					<div class="flex items-center justify-between mt-auto">
-						<span
-							class="text-[0.75rem] text-primary font-semibold truncate max-w-[80px]"
-							>@geg-tech</span
-						>
-						<span
-							class="text-[0.65rem] px-1.5 py-0.5 rounded-full border border-border text-muted-foreground"
-							>Hardware</span
-						>
-					</div>
-				</div>
-			</a>
 		</div>
 	</div>
 </section>
@@ -904,6 +667,12 @@
 					<li>
 						<a
 							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="#">Home</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
 							href="#how-it-works">How it works</a
 						>
 					</li>
@@ -911,12 +680,6 @@
 						<a
 							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
 							href="#prizes">The shop</a
-						>
-					</li>
-					<li>
-						<a
-							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
-							href="#projects">Explore projects</a
 						>
 					</li>
 				</ul>
