@@ -12,22 +12,23 @@
 </script>
 
 <aside
-	class="relative scrollbar-none bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border p-5 border-r-2 scrollbar-none"
+	class="relative bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border-r p-5 scrollbar-none"
 >
 	<div
 		class="sidebar-group flex flex-col gap-2 items-center scrollbar-none w-full pb-5 border-b"
 	>
 		<div class="flex gap-1 w-full items-baseline">
-			<span
-				class="font-decor text-card-foreground font-extrabold text-2xl tracking-tight"
-				>ALCHEMIZE</span
-			>
-			<span
-				class="font-extrabold leading-none tracking-wider text-xs uppercase font-display"
-			>
-				Docs
-			</span>
+			<img
+				src="/assets/Alchemize.png"
+				alt="Alchemize Logo"
+				class=" h-[100px] object-contain object-left -mb-8"
+			/>
 		</div>
+		<span
+			class="font-extrabold leading-none tracking-wider text-xs uppercase font-display"
+		>
+			Docs
+		</span>
 		<a href="/dashboard" class="w-full">
 			<Button variant="secondary" size="sm" class="w-full">Back to site</Button>
 		</a>
