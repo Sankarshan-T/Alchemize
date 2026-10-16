@@ -162,8 +162,12 @@
 			<div
 				class="relative w-full max-w-[560px] h-[480px] flex items-center justify-center border-2 border-dashed border-border rounded-lg"
 			>
-				<div class="asset-slot relative size-full border-none">
-					<img alt="pmix" src="/pmix_v2.png" />
+				<div class="relative flex size-full items-center justify-center">
+					<img
+						alt="Potion Mix"
+						src="/pmix_v2.png"
+						class="max-h-full max-w-full object-contain"
+					/>
 				</div>
 			</div>
 		</div>
