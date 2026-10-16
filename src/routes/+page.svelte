@@ -3,6 +3,18 @@
 	import { browser } from "$app/environment"
 	import { PUBLIC_TURNED_OFF } from "$env/static/public"
 
+	type LenisInstance = {
+		raf: (time: number) => void
+		destroy: () => void
+	}
+
+	type LenisConstructor = new (options: {
+		anchors: boolean
+		duration: number
+		easing: (progress: number) => number
+		smoothWheel: boolean
+	}) => LenisInstance
+
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
 	let openFaq = $state<number | null>(null)
@@ -30,6 +42,51 @@
 	function toggleFaq(question: number) {
 		openFaq = openFaq === question ? null : question
 	}
+
+	onMount(() => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+		let disposed = false
+		let lenis: LenisInstance | undefined
+		let frameId = 0
+
+		const script = document.createElement("script")
+		script.src = "https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"
+		script.async = true
+		script.onload = () => {
+			if (disposed) return
+			const Lenis = (window as Window & { Lenis?: LenisConstructor }).Lenis
+			if (!Lenis) {
+				console.error("Lenis loaded without exposing its constructor")
+				return
+			}
+
+			lenis = new Lenis({
+				anchors: true,
+				duration: 1.2,
+				easing: (progress: number) =>
+					Math.min(1, 1.001 - Math.pow(2, -10 * progress)),
+				smoothWheel: true
+			})
+
+			const raf = (time: number) => {
+				lenis?.raf(time)
+				frameId = requestAnimationFrame(raf)
+			}
+			frameId = requestAnimationFrame(raf)
+		}
+		script.onerror = () => {
+			console.error("Failed to load Lenis for homepage smooth scrolling")
+		}
+		document.head.appendChild(script)
+
+		return () => {
+			disposed = true
+			cancelAnimationFrame(frameId)
+			lenis?.destroy()
+			script.remove()
+		}
+	})
 
 	onMount(() => {
 		if (data.error) {
@@ -740,10 +797,3 @@
 		</p>
 	</div>
 </footer>
-
-<svelte:head>
-	<script
-		src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"
-	></script>
-	<script src="/js/main.js" defer></script>
-</svelte:head>

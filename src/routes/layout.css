@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:wght@400;500;600;700&family=IM+Fell+English&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "@fontsource-variable/geist";
@@ -6,10 +6,12 @@
 @source "src/**/*.{svelte,ts,js,html,md}";
 
 :root {
-  --font-display: "Cinzel", serif;
-  --font-decor: "Cinzel Decorative", serif;
-  --font-body: "EB Garamond", serif;
-  --font-note: "IM Fell English", serif;
+  --font-display: "Lora", serif;
+  --font-decor: "Lora", serif;
+  --font-body: "Inter", sans-serif;
+  --font-note: "Inter", sans-serif;
+  --default-transition-duration: 200ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 
   --background: #1D1728;
   --background-texture:
@@ -91,7 +93,7 @@ body {
   --font-body: var(--font-body);
   --font-note: var(--font-note);
 
-  --font-alchemize: "Inter", sans-serif;
+  --font-alchemize: var(--font-body);
 
   --shadow-neo: 2px 2px 0px color-mix(in srgb, var(--primary) 50%, transparent);
 
@@ -218,10 +220,24 @@ html.lenis body {
   height: auto;
 }
 
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
 .scroll-smooth.lenis {
   scroll-behavior: auto !important;
 }
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
