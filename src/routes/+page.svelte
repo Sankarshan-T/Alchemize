@@ -253,7 +253,7 @@
 				</div>
 				<div class="w-full h-[240px] pl-0 pr-6 flex justify-start">
 					<img
-						src="assets/step 1.png"
+						src="assets/step_1.png"
 						alt="Step 1"
 						class="max-h-full w-auto object-contain"
 					/>
