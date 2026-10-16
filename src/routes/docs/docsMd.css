@@ -1,100 +1,220 @@
 @import "tailwindcss";
-:root{
-    --md-h1:clamp(1.5em, 2vw, 2.5em);
-    --md-h2:clamp(1.2em, 1.7vw, 1.8em);
-    --md-h3:clamp(1em, 1.4vw, 1.5em);
-    --md-h4:clamp(0.9em, 1.2vw, 1.3em);
-    
-}
-.md h1{
-    font-size: var(--md-h1);
-    border-bottom: 1px solid #600 ;
-    font-weight: 700;
-    margin-bottom: 0.5em;
-}
-.md h2{
-    font-size: var(--md-h2);
-    margin-bottom: 0.5em;
-    font-weight: 700;
-    border-left: 4px solid #700;
-    padding-left: 0.5em;
-}
-.md h3{
-    font-size: var(--md-h3);
-    margin-top: 0.5em;
-        margin-bottom: 0.2em;
-    font-weight: 600;
 
+.md {
+	width: 100%;
+	max-width: 56rem;
+	min-height: 100%;
+	margin-inline: auto;
+	color: var(--foreground);
+	font-size: 1rem;
+	line-height: 1.75;
+	overflow: visible;
+	scrollbar-width: auto;
 }
-.md p{
-    font-size: 1em;
-    margin-top: 1em;
+
+.md > :first-child {
+	margin-top: 0;
 }
+
+.md h1,
+.md h2,
+.md h3,
+.md h4,
+.md h5,
+.md h6 {
+	color: var(--foreground);
+	font-family: var(--font-display);
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.md h1 {
+	margin-block: 0 1.25rem;
+	font-size: clamp(2rem, 4vw, 3rem);
+	letter-spacing: -0.025em;
+}
+
+.md h2 {
+	margin-block: 2.75rem 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid var(--border);
+	font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.md h3 {
+	margin-block: 2rem 0.75rem;
+	font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+}
+
+.md h4 {
+	margin-block: 1.5rem 0.5rem;
+	font-size: 1.125rem;
+}
+
+.md h5,
+.md h6 {
+	margin-block: 1.25rem 0.5rem;
+	font-size: 1rem;
+}
+
+.md p {
+	margin-block: 0.9rem;
+	color: var(--muted-foreground);
+}
+
+.md ul,
+.md ol {
+	display: grid;
+	gap: 0.5rem;
+	margin-block: 0.9rem 1.25rem;
+	padding-left: 1.5rem;
+	color: var(--muted-foreground);
+}
+
 .md ul {
-    margin-bottom: 1em;
-    list-style-type: circle;
-      /* list-style-position: inside; */
-    margin-left: 1.2em;
-}
-.md ol{
-    margin-bottom: 1em;
-      /* list-style-position: inside; */
-      margin-left: 1.2em;
-}
-.md li {
-    @apply my-3;
-    list-style-type:circle;
-  /* list-style-position: inside; */
-}
-.md{
-    overflow-y: scroll;
-    height: 100vh;
-    scrollbar-width: 0px; 
-    
-    -ms-overflow-style: none; 
+	list-style: disc;
 }
 
-.md::-webkit-scrollbar {
-  display: none; 
+.md ol {
+	list-style: decimal;
 }
-.md hr{
-    margin-bottom: 3em;
-    margin-top: 2em;
+
+.md li {
+	padding-left: 0.25rem;
 }
-.md h4{
-    font-size: var(--md-h4);
-    margin-top: 0.5em;
-    margin-bottom: 0.3em;
-    font-weight: 600;
+
+.md li::marker {
+	color: var(--primary);
 }
-.md a{
-    color: #900;
-    text-decoration: none;
+
+.md li > ul,
+.md li > ol {
+	margin-block: 0.5rem;
 }
-.md strong{
-    font-weight: 700;
+
+.md a {
+	color: var(--primary);
+	text-decoration: underline;
+	text-decoration-color: color-mix(in srgb, var(--primary) 55%, transparent);
+	text-underline-offset: 0.2em;
+	transition: color 200ms ease, text-decoration-color 200ms ease;
 }
-.md table{
-    width:50%;
-    height: auto;
-    margin-bottom: 1em;
-    margin-top: 1em;
+
+.md a:hover {
+	color: var(--primary-hover);
+	text-decoration-color: currentColor;
 }
-.md table th{
-    border: 1px solid #600;
-    padding: 0.5em;
-    text-align: left;
+
+.md strong {
+	color: var(--foreground);
+	font-weight: 700;
 }
-.md table td{
-    border: 1px solid #600;
-    padding: 0.5em;
-    text-align: left;
+
+.md blockquote {
+	margin-block: 1.5rem;
+	padding: 0.75rem 1rem;
+	border-left: 3px solid var(--primary);
+	border-radius: 0 0.5rem 0.5rem 0;
+	background: color-mix(in srgb, var(--card) 75%, transparent);
+	color: var(--muted-foreground);
 }
-.md pre{
-    font-family: monospace;
-    font-weight: 500;
-    background-color: #2910103f;
-    max-width:400px;
-    padding-left: 1em !important;
-    padding:0.2em;
+
+.md blockquote > :first-child {
+	margin-top: 0;
+}
+
+.md blockquote > :last-child {
+	margin-bottom: 0;
+}
+
+.md hr {
+	margin-block: 2.5rem;
+	border: 0;
+	border-top: 1px solid var(--border);
+}
+
+.md table {
+	display: block;
+	width: 100%;
+	margin-block: 1.5rem;
+	overflow-x: auto;
+	border-collapse: collapse;
+	border: 1px solid var(--border);
+}
+
+.md th,
+.md td {
+	min-width: 8rem;
+	padding: 0.75rem 1rem;
+	border: 1px solid var(--border);
+	text-align: left;
+	vertical-align: top;
+}
+
+.md th {
+	background: var(--secondary);
+	color: var(--secondary-foreground);
+	font-weight: 700;
+}
+
+.md td {
+	color: var(--muted-foreground);
+}
+
+.md tr:nth-child(even) td {
+	background: color-mix(in srgb, var(--card) 65%, transparent);
+}
+
+.md img {
+	max-width: 100%;
+	height: auto;
+	margin-block: 1.25rem;
+	border-radius: 0.5rem;
+}
+
+.md :not(pre) > code {
+	padding: 0.15em 0.4em;
+	border: 1px solid var(--border);
+	border-radius: 0.35rem;
+	background: var(--card);
+	color: var(--foreground);
+	font-size: 0.9em;
+}
+
+.md pre {
+	max-width: 100%;
+	margin-block: 1.25rem;
+	padding: 1rem 1.25rem;
+	overflow-x: auto;
+	border: 1px solid var(--border);
+	border-radius: 0.6rem;
+	background: var(--card);
+	color: var(--foreground);
+	line-height: 1.6;
+}
+
+.md pre code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+	.md {
+		font-size: 0.9375rem;
+	}
+
+	.md h2 {
+		margin-top: 2rem;
+	}
+
+	.md th,
+	.md td {
+		padding: 0.6rem 0.75rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.md a {
+		transition: none;
+	}
 }

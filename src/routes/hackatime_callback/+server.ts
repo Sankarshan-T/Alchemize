@@ -70,7 +70,7 @@ export const GET: RequestHandler = async ({ url, cookies, fetch, locals }) => {
 
 	cookies.set('hackatime_verified', 'true', {
 		httpOnly: false,
-		secure: true,
+		secure: url.protocol === 'https:',
 		sameSite: 'lax',
 		path: '/',
 		maxAge: 60 * 60 * 24 * 30

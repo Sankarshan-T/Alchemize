@@ -1,28 +1,27 @@
 <script lang="ts">
-	import {
-		ArrowDown,
-		Blocks,
-		ChevronsRight,
-		FlaskConical,
-		Rocket,
-		ShoppingCart,
-		LoaderCircleIcon,
-	} from "lucide-svelte"
 	import { onMount } from "svelte"
 	import { browser } from "$app/environment"
-	import {
-		PUBLIC_HACKCLUB_AUTH,
-		PUBLIC_HACKCLUB_REDIRECT,
-		PUBLIC_TURNED_OFF,
-	} from "$env/static/public"
-	import Accordion from "$lib/components/accordion.svelte"
-	import Button from "$lib/components/ui/button/button.svelte"
+	import { PUBLIC_TURNED_OFF } from "$env/static/public"
+
+	type LenisInstance = {
+		raf: (time: number) => void
+		destroy: () => void
+	}
+
+	type LenisConstructor = new (options: {
+		anchors: boolean
+		duration: number
+		easing: (progress: number) => number
+		smoothWheel: boolean
+	}) => LenisInstance
 
 	let { data } = $props()
 	let rsvpCount: number | "Fetching" = $state("Fetching")
-	let showRotator = $state(false)
-	const clientId = PUBLIC_HACKCLUB_AUTH
-	const uri = encodeURIComponent(PUBLIC_HACKCLUB_REDIRECT)
+	let openFaq = $state<number | null>(null)
+	let shopItems: { itemID: string; name: string; cdnImage: string }[] = $state(
+		[]
+	)
+	let shopItemsError = $state(false)
 
 	let hasaccessToken = $state(
 		browser &&
@@ -40,47 +39,56 @@
 
 	let referUrl = $state(`./refer`)
 
-	const targetDate = new Date("2026-06-21T01:00:00Z").getTime()
-	let timeLeft = $state(Math.max(0, targetDate - Date.now()))
-
-	let time = $derived(formatTime(timeLeft))
-
-	$effect(() => {
-		const interval = setInterval(() => {
-			const difference = targetDate - Date.now()
-
-			if (difference <= 0) {
-				timeLeft = 0
-				clearInterval(interval)
-			} else {
-				timeLeft = difference
-			}
-		}, 1000)
-
-		return () => clearInterval(interval)
-	})
-
-	function formatTime(ms: number) {
-		if (ms <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-
-		const seconds = Math.floor((ms / 1000) % 60)
-		const minutes = Math.floor((ms / 1000 / 60) % 60)
-		const hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
-		const days = Math.floor(ms / (1000 * 60 * 60 * 24))
-
-		return {
-			days: days.toString().padStart(2, "0"),
-			hours: hours.toString().padStart(2, "0"),
-			minutes: minutes.toString().padStart(2, "0"),
-			seconds: seconds.toString().padStart(2, "0"),
-		}
+	function toggleFaq(question: number) {
+		openFaq = openFaq === question ? null : question
 	}
 
 	onMount(() => {
-		const html = document.documentElement
-		const wasDark = html.classList.contains("dark")
-		html.classList.remove("dark")
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
 
+		let disposed = false
+		let lenis: LenisInstance | undefined
+		let frameId = 0
+
+		const script = document.createElement("script")
+		script.src = "https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"
+		script.async = true
+		script.onload = () => {
+			if (disposed) return
+			const Lenis = (window as Window & { Lenis?: LenisConstructor }).Lenis
+			if (!Lenis) {
+				console.error("Lenis loaded without exposing its constructor")
+				return
+			}
+
+			lenis = new Lenis({
+				anchors: true,
+				duration: 1.2,
+				easing: (progress: number) =>
+					Math.min(1, 1.001 - Math.pow(2, -10 * progress)),
+				smoothWheel: true
+			})
+
+			const raf = (time: number) => {
+				lenis?.raf(time)
+				frameId = requestAnimationFrame(raf)
+			}
+			frameId = requestAnimationFrame(raf)
+		}
+		script.onerror = () => {
+			console.error("Failed to load Lenis for homepage smooth scrolling")
+		}
+		document.head.appendChild(script)
+
+		return () => {
+			disposed = true
+			cancelAnimationFrame(frameId)
+			lenis?.destroy()
+			script.remove()
+		}
+	})
+
+	onMount(() => {
 		if (data.error) {
 			alert(data.error)
 		}
@@ -98,6 +106,21 @@
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
 
+		fetch("/api/shop/items")
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(
+						`Shop items request failed with status ${response.status}`
+					)
+				}
+				return response.json()
+			})
+			.then(items => (shopItems = items))
+			.catch(error => {
+				console.error("Failed to load homepage shop items", error)
+				shopItemsError = true
+			})
+
 		referUrl =
 			PUBLIC_TURNED_OFF !== "false"
 				? `./turned-off`
@@ -107,392 +130,786 @@
 		fetch("/rsvp")
 			.then(res => res.json())
 			.then(data => (rsvpCount = data.count))
-
-		return () => {
-			if (wasDark) html.classList.add("dark")
-		}
 	})
 </script>
 
-<div class="home-page relative min-h-screen w-full overflow-x-hidden">
-	<div
-		class="absolute top-3 left-0 z-50 transition-transform duration-100 hover:scale-[1.02]"
-	>
-		<a href="https://hackclub.com/">
-			<img
-				class="w-24 md:w-40 bg-transparent p-1 rounded-md"
-				src="https://assets.hackclub.com/banners/2026.svg"
-				alt="Hack Club"
-			/>
+<header
+	class="fixed inset-x-0 top-0 z-1000 h-16 pointer-events-none"
+	id="site-header"
+>
+	<div class="h-full max-w-full flex items-center justify-end px-10">
+		<div class="flex-1"></div>
+		<a
+			href={authUrl}
+			type="button"
+			class="pointer-events-auto inline-flex items-center justify-center mt-5 mr-6 py-2.5 px-5 text-sm font-note font-semibold tracking-[0.03em] rounded-sm cursor-pointer bg-chart-3 text-foreground shadow-[0px_4px_0px_0px] shadow-chart-3/20 transition-all duration-300 ease-in-out hover:bg-chart-3/80 active:translate-y-[3px]"
+			id="btn-header-oauth"
+		>
+			Sign in with Hack Club
 		</a>
 	</div>
+</header>
 
+<section
+	id="hero"
+	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-background"
+>
 	<div
-		class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
-	></div>
-	<div class="fixed inset-0 z-0 bg-background/90 bg-contain bg-scale"></div>
-	<img
-		src="/pmix_v2.png"
-		alt=""
-		class="absolute h-40 -rotate-25 object-contain top-[50vh] left-[10vw] opacity-80 animate-pulse"
-	/>
-	<img
-		src="/pmix_v2.png"
-		alt=""
-		class="absolute h-40 rotate-25 object-contain top-[50vh] right-[10vw] opacity-80 animate-pulse"
-	/>
-	<main class="relative w-full px-4 sm:px-6 md:px-10 home">
-		<section
-			class="flex flex-col items-center justify-center min-h-screen pt-24 pb-12 gap-y-7 relative"
-		>
-			<div class="flex flex-col items-center gap-5">
-				<div
-					class="flex items-center gap-2 text-2xl font-decor text-foreground tracking-[0.3em] uppercase"
-				>
-					<span>Season 2</span>
-				</div>
-				<h1
-					class="text-7xl sm:text-6xl md:text-9xl lg:text-9xl font-black font-decor tracking-tighter uppercase text-foreground text-shadow-xs text-shadow-primary hover:text-shadow-lg transition-all select-none break-all sm:break-normal"
-				>
-					ALCHEMIZE
-				</h1>
-				<h3
-					class="text-lg font-bold font-display tracking-tighter text-foreground text-shadow-xs text-shadow-primary selection:bg-primary selection:text-black pointer-events-none select-none flex flex-col items-center break-all sm:break-normal"
-				>
-					Make themed projects, earn Aqua Regia!<br />
-					<span class="text-sm shadow-none font-note font-light tracking-wider">
-						With more mixing this time</span
-					>
-				</h3>
-				<span
-					class="mt-2 font-display text-foreground font-semibold tracking-wider"
-				>
-					Starts soon...
-				</span>
-				<div class="p-3 w-full flex items-center justify-center gap-3">
-					<a href={authUrl}>
-						<Button
-							variant="primary"
-							class="p-6 w-full text-xl justify-between flex"
-						>
-							<p>Get Started</p>
-							{#if showRotator}
-								<LoaderCircleIcon class="animate-spin" />
-							{:else}
-								<ChevronsRight />
-							{/if}
-						</Button>
-					</a>
-					<a href="/shop">
-						<Button variant="secondary" class="py-6">
-							<ShoppingCart class="size-8" />
-							See the shop!
-						</Button>
-					</a>
-				</div>
-			</div>
-
-			<a
-				href="#features"
-				class="animate-bounce border border-border p-2 hover:border-primary bg-secondary transition-colors rounded-full"
-			>
-				<ArrowDown class="w-5 h-5 text-foreground" />
-			</a>
-		</section>
-
-		<section
-			id="features"
-			class="flex flex-col gap-12 py-18 min-h-screen border-t-2 border-border relative items-center justify-center"
-		>
-			<h2
-				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
-			>
-				HOW IT WORKS
-			</h2>
-
-			<div
-				class="grid grid-cols-1 md:grid-cols-4 gap-6 xl:gap-8 2xl:gap-10 w-full"
-			>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<Blocks class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							1 - Create
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Pick a theme (Endless, No Internet, or Indie Gamedev) and track
-						hours via Hackatime.
-					</p>
-				</div>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<Rocket class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							2 - Ship
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Submit your project for review to earn Aqua Regia.
-					</p>
-				</div>
-
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl d hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<FlaskConical class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							3 - Earn
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Every approved hour earns you 1 Aqua Regia ($5), no matter which
-						theme you pick.
-					</p>
-				</div>
-				<div
-					class="h-full flex flex-col gap-2 xl:gap-4 2xl:gap-5 bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 rounded-md transition-all hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl hover:shadow-neo-lg shadow-neo"
-				>
-					<div class="shrink-0 flex items-center gap-4 pt-1">
-						<div
-							class="p-2 border border-border bg-secondary/20 text-foreground transition-colors rounded-md"
-						>
-							<ShoppingCart class="h-7 w-7" />
-						</div>
-						<h3
-							class="text-2xl xl:text-3xl 2xl:text-4xl font-black font-display uppercase tracking-tight text-foreground"
-						>
-							4 - Spend!
-						</h3>
-					</div>
-					<p
-						class="text-muted-foreground font-body text-sm xl:text-base 2xl:text-lg leading-relaxed"
-					>
-						Spend your precious Aqua Regia on rewards. New items are
-						added frequently!
-					</p>
-				</div>
-			</div>
-		</section>
-
-		<section
-			id="themes"
-			class="flex flex-col items-center gap-12 py-24 min-h-screen border-t-2 border-border relative"
-		>
-			<h2
-				class="text-5xl xl:text-6xl 2xl:text-7xl font-note tracking-tight uppercase text-foreground"
-			>
-				Themes for Season 2
-			</h2>
-
-			<div class="grid grid-cols-2 gap-4 xl:gap-8 2xl:gap-10 w-full">
-				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						1. Bots
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Make a bot that does something useful or fun! It could be a Discord
-						bot or a slack bot or a bot for your own website. It could be a bot
-						that does something fun or a bot that does something useful. The
-						choice is yours!
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-				<div
-					class="w-full flex flex-col bg-card border-2 border-border rounded-md p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px hover:shadow-neo-lg shadow-neo rounded-tl-2xl rounded-br-2xl"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						2. Co-Op
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Create a project with that involves <strong>team play</strong>...
-						could be literally anything multiplayer! Like maybe a multiplayer
-						game or a simple collaborative canvas.
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-				<div
-					class="col-span-2 w-1/2 justify-self-center flex flex-col bg-card border-2 border-border p-5 xl:p-8 2xl:p-10 gap-4 xl:gap-6 2xl:gap-8 transition hover:-translate-x-px hover:-translate-y-px rounded-tl-2xl rounded-br-2xl rounded-md hover:shadow-neo-lg shadow-neo"
-				>
-					<h3
-						class="text-xl xl:text-2xl 2xl:text-3xl font-display font-black uppercase tracking-tight text-card-foreground"
-					>
-						3. Electro Art
-					</h3>
-					<p
-						class="text-card-foreground text-xs xl:text-base 2xl:text-lg font-body leading-relaxed font-body"
-					>
-						Make something by which your code returns art. Like a dynamic
-						website creating various patterns or a generative art piece or a
-						music visualizer. Anything that is artistic and uses code to create
-						it.
-					</p>
-					<p
-						class="flex gap-2 text-foreground text-xs xl:text-sm 2xl:text-base font-body font-medium leading-relaxed font-body"
-					>
-						Rewards: Aqua Regia
-						<img src="/alch-aquaregia.png" alt="" class="h-6 object-contain" />
-					</p>
-				</div>
-			</div>
-		</section>
-
-		<section
-			id="faq"
-			class="flex flex-col items-center gap-12 py-24 border-t-2 border-border relative"
-		>
-			<h2
-				class="text-3xl xl:text-4xl 2xl:text-5xl font-black tracking-tight uppercase text-foreground"
-			>
-				FAQ
-			</h2>
-
-			<div class="flex flex-col gap-3 w-full max-w-6xl mx-auto">
-				<Accordion
-					Title="What is a 'ship'?"
-					Content="A 'ship' is a project that works, has the code open source, requires very minimal setup to run and is recreatable."
-				/>
-				<Accordion
-					Title="Who can participate here?"
-					Content="Anyone ages 13-18 (inclusive) can participate."
-				/>
-				<Accordion
-					Title="How is time tracked?"
-					Content="Software development time is tracked using <a class='text-foreground p-1 font-semibold hover:bg-primary/60 transition rounded hover:text-foreground' target='_blank' href='https://hackatime.hackclub.com'> Hackatime</a>"
-				/>
-				<Accordion
-					Title="Where can I find more information?"
-					Content="If you have any questions or need help with anything, just join the <a class='text-foreground p-1 hover:bg-primary/60 font-semibold transition rounded hover:text-foreground' target='_blank' href='https://hackclub.enterprise.slack.com/archives/C0ASY6R552R'>#alchemize-help</a> channel in the Hack Club Slack! You can ask for help there, and the community will be happy to assist you. "
-				/>
-			</div>
-		</section>
-	</main>
-
-	<footer
-		class="w-full border-t-2 border-border bg-secondary/50 relative z-20 mt-24 py-16"
+		class="relative z-2 w-full max-w-[1440px] mx-auto min-h-screen grid grid-cols-2 items-center gap-12 pt-[100px] px-12 pb-20"
 	>
-		<div
-			class="max-w-7xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row gap-12 justify-between items-start"
-		>
-			<div class="flex flex-col gap-2 max-w-xs">
-				<h3
-					class="text-xl font-black font-decor text-foreground tracking-wide uppercase"
-				>
-					Hack Club
-				</h3>
-				<p class="text-muted-foreground font-display text-xs leading-relaxed">
-					Hack Club is a 501(c)(3) nonprofit and network of 100k+ technical high
-					schoolers. We believe you learn best by building, so we're creating
-					community and providing grants so you can make awesome projects.
-				</p>
-			</div>
+		<div class="flex flex-col items-start gap-5">
+			<img
+				src="assets/Alchemize.png"
+				alt="Alchemize Logo"
+				class="w-[440px] h-[130px] object-contain object-left -mb-8"
+			/>
 
-			<div
-				class="grid grid-cols-2 gap-x-16 gap-y-8 text-xs font-bold uppercase tracking-wider font-decor"
+			<p
+				class="max-w-[540px] text-[1.15rem] leading-[1.8] text-muted-foreground"
 			>
-				<div class="flex flex-col gap-3">
+				Make themed projects, get themed prizes! With more mixing this time!
+			</p>
+
+			<div class="flex flex-col items-start gap-4">
+				<div
+					class="flex items-stretch h-[52px] border-2 border-border rounded-sm overflow-hidden"
+				>
+					<input
+						type="email"
+						id="hero-email"
+						class="w-[300px] px-5 text-[1rem] text-foreground bg-card/35 outline-none placeholder:text-muted-foreground/70"
+						placeholder="you@example.com"
+						aria-label="Email address"
+					/>
 					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/philosophy/">Philosophy</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/team/">The Team</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/brand/">Branding</a
-					>
-				</div>
-				<div class="flex flex-col gap-3">
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackatime.hackclub.com/">Hackatime</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://app.slack.com/client/E09V59WQY1E/C0ASY6R552R"
-						>join our slack</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://github.com/hackclub">github</a
-					>
-				</div>
-				<div class="flex flex-col gap-3">
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/jams/">Jams</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://toolbox.hackclub.com/">Toolbox</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/conduct/">Code of Conduct</a
-					>
-					<a
-						class="text-muted-foreground hover:text-foreground transition-colors"
-						href="https://hackclub.com/privacy/">Privacy</a
+						href={authUrl}
+						type="button"
+						class="inline-flex items-center justify-center px-7 text-lg tracking-[0.03em] cursor-pointer bg-primary font-semibold text-primary-foreground border-l-2 border-border transition-all duration-300 ease-[ease] hover:bg-primary/80 active:translate-y-[2px]"
+						id="btn-sign-in">Sign In</a
 					>
 				</div>
 			</div>
 		</div>
-	</footer>
-</div>
+
+		<div class="flex items-center justify-center h-full">
+			<div
+				class="group/potion-cluster pointer-events-none relative w-full max-w-[560px] h-[480px]"
+			>
+				<div
+					class="hero-potion-float pointer-events-auto absolute left-[34%] top-[26%] w-[190px] sm:w-[220px]"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[-5deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-y-10 group-hover/potion-cluster:scale-110 group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute left-[7%] top-[7%] w-[105px] sm:w-[135px]"
+					style="animation-delay: -1.2s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[14deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-x-10 group-hover/potion-cluster:-translate-y-8 group-hover/potion-cluster:rotate-[22deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute right-[6%] top-[10%] w-[110px] sm:w-[140px]"
+					style="animation-delay: -2.8s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[-14deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:translate-x-10 group-hover/potion-cluster:-translate-y-8 group-hover/potion-cluster:rotate-[-22deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute bottom-[3%] left-[15%] w-[115px] sm:w-[145px]"
+					style="animation-delay: -3.6s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[-12deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:-translate-x-10 group-hover/potion-cluster:translate-y-8 group-hover/potion-cluster:rotate-[-20deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+				<div
+					class="hero-potion-float pointer-events-auto absolute right-[11%] bottom-[4%] w-[105px] sm:w-[135px]"
+					style="animation-delay: -4.4s;"
+				>
+					<img
+						alt=""
+						src="/pmix_v2.png"
+						class="w-full rotate-[16deg] object-contain transition-transform duration-500 ease-out group-hover/potion-cluster:translate-x-10 group-hover/potion-cluster:translate-y-8 group-hover/potion-cluster:rotate-[24deg] group-hover/potion-cluster:drop-shadow-lg motion-reduce:transition-none"
+						aria-hidden="true"
+					/>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	id="how-it-works"
+	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 92%, var(--primary));"
+>
+	<div class="relative z-2 w-full max-w-content mx-auto px-12 py-12">
+		<h2
+			class="font-heading text-[3rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
+		>
+			How does this work?
+		</h2>
+		<p class="text-[1.15rem] text-muted-foreground text-center mb-12">
+			All about Alchemize!!!
+		</p>
+
+		<div class="mx-auto grid max-w-[1000px] grid-cols-1 gap-6 md:grid-cols-2">
+			<article
+				class="group overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
+			>
+				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
+					<img
+						src="assets/step_1.png"
+						alt="Alchemize character choosing potions"
+						class="h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+					/>
+				</div>
+				<div class="p-6">
+					<div class="mb-2 flex items-center gap-3">
+						<span
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+							>1</span
+						>
+						<h3 class="font-heading text-xl font-bold text-foreground">
+							Pick an Idea
+						</h3>
+					</div>
+					<p class="text-sm leading-relaxed text-muted-foreground">
+						Got your own idea? Build it. Make something completely crazy. Just
+						pick a project you're actually interested to build!
+					</p>
+				</div>
+			</article>
+
+			<article
+				class="group overflow-hidden rounded-tl-3xl rounded-br-3xl border border-border bg-card transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
+			>
+				<div class="flex h-72 items-center justify-center bg-secondary/20 p-5">
+					<img
+						src="assets/step_2.png"
+						alt="Alchemize character building a project"
+						class="h-full w-full object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+					/>
+				</div>
+				<div class="p-6">
+					<div class="mb-2 flex items-center gap-3">
+						<span
+							class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+							>2</span
+						>
+						<h3 class="font-heading text-xl font-bold text-foreground">
+							Build the Project
+						</h3>
+					</div>
+					<p class="text-sm leading-relaxed text-muted-foreground">
+						Turn your idea into a real, working project. Code it, design it, and
+						ship it, just remember to track your hours as you build.
+					</p>
+				</div>
+			</article>
+
+			<article
+				class="group rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
+			>
+				<div class="mb-2 flex items-center gap-3">
+					<span
+						class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+						>3</span
+					>
+					<h3 class="font-heading text-xl font-bold text-foreground">
+						Submit It for Review
+					</h3>
+				</div>
+				<p class="text-sm leading-relaxed text-muted-foreground">
+					Once your project is ready, submit it with your code and a link to try
+					it out. Our reviewers will check it and approve your hours.
+				</p>
+			</article>
+
+			<article
+				class="group rounded-tl-3xl rounded-br-3xl border border-border bg-card p-6 transition-colors duration-500 ease-[ease] hover:border-primary/70 hover:bg-card/70 motion-reduce:transition-none"
+			>
+				<div class="mb-2 flex items-center gap-3">
+					<span
+						class="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-foreground font-extrabold text-base transition-transform duration-500 ease-[ease] group-hover:-rotate-6 group-hover:scale-110 motion-reduce:transition-none"
+						>4</span
+					>
+					<h3 class="font-heading text-xl font-bold text-foreground">
+						Spend Your Stones!
+					</h3>
+				</div>
+				<p class="text-sm leading-relaxed text-muted-foreground">
+					Every approved hour earns you Aqua Regia. Spend it in the shop on
+					amazing rewards like hardware, tools, and licenses to help your next
+					project.
+				</p>
+			</article>
+		</div>
+	</div>
+</section>
+
+<section
+	id="prizes"
+	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 88%, var(--secondary));"
+>
+	<div
+		class="relative z-2 w-full max-w-content mx-auto px-12 pt-[60px] pb-10 flex flex-col items-center"
+	>
+		<h2
+			class="font-heading text-[3rem] font-bold text-foreground text-center mb-3 tracking-[-0.02em]"
+		>
+			The Shop
+		</h2>
+		<p class="text-[1.15rem] text-muted-foreground text-center mb-12">
+			Ship real projects. Earn real rewards.
+		</p>
+
+		<div
+			class="group relative w-full overflow-hidden mt-8 py-4 border-2 border-border rounded-md"
+			data-marquee
+			aria-label="Prize items scrolling ribbon forward"
+		>
+			<div
+				class="flex w-max animate-marquee will-change-transform group-hover:[animation-play-state:paused]"
+				id="marquee-track-1"
+				data-marquee-track
+			>
+				{#if shopItemsError}
+					<p class="px-10 text-sm text-muted-foreground">
+						Shop items are temporarily unavailable.
+					</p>
+				{:else}
+					<div class="flex items-center gap-10 pr-10 shrink-0">
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-muted-foreground text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+					<div
+						class="flex items-center gap-10 pr-10 shrink-0"
+						aria-hidden="true"
+					>
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-muted-foreground text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+
+		<div
+			class="group relative w-full overflow-hidden mt-[calc(14px+1rem)] mb-12 py-4 border-2 border-border rounded-md"
+			data-marquee
+			aria-label="Prize items scrolling ribbon reverse"
+		>
+			<div
+				class="flex w-max animate-marquee-reverse will-change-transform group-hover:[animation-play-state:paused]"
+				id="marquee-track-2"
+				data-marquee-track
+			>
+				{#if shopItemsError}
+					<p class="px-10 text-sm text-muted-foreground">
+						Shop items are temporarily unavailable.
+					</p>
+				{:else}
+					<div class="flex items-center gap-10 pr-10 shrink-0">
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-muted-foreground text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+					<div
+						class="flex items-center gap-10 pr-10 shrink-0"
+						aria-hidden="true"
+					>
+						{#each shopItems as item (item.itemID)}
+							<div
+								class="shrink-0 w-[180px] flex flex-col items-center gap-2.5"
+							>
+								<div
+									class="relative w-[140px] h-[100px] flex items-center justify-center"
+								>
+									<img
+										src={item.cdnImage}
+										alt={item.name}
+										class="max-w-full max-h-full object-contain"
+									/>
+								</div>
+								<span
+									class="text-[0.85rem] font-semibold text-muted-foreground text-center whitespace-nowrap"
+									>{item.name}</span
+								>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	id="faq"
+	class="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+	style="background-color: color-mix(in srgb, var(--background) 80%, var(--secondary));"
+>
+	<div class="relative z-2 w-full max-w-[820px] mx-auto px-12 py-20">
+		<div class="flex w-full items-center justify-center mb-12">
+			<img
+				src="/assets/FAQ.png"
+				alt="Alchemize FAQ"
+				class=" h-[100px] object-contain object-left -mb-8"
+			/>
+		</div>
+
+		<p
+			class="mb-8 rounded-lg border border-primary/40 bg-card/50 px-5 py-4 text-center text-sm font-semibold text-foreground"
+			role="status"
+		>
+			Season 2 docs are coming soon. Check back for the latest program details!
+		</p>
+
+		<div class="flex flex-col" id="faq-accordion">
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(1)}
+					aria-expanded={openFaq === 1}
+					id="faq-btn-1"
+					aria-controls="faq-panel-1"
+				>
+					<span>Who is eligible?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 1 ? "1fr" : "0fr"}
+					id="faq-panel-1"
+					role="region"
+					aria-labelledby="faq-btn-1"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Anyone aged 13 through 18! Everyone from all over the world can
+							participate.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(2)}
+					aria-expanded={openFaq === 2}
+					id="faq-btn-2"
+					aria-controls="faq-panel-2"
+				>
+					<span>Is this free and legitimate?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 2 ? "1fr" : "0fr"}
+					id="faq-panel-2"
+					role="region"
+					aria-labelledby="faq-btn-2"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Yes! Alchemize is a Hack Club program. Hack Club is a 501(c)(3)
+							nonprofit, and donations from people like
+							<a
+								href="https://en.wikipedia.org/wiki/Michael_Dell"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Michael Dell</a
+							>
+							and
+							<a
+								href="https://en.wikipedia.org/wiki/Tom_Preston-Werner"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Tom Preston-Werner</a
+							>
+							help cover the prizes. Hack Club has also run programs like
+							<a
+								href="https://highseas.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>High Seas</a
+							>,
+							<a
+								href="https://summer.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Summer of Making</a
+							>, and
+							<a
+								href="https://flavortown.hackclub.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>Flavortown</a
+							>.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(3)}
+					aria-expanded={openFaq === 3}
+					id="faq-btn-3"
+					aria-controls="faq-panel-3"
+				>
+					<span>What projects count?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 3 ? "1fr" : "0fr"}
+					id="faq-panel-3"
+					role="region"
+					aria-labelledby="faq-btn-3"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Software projects count, as long as they're open-source.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(4)}
+					aria-expanded={openFaq === 4}
+					id="faq-btn-4"
+					aria-controls="faq-panel-4"
+				>
+					<span>Does hardware count?</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 4 ? "1fr" : "0fr"}
+					id="faq-panel-4"
+					role="region"
+					aria-labelledby="faq-btn-4"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							Not at this time. Alchemize currently supports software projects
+							only; we do not yet have the review and tracking process needed to
+							assess hardware submissions consistently. If this changes, we’ll
+							share an update through our official channels.
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="border-b-2 border-border first:border-t-2">
+				<button
+					class="group w-full flex items-center justify-between py-[22px] px-2 text-[1.1rem] font-semibold text-foreground text-left cursor-pointer transition-colors duration-300 ease-[ease] hover:text-primary"
+					onclick={() => toggleFaq(5)}
+					aria-expanded={openFaq === 5}
+					id="faq-btn-5"
+					aria-controls="faq-panel-5"
+				>
+					<span>I've got more questions...</span>
+					<span
+						class="relative shrink-0 size-6 ml-5 before:absolute before:top-1/2 before:left-1/2 before:w-[18px] before:h-[3px] before:-translate-1/2 before:rounded-[2px] before:bg-primary before:transition-colors before:duration-300 after:absolute after:top-1/2 after:left-1/2 after:w-[3px] after:h-[18px] after:-translate-1/2 after:rounded-[2px] after:bg-primary after:transition-all after:duration-300 group-aria-expanded:before:bg-primary group-aria-expanded:after:bg-primary group-aria-expanded:after:rotate-90 group-aria-expanded:after:opacity-0"
+						aria-hidden="true"
+					></span>
+				</button>
+				<div
+					class="grid overflow-hidden transition-[grid-template-rows] duration-400 ease-[ease]"
+					style:grid-template-rows={openFaq === 5 ? "1fr" : "0fr"}
+					id="faq-panel-5"
+					role="region"
+					aria-labelledby="faq-btn-5"
+				>
+					<div class="min-h-0 overflow-hidden">
+						<p
+							class="px-2 pb-6 text-[0.95rem] leading-[1.75] text-muted-foreground"
+						>
+							If you're on Hack Club Slack, send a message in
+							<a
+								href="https://hackclub.enterprise.slack.com/archives/C0ASVK0HHEX"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary underline underline-offset-2 hover:text-primary-hover"
+								>#alchemize-help</a
+							>. We'll be happy to help and answer your questions.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<footer
+	class="border-t-3 border-border pt-16 px-12"
+	id="footer"
+	style="background-color: var(--background);"
+>
+	<div
+		class="max-w-content mx-auto flex justify-between items-start gap-12 pb-12"
+	>
+		<div class="flex flex-col gap-3">
+			<img
+				src="assets/Alchemize.png"
+				alt="Alchemize Logo"
+				class="w-[240px] h-16 object-contain object-left -mb-3"
+			/>
+			<p class="text-[0.82rem] leading-[1.65] text-muted-foreground max-w-80">
+				A Hack Club program. Hack Club is a 501(c)(3) non-profit with a network
+				of more than 100,000 teenagers in 119 countries, all of them learning by
+				shipping.
+			</p>
+		</div>
+
+		<nav
+			class="grid grid-cols-[repeat(3,auto)] gap-14"
+			aria-label="Footer navigation"
+		>
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-primary mb-5"
+				>
+					ALCHEMIZE
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="#">Home</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="#how-it-works">How it works</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="#prizes">The shop</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-primary mb-5"
+				>
+					HACK CLUB
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/philosophy"
+							target="_blank"
+							rel="noopener">Philosophy</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/team"
+							target="_blank"
+							rel="noopener">Team</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/donate"
+							target="_blank"
+							rel="noopener">Donate</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/brand"
+							target="_blank"
+							rel="noopener">Branding</a
+						>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h4
+					class="text-[0.75rem] font-extrabold tracking-[0.12em] uppercase text-primary mb-5"
+				>
+					HELP
+				</h4>
+				<ul class="*:mb-3">
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.enterprise.slack.com/archives/C0ASVK0HHEX"
+							target="_blank"
+							rel="noopener">#alchemize-help on Slack</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="mailto:identity@hackclub.com">identity@hackclub.com</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://forms.hackclub.com/bounty">Fulfilment bounty</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/conduct"
+							target="_blank"
+							rel="noopener">Code of conduct</a
+						>
+					</li>
+					<li>
+						<a
+							class="text-[0.9rem] text-muted-foreground transition-colors duration-300 ease-[ease] hover:text-foreground"
+							href="https://hackclub.com/privacy"
+							target="_blank"
+							rel="noopener">Privacy &amp; terms</a
+						>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div class="max-w-content mx-auto py-6 border-t border-border text-center">
+		<p class="text-[0.8rem] text-muted-foreground tracking-[0.02em]">
+			Sponsored by, <a
+				href="https://hackclub.enterprise.slack.com/team/U01PJ08PR7S">Josias</a
+			>
+		</p>
+	</div>
+</footer>
 
 <style>
-	main {
-		transform: translateZ(0);
+	.hero-potion-float {
+		animation: hero-potion-float 5.5s ease-in-out infinite;
+	}
+
+	@keyframes hero-potion-float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-10px);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-potion-float {
+			animation: none;
+		}
 	}
 </style>

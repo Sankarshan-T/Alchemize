@@ -114,9 +114,7 @@
 <main
 	class="h-screen w-full px-10 py-6 tracking-wide relative overflow-hidden flex flex-col font-body"
 >
-	<header
-		class="relative z-10 w-full flex flex-col gap-4 border-b-2 pb-4 shrink-0"
-	>
+	<header class="relative z-10 w-full shrink-0">
 		<div
 			class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 py-3 px-8"
 		>
@@ -132,30 +130,32 @@
 			</div>
 
 			{#if loggedIn}
-				<Button
-					size="sm"
-					variant="outline"
-					onclick={() => (ordersDialogOpen = true)}
+				<div
+					class="flex w-full sm:w-auto items-center gap-2 font-note font-bold"
 				>
-					Orders
-				</Button>
+					<div
+						class="flex items-center gap-2 rounded-md border border-blue-300/50 bg-blue-300/10 px-2 py-1.5 text-blue-300"
+					>
+						<img
+							src="/alch-aquaregia.png"
+							alt=""
+							class="size-7 object-contain"
+						/>
+						<span class="font-black text-sm font-display">
+							{formatAqua(balanceHundredths)}
+						</span>
+					</div>
+
+					<Button
+						size="sm"
+						variant="outline"
+						onclick={() => (ordersDialogOpen = true)}
+					>
+						Orders
+					</Button>
+				</div>
 			{/if}
 		</div>
-
-		{#if loggedIn}
-			<div class="flex w-full font-note font-bold">
-				<div
-					class="flex items-center justify-between gap-4 rounded-md border-2 px-3 py-2 shadow-sm shadow-blue-900/20 border-blue-700/50 bg-blue-800/10 text-blue-800 dark:border-blue-300/50 dark:bg-blue-300/10 dark:text-blue-300"
-				>
-					<span class="text-[10px] sm:text-xs uppercase tracking-wider">
-						Balance
-					</span>
-					<span class="font-black text-xs sm:text-sm">
-						{formatAqua(balanceHundredths)}
-					</span>
-				</div>
-			</div>
-		{/if}
 	</header>
 
 	{#if loggedIn}
@@ -216,10 +216,7 @@
 	>
 		{#each finalItems as item}
 			<div
-				class={cn(
-					"relative z-10 w-full flex flex-col bg-card border-2 rounded rounded-tl-3xl rounded-br-3xl p-3 h-full gap-3 backdrop-blur-sm transition-all",
-					"shadow-aqr border-blue-900"
-				)}
+				class={"relative z-10 w-full flex flex-col bg-card border-2 rounded rounded-tl-3xl rounded-br-3xl p-3 h-full gap-3 backdrop-blur-sm transition-all border-border shadow-aqr"}
 			>
 				<div
 					class="w-full aspect-square border bg-background rounded rounded-tl-3xl rounded-br-3xl overflow-hidden relative shrink-0 flex items-center justify-center p-3"
@@ -227,7 +224,7 @@
 					<img
 						src={item.image}
 						alt={item.name}
-						class="max-w-full max-h-full object-contain rounded rounded-tl-3xl rounded-br-3xl transform scale-100 group-hover:scale-[1.05] transition-transform duration-300 relative z-10"
+						class="max-w-full max-h-full object-scale rounded rounded-tl-3xl rounded-br-3xl relative z-10"
 					/>
 				</div>
 
@@ -295,6 +292,6 @@
 
 <style>
 	.shadow-aqr {
-		box-shadow: 4px 4px 0px var(--color-blue-600);
+		box-shadow: 4px 4px 0px var(--color-primary);
 	}
 </style>

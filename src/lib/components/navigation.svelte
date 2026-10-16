@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Dialog from "$lib/components/ui/dialog/index.js"
 	import { page } from "$app/state"
+	import { buttonVariants } from "$lib/components/ui/button/button.svelte"
 	import {
 		CompassIcon,
 		Home,
@@ -12,7 +13,8 @@
 		Moon,
 		Sun,
 	} from "lucide-svelte"
-	import { mode, toggleMode } from "mode-watcher"
+
+	let { inline = false }: { inline?: boolean } = $props()
 
 	const isAdmin = $derived(!page.data?.admin)
 
@@ -36,7 +38,7 @@
 		// 	icon: Compass,
 		// 	side: "left",
 		// },
-		{ href: "/docs", label: "Documentation", icon: Newspaper, side: "left" },
+		{ href: "/docs", label: "Docs", icon: Newspaper, side: "left" },
 		{ href: "/refer", label: "Refer", icon: Users, side: "left" },
 		{
 			href: "/dashboard/projects",
@@ -51,24 +53,24 @@
 			side: "right",
 		},
 	]
-
-	const isDark = $derived(mode.current === "dark")
 </script>
 
 <div class="relative font-mono tracking-wide">
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class="fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center justify-center border-2 border-primary/80 bg-secondary/90 py-1 px-5 rounded-md text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group gap-3"
+			class={inline
+				? `${buttonVariants({ variant: "outline", size: "sm" })} group`
+				: "fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center justify-center gap-3 rounded-md border-2 border-primary/80 bg-secondary/90 px-5 py-1 text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group"}
 		>
 			<CompassIcon
-				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"
+				class="size-4 text-secondary-foreground transition-colors group-hover:text-primary"
 			/>
-			Go Somewhere?
+			{inline ? "Navigate" : "Go Somewhere?"}
 		</Dialog.Trigger>
 
 		<Dialog.Content
-			class="bg-secondary/80 backdrop-blur-md border-2 border-primary shadow-lg shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
+			class="bg-secondary/40 backdrop-blur-md border-2 border-primary shadow-sm shadow-primary rounded rounded-tl-3xl rounded-br-3xl max-w-[60%] min-w-[60vw] p-6 sm:p-8 overflow-hidden z-9999 [&>button]:hidden"
 		>
 			<div
 				class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-center w-full"
@@ -134,21 +136,6 @@
 								</a>
 							</Dialog.Close>
 						{/each}
-						<button
-							type="button"
-							class="flex items-center justify-center gap-2 self-center rounded-md border-2 border-primary/40 bg-card p-2 text-foreground shadow-sm shadow-primary transition-all duration-150 hover:border-primary hover:text-primary"
-							onclick={toggleMode}
-							aria-label={isDark
-								? "Switch to light mode"
-								: "Switch to dark mode"}
-							title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-						>
-							{#if isDark}
-								<Sun class="h-4 w-4" />
-							{:else}
-								<Moon class="h-4 w-4" />
-							{/if}
-						</button>
 					</div>
 				</div>
 

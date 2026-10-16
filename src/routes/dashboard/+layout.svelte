@@ -24,7 +24,7 @@
 
 {#if $navigating || $loaderStore}
 	<div
-		class="fixed inset-0 bg-black/70 flex items-center justify-center z-80 backdrop-blur-none"
+		class="fixed inset-0 bg-black/80 flex items-center justify-center z-80 backdrop-blur-none"
 	>
 		<div class="flex flex-col items-center gap-4">
 			<div
@@ -51,15 +51,14 @@
 {/if}
 
 <div
-	class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103"
+	class="fixed inset-0 z-[-1] bg-[url('/bg-pattern-outline.png')] bg-contain bg-scale scale-103 opacity-50"
 ></div>
-<div
-	class="fixed inset-0 z-0 bg-background/90 dark:bg-background/95 bg-contain bg-scale"
-></div>
+<div class="fixed inset-0 z-0 bg-background/95 bg-contain bg-scale"></div>
 <div
 	class="relative z-10 root h-screen w-screen flex items-center justify-start text-primary-foreground"
 >
-	{#if !excludedRoutes.includes(page.url.pathname)}
+	{#if !excludedRoutes.includes(page.url.pathname) &&
+		page.url.pathname !== "/dashboard/projects"}
 		<Navigation />
 	{/if}
 	{#if unVerified}

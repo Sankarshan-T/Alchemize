@@ -321,7 +321,7 @@
 												<div
 													class="flex flex-wrap items-center gap-1.5 font-note text-[10px] text-muted-foreground"
 												>
-													<span class="font-bold text-amber-700">
+													<span class="font-bold text-amber-300">
 														New Ship Update
 													</span>
 													<span>•</span>
@@ -433,8 +433,8 @@
 												class={cn(
 													"font-note text-[10px] font-semibold px-2 py-1 rounded-full",
 													descriptionCharCount < 50
-														? "bg-amber-500/10 text-amber-700"
-														: "bg-emerald-500/10 text-emerald-700"
+														? "border border-amber-400/30 bg-amber-500/15 text-amber-300"
+														: "border border-emerald-400/30 bg-emerald-500/15 text-emerald-300"
 												)}
 											>
 												{descriptionCharCount < 50
@@ -743,8 +743,8 @@
 											class={cn(
 												"font-note text-[10px] font-semibold px-2 py-1 rounded-full",
 												changelogCharCount < 20
-													? "bg-amber-500/10 text-amber-700"
-													: "bg-emerald-500/10 text-emerald-700"
+													? "border border-amber-400/30 bg-amber-500/15 text-amber-300"
+													: "border border-emerald-400/30 bg-emerald-500/15 text-emerald-300"
 											)}
 										>
 											{changelogCharCount < 20

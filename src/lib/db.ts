@@ -6,18 +6,9 @@ import type { Log } from './types'
 import { CURRENCY_KEY, CURRENCY_NAME, hundredthsToUnits, formatAqua, minutesToHundredths } from './currency'
 import { applyT2Award, calculateNewMinutes, hasUnpushedApprovedEntries, sharesHackatimeProject } from './server/projectLog'
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: ['.env.local', '.env'] });
 
-let DATABASE_URL: string | undefined;
-
-try {
-    const svelteEnv = await import("$env/static/private");
-    DATABASE_URL = svelteEnv.DATABASE_URL;
-} catch (e) {
-    const dotenv = await import('dotenv');
-    dotenv.config();
-    DATABASE_URL = process.env.DATABASE_URL;
-}
+const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
     throw new Error("DATABASE_URL is not defined");

@@ -12,21 +12,17 @@
 </script>
 
 <aside
-	class="relative scrollbar-none bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border p-5 border-r-2 scrollbar-none"
+	class="relative bg-card z-10 h-full max-h-screen overflow-y-auto sidebar w-1/4 border-r p-5 scrollbar-none"
 >
 	<div
 		class="sidebar-group flex flex-col gap-2 items-center scrollbar-none w-full pb-5 border-b"
 	>
-		<div class="flex gap-1 w-full items-baseline">
-			<span
-				class="font-decor text-card-foreground font-extrabold text-2xl tracking-tight"
-				>ALCHEMIZE</span
-			>
-			<span
-				class="font-extrabold leading-none tracking-wider text-xs uppercase font-display"
-			>
-				Docs
-			</span>
+		<div class="flex w-full justify-center pb-2">
+			<img
+				src="/assets/DOCS.png"
+				alt="Docs"
+				class="block h-auto w-full max-w-[220px] object-contain"
+			/>
 		</div>
 		<a href="/dashboard" class="w-full">
 			<Button variant="secondary" size="sm" class="w-full">Back to site</Button>
@@ -61,7 +57,7 @@
 					{#each groupItems as item}
 						<a
 							href={item.path}
-							class="hover:text-card-foreground hover:font-semibold cursor-pointer transition"
+							class="hover:text-card-foreground hover:underline underline-offset-4 cursor-pointer transition"
 						>
 							{item.name}
 						</a>

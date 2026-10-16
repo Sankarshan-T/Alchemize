@@ -13,12 +13,12 @@ const JWKS_CACHE_MS = 10 * 60 * 1000
 
 const STATE_MAX_AGE_SECONDS = 600
 
-export const createOAuthState = (cookies: Cookies, cookieName: string): string => {
+export const createOAuthState = (cookies: Cookies, cookieName: string, secure: boolean): string => {
 	const state = crypto.randomBytes(16).toString("hex")
 	cookies.set(cookieName, state, {
 		path: "/",
 		httpOnly: true,
-		secure: true,
+		secure,
 		// The provider redirects back with a top-level GET navigation, which carries Lax cookies
 		sameSite: "lax",
 		maxAge: STATE_MAX_AGE_SECONDS,
