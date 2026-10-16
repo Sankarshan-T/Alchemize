@@ -259,7 +259,7 @@
 		</Button>
 	</div>
 
-	<div class="overflow-y-auto flex flex-col gap-6 px-15 py-5">
+	<div class="overflow-y-auto flex flex-col gap-6 px-15 py-5 pb-24">
 		{#if projects.length}
 			{#each projects as project}
 				<button

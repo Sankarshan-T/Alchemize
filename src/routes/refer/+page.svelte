@@ -60,7 +60,7 @@
 
 <a
 	href="/dashboard"
-	class="self-start absolute z-10 top-5 left-5 hover:text-primary hover:font-bold"
+	class="self-start absolute z-10 top-5 left-5 hover:text-primary hover:underline underline-offset-4"
 >
 	<ArrowLeft class="size-7" />
 </a>

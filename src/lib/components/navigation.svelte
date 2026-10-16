@@ -56,7 +56,11 @@
 	<Dialog.Root>
 		<Dialog.Trigger
 			type="button"
-			class="fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center justify-center border-2 border-primary/80 bg-secondary/90 py-1 px-5 rounded-md text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group gap-3"
+			class={`fixed z-50 flex items-center justify-center border-2 border-primary/80 bg-secondary/90 py-1 px-5 rounded-md text-secondary-foreground shadow-sm shadow-primary transition-all duration-200 hover:border-primary hover:bg-border/5 group gap-3 ${
+				page.url.pathname === "/dashboard/projects"
+					? "bottom-6 right-6"
+					: "left-1/2 top-3 -translate-x-1/2"
+			}`}
 		>
 			<CompassIcon
 				class="w-6 h-6 text-secondary-foreground group-hover:text-primary transition-colors"

@@ -17,18 +17,13 @@
 	<div
 		class="sidebar-group flex flex-col gap-2 items-center scrollbar-none w-full pb-5 border-b"
 	>
-		<div class="flex gap-1 w-full items-baseline">
+		<div class="flex w-full justify-center pb-2">
 			<img
-				src="/assets/Alchemize.png"
-				alt="Alchemize Logo"
-				class=" h-[100px] object-contain object-left -mb-8"
+				src="/assets/DOCS.png"
+				alt="Docs"
+				class="block h-auto w-full max-w-[220px] object-contain"
 			/>
 		</div>
-		<span
-			class="font-extrabold leading-none tracking-wider text-xs uppercase font-display"
-		>
-			Docs
-		</span>
 		<a href="/dashboard" class="w-full">
 			<Button variant="secondary" size="sm" class="w-full">Back to site</Button>
 		</a>
@@ -62,7 +57,7 @@
 					{#each groupItems as item}
 						<a
 							href={item.path}
-							class="hover:text-card-foreground hover:font-semibold cursor-pointer transition"
+							class="hover:text-card-foreground hover:underline underline-offset-4 cursor-pointer transition"
 						>
 							{item.name}
 						</a>
