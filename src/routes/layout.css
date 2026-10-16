@@ -10,6 +10,9 @@
   --font-decor: "Lora", serif;
   --font-body: "Inter", sans-serif;
   --font-note: "Inter", sans-serif;
+  --text-body-size: 1rem;
+  --leading-body: 1.6;
+  --leading-heading: 1.2;
   --default-transition-duration: 200ms;
   --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -143,10 +146,18 @@ body {
   html {
     @apply scroll-smooth;
     font-family: var(--font-body);
+    font-size: clamp(15px, calc(14px + 0.15vw), 16px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
     @apply text-foreground;
+    font-size: var(--text-body-size);
+    line-height: var(--leading-body);
+    letter-spacing: -0.01em;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
@@ -156,6 +167,20 @@ body {
   h5,
   h6 {
     font-family: var(--font-display);
+    line-height: var(--leading-heading);
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 
   button:not(:disabled),
