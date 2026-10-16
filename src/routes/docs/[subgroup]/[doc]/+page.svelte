@@ -74,10 +74,10 @@ let html = $derived.by(() => marked.parse(markdownContent));
     <title>{docTitle ?? "Docs"} - Alchemize Docs</title>
 </svelte:head>
 
-<div class="md">
+<article class="md">
     {#if html}
         {@html html}
     {:else}
         <p>Loading doc...</p>
     {/if}
-</div>
+</article>

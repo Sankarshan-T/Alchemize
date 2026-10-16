@@ -6,26 +6,12 @@
 ## General
 ### What can you ship?
 
--  Any general project (software, hardware, gamedev, etc.) 
+-  Any general software project (websites, apps, games, etc.)
 -  Or a theme-based project
-
-### Season 1 Themes:
-
--  Sci-fi 
--  Anime 
--  Tribute to your favorite person
-
-### How does this YSWS work?
-
--  There are 3 seasons, each with 3 themes
--  Seasons unlock like a mystery box
--  When total participant coding hours reach a target → next season unlocks
-    (target time: TBD)
 
 ### How does the shop work?
 
 - The shop is fully run by you guys. You can choose whatever you want and it will be added to the shop. Add your suggestions here - Shop item suggestions
-- Every item in the shop is priced in Aqua Regia, and anything can be bought with Aqua Regia earned on any theme.
 
 ## Rules
 
@@ -51,18 +37,8 @@ You must submit:
 
 ##### 💻 Software
 
-Examples: websites, apps, games, etc.
-
 -  Track time using Hackatime
 -  Commit every 30–60 minutes
-
-##### 🔧 Hardware
-
-Examples: electronics, physical builds
-
--  Track time using lapse
--  If coding is involved → must use Hackatime
-    (coding time via Lapse = rejected)
 
 #### ➕ ADDONS
 
@@ -92,14 +68,3 @@ Addons are the things you do in addition to your base project, like designing as
 | Asset designing | Debugging |
 | Audio / music | Learning (if u want to learn, track time like a normal project). |
 | Drawings | |
-
-### The Currency System 
-- As you know, there are 3 themes in a season.
-- You can work on theme projects (you can work on 1 theme, 2 themes or even all of them, noone is gonna stop you).
-- If you don't get any idea for the themes you can work on general projects outside the theme.
-
-There is only one currency: **Aqua Regia**.
-
-- 1 approved hour = 1 Aqua Regia = $5
-- It's the same on every theme and on general projects
-- Spend it on anything in the shop
