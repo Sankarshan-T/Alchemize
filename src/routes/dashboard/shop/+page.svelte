@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte"
+	import Navigation from "$lib/components/navigation.svelte"
 	import ShopDialog from "$lib/components/shopitem-dialog.svelte"
 	import OrdersDialog from "$lib/components/orders-dialog.svelte"
 	import { getSlackProfile } from "$lib/utils"
@@ -129,32 +130,35 @@
 				</div>
 			</div>
 
-			{#if loggedIn}
-				<div
-					class="flex w-full sm:w-auto items-center gap-2 font-note font-bold"
-				>
+			<div class="flex w-full sm:w-auto items-center justify-end gap-2">
+				{#if loggedIn}
 					<div
-						class="flex items-center gap-2 rounded-md border border-blue-300/50 bg-blue-300/10 px-2 py-1.5 text-blue-300"
+						class="flex w-full sm:w-auto items-center gap-2 font-note font-bold"
 					>
-						<img
-							src="/alch-aquaregia.png"
-							alt=""
-							class="size-7 object-contain"
-						/>
-						<span class="font-black text-sm font-display">
-							{formatAqua(balanceHundredths)}
-						</span>
-					</div>
+						<div
+							class="flex items-center gap-2 rounded-md border border-blue-300/50 bg-blue-300/10 px-2 py-1.5 text-blue-300"
+						>
+							<img
+								src="/alch-aquaregia.png"
+								alt=""
+								class="size-7 object-contain"
+							/>
+							<span class="font-black text-sm font-display">
+								{formatAqua(balanceHundredths)}
+							</span>
+						</div>
 
-					<Button
-						size="sm"
-						variant="outline"
-						onclick={() => (ordersDialogOpen = true)}
-					>
-						Orders
-					</Button>
-				</div>
-			{/if}
+						<Button
+							size="sm"
+							variant="outline"
+							onclick={() => (ordersDialogOpen = true)}
+						>
+							Orders
+						</Button>
+					</div>
+				{/if}
+				<Navigation inline />
+			</div>
 		</div>
 	</header>
 

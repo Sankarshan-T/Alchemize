@@ -16,7 +16,7 @@
 	const isAllowed = $derived(data?.allowed ?? false)
 	const reLogin = $derived(data?.relogin ?? false)
 	const reHackatime = $derived(data?.reHackatime ?? false)
-	const excludedRoutes = ["/dashboard"]
+	const excludedRoutes = ["/dashboard", "/dashboard/shop"]
 	let unVerified = $state(false)
 </script>
 

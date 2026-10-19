@@ -403,14 +403,14 @@
 					</h3>
 
 					<p class="text-xs text-muted-foreground">Browse the Alchemize shop</p>
-					<div
-						class="flex items-center gap-1.5 mt-2 text-xs font-bold uppercase tracking-widest text-primary"
+					<span
+						class="flex items-center gap-1.5 mt-2 text-xs font-bold uppercase tracking-widest text-primary hover:underline"
 					>
 						Explore
 						<ArrowUpRight
 							class="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
 						/>
-					</div>
+					</span>
 				</div>
 
 				<div
